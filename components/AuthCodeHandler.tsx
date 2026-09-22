@@ -38,14 +38,22 @@ export default function AuthCodeHandler() {
         {status === "working" && <p>Confirming your email…</p>}
         {status === "done" && (
           <p>
-            <strong>Email confirmed — welcome!</strong> You are now signed in.{" "}
-            <a href="/dashboard" className="font-semibold text-[#111111] hover:underline">Go to your dashboard →</a>
+            <strong>Link accepted — you are now signed in.</strong>{" "}
+            <a href="/dashboard" className="font-semibold text-[#7A5C00] hover:underline">Go to your dashboard →</a>
+            <br />
+            <span className="text-[#6B7280]">
+              Resetting your password instead?{" "}
+              <a href="/reset-password" className="font-semibold text-[#7A5C00] hover:underline">Choose a new password →</a>
+            </span>
           </p>
         )}
         {status === "error" && (
           <p>
-            <strong>This link is invalid or has expired.</strong> Request a new confirmation email by registering again,{" "}
-            or <a href="/login" className="font-semibold text-[#111111] hover:underline">log in</a> if you already have an account.
+            <strong>This link is invalid or has expired.</strong> Email links work
+            only once, only for a short time, and only in the same browser you
+            requested them from — request a fresh link, then open it in that
+            same browser (not a private tab).{" "}
+            <a href="/login" className="font-semibold text-[#7A5C00] hover:underline">Back to login</a>
           </p>
         )}
       </div>
