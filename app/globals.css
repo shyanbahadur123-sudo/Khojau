@@ -33,58 +33,61 @@ body {
 
 /* ---------- Premium monochrome dark theme ----------
    Single override layer driven by `.dark` on <html>.
-   Attribute-substring selectors catch every opacity variant
-   (e.g. bg-[#FFFFFF] also matches bg-[#FFFFFF]/95), so no
-   per-file dark: variants are needed and photos are untouched. */
-.dark [class*="bg-[#FFFFFF]"],
-.dark [class*="bg-white"] {
+/* ---------- Premium monochrome dark theme ----------
+   Exact-token attribute selectors ([class~="…"]) so hover-only tokens
+   never leak into resting styles. White text is left alone (correct on
+   permanently-dark surfaces); only light-ink tokens invert. Photos and
+   gold washes work in both themes untouched. */
+.dark [class~="bg-white"],
+.dark [class~="bg-[#FFFFFF]"],
+.dark [class~="bg-white/60"],
+.dark [class~="bg-[#FFFFFF]/95"] {
   background-color: #171717;
 }
-.dark [class*="bg-[#111111]"] {
-  background-color: #f5f5f5;
-}
-/* Tinted translucents become white-on-dark washes (later = wins). */
-.dark [class*="bg-[#111111]/"] {
-  background-color: rgba(255, 255, 255, 0.08);
-}
-.dark [class*="bg-neutral-900"] {
-  background-color: #ededed;
-}
-.dark [class*="bg-black/5"] {
+.dark [class~="bg-black/5"] {
   background-color: rgba(255, 255, 255, 0.07);
 }
-.dark [class*="hover:bg-black/5"]:hover {
+.dark [class~="bg-black/10"] {
+  background-color: rgba(255, 255, 255, 0.09);
+}
+.dark [class~="hover:bg-black/5"]:hover {
   background-color: rgba(255, 255, 255, 0.07);
 }
-.dark [class*="hover:bg-black/10"]:hover {
+.dark [class~="hover:bg-black/10"]:hover {
   background-color: rgba(255, 255, 255, 0.12);
 }
-.dark [class*="hover:bg-[#000000]"]:hover {
-  background-color: #e5e5e5;
-}
-.dark [class*="text-white"] {
-  color: #0a0a0a;
-}
-.dark [class*="text-[#0A0A0A]"],
-.dark [class*="text-[#111111]"] {
+.dark [class~="text-[#0A0A0A]"],
+.dark [class~="text-[#0A0A0A]/80"],
+.dark [class~="text-[#0A0A0A]/85"],
+.dark [class~="text-[#111111]"] {
   color: #f5f5f5;
 }
-.dark [class*="text-[#6B7280]"] {
+.dark [class~="text-[#6B7280]"] {
   color: #a3a3a3;
 }
-.dark [class*="text-[#7A5C00]"] {
+.dark [class~="text-[#7A5C00]"] {
   color: #e3c565;
 }
-.dark [class*="border-black/"] {
+.dark [class~="hover:text-[#7A5C00]"]:hover {
+  color: #e3c565;
+}
+.dark [class~="border-black/10"],
+.dark [class~="border-black/15"] {
   border-color: rgba(255, 255, 255, 0.08);
 }
-.dark [class*="border-[#111111]"] {
-  border-color: rgba(255, 255, 255, 0.25);
+.dark [class~="border-black/25"] {
+  border-color: rgba(255, 255, 255, 0.18);
 }
-.dark [class*="border-[#111111]/"] {
-  border-color: rgba(255, 255, 255, 0.1);
+.dark [class~="hover:border-black/25"]:hover,
+.dark [class~="hover:border-[#111111]"]:hover,
+.dark [class~="hover:border-[#111111]/50"]:hover,
+.dark [class~="hover:border-[#111111]/30"]:hover {
+  border-color: rgba(255, 255, 255, 0.22);
 }
-.dark [class*="divide-black/"] > * + * {
+.dark [class~="border-[#111111]/30"] {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.dark [class~="divide-black/10"] > * + * {
   border-color: rgba(255, 255, 255, 0.08);
 }
 .dark *:focus-visible {
