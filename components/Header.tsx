@@ -18,7 +18,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-black/10 bg-[#FFFFFF]/95 backdrop-blur-md">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2 font-bold text-[#111111]" aria-label="Khojau home">
-          <span aria-hidden className="grid h-8 w-8 place-items-center rounded-lg bg-[#111111] text-white">
+          <span aria-hidden className="grid h-8 w-8 place-items-center rounded-lg bg-[#C9A227] text-black">
             ख
           </span>
           <span className="text-lg tracking-tight">Khojau</span>
@@ -35,7 +35,7 @@ export default function Header() {
           </Link>
           <Link
             href="/add-business"
-            className="rounded-md bg-[#111111] px-3 py-2 font-semibold text-white hover:bg-[#000000]"
+            className="rounded-md bg-[#C9A227] px-3 py-2 font-semibold text-black hover:bg-[#B8941F]"
           >
             Add Business
           </Link>
@@ -66,7 +66,7 @@ export default function Header() {
                 <li><Link onClick={() => setMobileOpen(false)} href="/how-it-works" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">How it works</Link></li>
                 <li><Link onClick={() => setMobileOpen(false)} href="/login" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Log in</Link></li>
                 <li><Link onClick={() => setMobileOpen(false)} href="/dashboard" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Dashboard</Link></li>
-                <li><Link onClick={() => setMobileOpen(false)} href="/add-business" className="block rounded-lg bg-[#111111] px-3 py-2.5 font-semibold text-white">Add Business — it&apos;s free</Link></li>
+                <li><Link onClick={() => setMobileOpen(false)} href="/add-business" className="block rounded-lg bg-[#C9A227] px-3 py-2.5 font-semibold text-black">Add Business — it&apos;s free</Link></li>
                 <li><button onClick={() => setMobileOpen(false)} className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left hover:bg-black/5" aria-label="Close menu"><CloseIcon className="h-4 w-4" /> Close</button></li>
               </ul>
             </nav>

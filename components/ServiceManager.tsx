@@ -113,7 +113,7 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
                   <input aria-label="Minimum price" type="number" min={0} value={editing.price_min ?? ""} onChange={(e) => setEditing({ ...editing, price_min: e.target.value === "" ? null : Number(e.target.value) })} className="h-10 rounded-lg border border-black/15 px-2" />
                   <input aria-label="Maximum price" type="number" min={0} value={editing.price_max ?? ""} onChange={(e) => setEditing({ ...editing, price_max: e.target.value === "" ? null : Number(e.target.value) })} className="h-10 rounded-lg border border-black/15 px-2" />
                   <div className="flex gap-2 sm:col-span-4">
-                    <button disabled={disabled} onClick={() => void saveEdit()} className="rounded-lg bg-[#111111] px-3 py-1.5 font-semibold text-white">Save</button>
+                    <button disabled={disabled} onClick={() => void saveEdit()} className="rounded-lg bg-[#C9A227] px-3 py-1.5 font-semibold text-black">Save</button>
                     <button disabled={disabled} onClick={() => setEditing(null)} className="rounded-lg border px-3 py-1.5">Cancel</button>
                   </div>
                 </div>

@@ -38,7 +38,7 @@ export default async function ProviderPage({ params }: { params: { slug: string 
           <h1 className="text-2xl font-bold">{p.business_name}</h1>
           {p.verification_status === "verified" && <VerifiedBadge />}
           {p.plan !== "free" && (
-            <span className="rounded-full bg-neutral-900 px-2 py-0.5 text-xs font-semibold text-white">{p.plan}</span>
+            <span className="rounded-full bg-[#C9A227] px-2 py-0.5 text-xs font-semibold text-black">{p.plan}</span>
           )}
         </div>
         <p className="mt-1 text-sm text-[#6B7280]">
@@ -60,7 +60,7 @@ export default async function ProviderPage({ params }: { params: { slug: string 
 
       {/* Sticky mobile contact bar */}
       <div className="sticky bottom-3 z-30 grid grid-cols-3 gap-2 rounded-xl border border-black/10 bg-[#FFFFFF] p-2 shadow-lg sm:static sm:flex sm:shadow-none">
-        <a href={`tel:${p.phone}`} className="rounded-lg bg-[#111111] px-4 py-3 text-center font-semibold text-white" data-track="phone_click">
+        <a href={`tel:${p.phone}`} className="rounded-lg bg-[#C9A227] px-4 py-3 text-center font-semibold text-black" data-track="phone_click">
           Call
         </a>
         {wa ? (
@@ -173,9 +173,9 @@ export default async function ProviderPage({ params }: { params: { slug: string 
         </section>
       </div>
 
-      <div className="rounded-xl border border-[#111111]/30 bg-[#111111]/5 p-4 text-sm sm:flex sm:items-center sm:justify-between sm:gap-4">
+      <div className="rounded-xl border border-[#C9A227]/40 bg-[#C9A227]/10 p-4 text-sm sm:flex sm:items-center sm:justify-between sm:gap-4">
         <p className="font-semibold">Prefer to send details instead of calling? The provider will call you back.</p>
-        <a href={`/request-service?provider=${p.slug}`} className="mt-2 inline-block min-h-[44px] rounded-lg bg-[#111111] px-4 py-2 font-semibold text-white sm:mt-0 sm:shrink-0">
+        <a href={`/request-service?provider=${p.slug}`} className="mt-2 inline-block min-h-[44px] rounded-lg bg-[#C9A227] px-4 py-2 font-semibold text-black sm:mt-0 sm:shrink-0">
           Request this service
         </a>
       </div>

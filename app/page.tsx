@@ -30,7 +30,7 @@ export default async function HomePage() {
   return (
     <div className="space-y-12 pt-6">
       <section aria-labelledby="hero-heading" className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-6 shadow-sm sm:p-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#111111]">Nepal&rsquo;s local services directory</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Nepal&rsquo;s local services directory</p>
         <h1 id="hero-heading" className="mt-2 max-w-xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
           Find the right local service in Nepal.
           <span className="mt-2 block text-lg font-normal leading-snug text-[#6B7280]">Verified local providers. Direct contact. No middlemen.</span>
@@ -58,8 +58,8 @@ export default async function HomePage() {
         <ul className="flex flex-wrap gap-2">
           {popular.map((c) => (
             <li key={c.slug}>
-              <Link href={`/services/${c.slug}`} className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-[#FFFFFF] px-4 py-2 text-sm font-medium text-[#0A0A0A] transition-colors hover:border-[#111111]/50 hover:text-[#111111]">
-                <CategoryIcon slug={c.slug} className="h-4 w-4 text-[#111111]" />
+              <Link href={`/services/${c.slug}`} className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-[#FFFFFF] px-4 py-2 text-sm font-medium text-[#0A0A0A] transition-colors hover:border-[#7A5C00]/60 hover:text-[#7A5C00]">
+                <CategoryIcon slug={c.slug} className="h-4 w-4 text-[#7A5C00]" />
                 {c.name}
               </Link>
             </li>
@@ -108,7 +108,7 @@ export default async function HomePage() {
       )}
       {all.length === 0 && (
         <section aria-label="Get started" className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-6 text-center shadow-sm sm:p-10">
-          <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-[#111111]/10 text-[#111111]">
+          <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-[#C9A227]/15 text-[#7A5C00]">
             <CategoryIcon slug="other" className="h-6 w-6" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight">Be the first business on Khojau</h2>
@@ -116,7 +116,7 @@ export default async function HomePage() {
             Khojau is a new directory for trusted local services in Nepal. List your business for free and get discovered by customers nearby.
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
-            <Link href="/add-business" className="rounded-lg bg-[#111111] px-5 py-3 font-semibold text-white">List your business — it&apos;s free</Link>
+            <Link href="/add-business" className="rounded-lg bg-[#C9A227] px-5 py-3 font-semibold text-black">List your business — it&apos;s free</Link>
             <Link href="/request-service" className="rounded-lg border border-black/15 px-5 py-3 font-semibold">Request a service</Link>
           </div>
         </section>
@@ -132,18 +132,18 @@ export default async function HomePage() {
         <p className="mt-4 text-sm"><Link href="/how-it-works" className="font-semibold text-[#111111] hover:underline">Learn more about how Khojau works →</Link></p>
       </section>
 
-      <section aria-labelledby="for-providers" className="rounded-2xl border border-[#111111]/25 bg-[#111111]/5 p-6 sm:p-8">
+      <section aria-labelledby="for-providers" className="rounded-2xl border border-[#C9A227]/40 bg-[#C9A227]/10 p-6 sm:p-8">
         <h2 id="for-providers" className="text-xl font-bold">For service providers</h2>
         <ul className="mt-3 grid gap-3 text-[15px] sm:grid-cols-2">
           {["List your business for free", "Show your services and prices", "Receive service requests directly", "Grow your local visibility"].map((t) => (
             <li key={t} className="flex items-start gap-2">
-              <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#111111]" />
+              <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#7A5C00]" />
               <span>{t}</span>
             </li>
           ))}
         </ul>
         <div className="mt-5">
-          <Link href="/add-business" className="inline-block rounded-lg bg-[#111111] px-5 py-3 font-semibold text-white">Add your business</Link>
+          <Link href="/add-business" className="inline-block rounded-lg bg-[#C9A227] px-5 py-3 font-semibold text-black">Add your business</Link>
         </div>
       </section>
 
@@ -159,7 +159,7 @@ export default async function HomePage() {
       </section>
 
       <section aria-label="Get started" className="flex flex-col items-center gap-3 rounded-2xl bg-[#0A0A0A] p-8 text-center sm:flex-row sm:justify-center sm:gap-4">
-        <Link href="/search" className="w-full rounded-lg bg-[#111111] px-6 py-3 font-semibold text-white sm:w-auto">Find a service</Link>
+        <Link href="/search" className="w-full rounded-lg bg-[#C9A227] px-6 py-3 font-semibold text-black sm:w-auto">Find a service</Link>
         <Link href="/add-business" className="w-full rounded-lg border border-white/30 px-6 py-3 font-semibold text-white sm:w-auto">List your business</Link>
       </section>
 

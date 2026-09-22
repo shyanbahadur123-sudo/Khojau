@@ -91,7 +91,7 @@ export default async function DashboardPage() {
       <h1 className="text-2xl font-bold">My listings</h1>
       <p className="text-sm text-[#6B7280]">Signed in as {user.email}{isAdminEmail(user.email) ? " · Admin" : ""}</p>
       <div className="flex gap-2">
-        <a href="/add-business" className="rounded-lg bg-[#111111] px-4 py-2 font-semibold text-white">Add business</a>
+        <a href="/add-business" className="rounded-lg bg-[#C9A227] px-4 py-2 font-semibold text-black">Add business</a>
         {isAdminEmail(user.email) && <a href="/admin" className="rounded-lg border px-4 py-2 font-semibold">Admin dashboard</a>}
         <form action="/api/auth/signout" method="post"><button className="rounded-lg border px-4 py-2">Sign out</button></form>
       </div>

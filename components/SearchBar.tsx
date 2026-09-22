@@ -60,7 +60,7 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
       <button
         type="submit"
         disabled={submitting}
-        className="h-12 rounded-lg bg-[#111111] px-6 text-base font-semibold text-white hover:bg-[#000000] disabled:opacity-60"
+        className="h-12 rounded-lg bg-[#C9A227] px-6 text-base font-semibold text-black hover:bg-[#B8941F] disabled:opacity-60"
       >
         {submitting ? "Searching…" : "Find Services"}
       </button>

@@ -11,6 +11,12 @@ const config: Config = {
           dark: "#000000",
           light: "#F5F5F5",
         },
+        accent: {
+          DEFAULT: "#C9A227",
+          hover: "#B8941F",
+          ink: "#7A5C00",
+          glow: "#E3C565",
+        },
         cream: {
           bg: "#FAFAFA",
           card: "#FFFFFF",

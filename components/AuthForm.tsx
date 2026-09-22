@@ -115,7 +115,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
       </div>
       {(error || oauthError) && <p role="alert" className="text-sm text-red-700">{error ?? oauthError}</p>}
       {notice && <p role="status" className="text-sm text-[#111111]">{notice}</p>}
-      <button disabled={loading} className="h-11 w-full rounded-lg bg-[#111111] font-semibold text-white disabled:opacity-60">
+      <button disabled={loading} className="h-11 w-full rounded-lg bg-[#C9A227] font-semibold text-black disabled:opacity-60">
         {loading ? "Please wait…" : mode === "register" ? "Register" : "Log in"}
       </button>
       <p className="text-sm text-[#6B7280]">

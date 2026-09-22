@@ -38,7 +38,7 @@ export default async function AdminPage() {
         ))}
       </div>
       <div className="flex flex-wrap gap-2 text-sm">
-        <Link href="/admin/providers" className="rounded-lg bg-[#111111] px-4 py-2 font-semibold text-white">Manage providers</Link>
+        <Link href="/admin/providers" className="rounded-lg bg-[#C9A227] px-4 py-2 font-semibold text-black">Manage providers</Link>
         <Link href="/admin/reports" className="rounded-lg border px-4 py-2">Reports</Link>
         <Link href="/admin/requests" className="rounded-lg border px-4 py-2">Requests</Link>
         <Link href="/admin/categories" className="rounded-lg border px-4 py-2">Categories</Link>

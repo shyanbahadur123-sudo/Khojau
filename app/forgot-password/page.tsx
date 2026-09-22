@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
           <label htmlFor="email" className="text-sm font-semibold">Email</label>
           <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 h-11 w-full rounded-lg border border-black/15 px-3" />
         </div>
-        <button disabled={loading} className="h-11 w-full rounded-lg bg-[#111111] font-semibold text-white disabled:opacity-60">
+        <button disabled={loading} className="h-11 w-full rounded-lg bg-[#C9A227] font-semibold text-black disabled:opacity-60">
           {loading ? "Sending…" : "Send reset link"}
         </button>
         {status && <p role="status" className="text-sm text-[#6B7280]">{status}</p>}

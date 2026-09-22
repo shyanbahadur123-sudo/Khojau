@@ -5,7 +5,7 @@ export default function SearchError({ reset }: { error: Error & { digest?: strin
     <div className="space-y-4 pt-6 text-center">
       <h1 className="text-2xl font-bold">Search is temporarily unavailable</h1>
       <p className="text-[#6B7280]">Please try again in a moment.</p>
-      <button onClick={() => reset()} className="rounded-lg bg-[#111111] px-5 py-3 font-semibold text-white">
+      <button onClick={() => reset()} className="rounded-lg bg-[#C9A227] px-5 py-3 font-semibold text-black">
         Try again
       </button>
     </div>

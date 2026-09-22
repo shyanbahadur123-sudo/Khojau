@@ -128,7 +128,7 @@ export default function HoursManager({ providerId, initial }: { providerId: stri
               )}
               {!hasRow && closed && <span className="text-xs text-[#6B7280]">unspecified</span>}
               <span className="ml-auto flex gap-1">
-                <button disabled={busy !== null} onClick={() => void saveDay(weekday)} className="rounded bg-[#111111] px-2 py-1 text-xs font-semibold text-white disabled:opacity-60">
+                <button disabled={busy !== null} onClick={() => void saveDay(weekday)} className="rounded bg-[#C9A227] px-2 py-1 text-xs font-semibold text-black disabled:opacity-60">
                   {busy === weekday ? "…" : "Save"}
                 </button>
                 {hasRow && (

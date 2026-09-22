@@ -51,7 +51,7 @@ export default function ResetPasswordPage() {
           <label htmlFor="password" className="text-sm font-semibold">New password</label>
           <input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1 h-11 w-full rounded-lg border border-black/15 px-3" />
         </div>
-        <button disabled={loading} className="h-11 w-full rounded-lg bg-[#111111] font-semibold text-white disabled:opacity-60">
+        <button disabled={loading} className="h-11 w-full rounded-lg bg-[#C9A227] font-semibold text-black disabled:opacity-60">
           {loading ? "Saving…" : "Save new password"}
         </button>
         {status && <p role="alert" className="text-sm text-red-700">{status}</p>}

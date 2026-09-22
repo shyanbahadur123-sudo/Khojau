@@ -19,7 +19,7 @@ export default async function AdminCategoriesPage() {
       <ul className="grid gap-2 sm:grid-cols-2">
         {CATEGORIES.map((c) => (
           <li key={c.slug} className="flex items-center justify-between rounded-xl bg-[#FFFFFF] p-3 text-sm">
-            <span className="flex items-center gap-2"><CategoryIcon slug={c.slug} className="h-4 w-4 text-[#111111]" /><strong>{c.name}</strong> <code className="text-[#6B7280]">{c.slug}</code></span>
+            <span className="flex items-center gap-2"><CategoryIcon slug={c.slug} className="h-4 w-4 text-[#7A5C00]" /><strong>{c.name}</strong> <code className="text-[#6B7280]">{c.slug}</code></span>
             <span className={inDb.has(c.slug) ? "text-[#111111]" : "text-amber-700"}>{inDb.has(c.slug) ? "in DB" : "missing"}</span>
           </li>
         ))}

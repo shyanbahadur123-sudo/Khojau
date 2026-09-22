@@ -57,14 +57,14 @@ function RequestForm() {
     return (
       <div className="mx-auto max-w-xl pt-6">
         <div className="rounded-2xl bg-[#FFFFFF] p-8 text-center">
-          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#111111]/10 text-[#111111]">
+          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#C9A227]/15 text-[#7A5C00]">
             <CheckIcon className="h-6 w-6" />
           </div>
           <h1 className="mt-3 text-2xl font-bold tracking-tight">Request received</h1>
           <p className="mt-2 text-sm text-[#6B7280]">
             {selected ? `We shared your request with ${selected.business_name}. They will contact you on your phone.` : "The Khojau team will match you with providers and contact you on your phone."}
           </p>
-          <a href="/" className="mt-4 inline-block rounded-lg bg-[#111111] px-5 py-3 font-semibold text-white">Back home</a>
+          <a href="/" className="mt-4 inline-block rounded-lg bg-[#C9A227] px-5 py-3 font-semibold text-black">Back home</a>
         </div>
       </div>
     );
@@ -121,7 +121,7 @@ function RequestForm() {
           <div><label htmlFor="preferred_time" className="text-sm font-semibold">Preferred time</label><input id="preferred_time" name="preferred_time" maxLength={120} placeholder="e.g. Tomorrow morning" className="mt-1 h-11 w-full rounded-lg border border-black/15 px-3" /></div>
           <div><label htmlFor="phone" className="text-sm font-semibold">Phone *</label><input id="phone" name="phone" required placeholder="98XXXXXXXX" className="mt-1 h-11 w-full rounded-lg border border-black/15 px-3" /></div>
         </div>
-        <button disabled={loading} className="h-12 w-full rounded-lg bg-[#111111] font-semibold text-white disabled:opacity-60">
+        <button disabled={loading} className="h-12 w-full rounded-lg bg-[#C9A227] font-semibold text-black disabled:opacity-60">
           {loading ? "Sending…" : "Submit request"}
         </button>
         {status && !done && <p role="status" className="text-sm text-[#6B7280]">{status}</p>}

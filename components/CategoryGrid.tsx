@@ -12,7 +12,7 @@ export default function CategoryGrid({ limit }: { limit?: number }) {
             href={`/services/${c.slug}`}
             className="group flex h-full items-start gap-3 rounded-xl border border-black/10 bg-[#FFFFFF] p-4 transition-colors hover:border-[#111111]/50"
           >
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#111111]/10 text-[#111111] transition-colors group-hover:bg-[#111111]/15">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#C9A227]/15 text-[#7A5C00] transition-colors group-hover:bg-[#C9A227]/25">
               <CategoryIcon slug={c.slug} className="h-5 w-5" />
             </span>
             <span className="min-w-0">

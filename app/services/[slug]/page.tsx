@@ -29,7 +29,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
       <nav className="text-sm text-[#6B7280]" aria-label="Breadcrumb">
         <Link href="/" className="hover:underline">Home</Link> / <Link href="/services" className="hover:underline">Services</Link> / <span aria-current="page">{c.name}</span>
       </nav>
-      <h1 className="flex items-center gap-3 text-2xl font-bold tracking-tight"><span className="grid h-10 w-10 place-items-center rounded-lg bg-[#111111]/10 text-[#111111]"><CategoryIcon slug={c.slug} className="h-5 w-5" /></span>{c.name} in Nepal</h1>
+      <h1 className="flex items-center gap-3 text-2xl font-bold tracking-tight"><span className="grid h-10 w-10 place-items-center rounded-lg bg-[#C9A227]/15 text-[#7A5C00]"><CategoryIcon slug={c.slug} className="h-5 w-5" /></span>{c.name} in Nepal</h1>
       {c.description && <p className="text-[#6B7280]">{c.description}</p>}
       <Suspense><SearchBar compact /></Suspense>
       {providers.length === 0 ? (

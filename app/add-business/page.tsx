@@ -25,7 +25,7 @@ export default function AddBusinessPage() {
     <div className="mx-auto max-w-2xl pt-6">
       <h1 className="text-2xl font-bold">Add your business</h1>
       <p className="mt-1 text-sm text-[#6B7280]">Free basic listing. Submissions are reviewed before going public.</p>
-      <div className="mt-3 rounded-xl border border-[#111111]/25 bg-[#111111]/5 p-4 text-sm">
+      <div className="mt-3 rounded-xl border border-[#C9A227]/40 bg-[#C9A227]/10 p-4 text-sm">
         <p className="font-semibold">What happens next?</p>
         <ol className="mt-1 list-decimal space-y-1 pl-5 text-[#0A0A0A]/85">
           <li>You submit your business details below.</li>
@@ -137,7 +137,7 @@ export default function AddBusinessPage() {
           </div>
         </details>
         {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
-        <button disabled={loading} className="h-12 w-full rounded-lg bg-[#111111] font-semibold text-white disabled:opacity-60">
+        <button disabled={loading} className="h-12 w-full rounded-lg bg-[#C9A227] font-semibold text-black disabled:opacity-60">
           {loading ? "Submitting…" : "Submit for review"}
         </button>
       </form>

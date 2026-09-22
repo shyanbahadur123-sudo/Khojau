@@ -22,7 +22,7 @@ export default function HowItWorksPage() {
           <li className="rounded-xl bg-[#FFFFFF] p-4"><p className="font-semibold">2. Compare providers</p><p className="mt-1 text-sm text-[#6B7280]">Open profiles to see services, price ranges, opening hours, photos, and contact details.</p></li>
           <li className="rounded-xl bg-[#FFFFFF] p-4"><p className="font-semibold">3. Contact or request</p><p className="mt-1 text-sm text-[#6B7280]">Call, message on WhatsApp, get directions — or send a service request with your phone number and the provider will call you back.</p></li>
         </ol>
-        <Link href="/search" className="mt-4 inline-block rounded-lg bg-[#111111] px-5 py-3 font-semibold text-white">Start searching</Link>
+        <Link href="/search" className="mt-4 inline-block rounded-lg bg-[#C9A227] px-5 py-3 font-semibold text-black">Start searching</Link>
       </section>
 
       <section aria-labelledby="for-businesses">
@@ -32,7 +32,7 @@ export default function HowItWorksPage() {
           <li className="rounded-xl bg-[#FFFFFF] p-4"><p className="font-semibold">2. We review it</p><p className="mt-1 text-sm text-[#6B7280]">Our team checks every submission before it goes public. You can track the status (pending, approved, rejected) in your dashboard.</p></li>
           <li className="rounded-xl bg-[#FFFFFF] p-4"><p className="font-semibold">3. Get discovered</p><p className="mt-1 text-sm text-[#6B7280]">Add your services, hours, and photos. Receive calls and service requests directly — no commission.</p></li>
         </ol>
-        <Link href="/add-business" className="mt-4 inline-block rounded-lg bg-[#111111] px-5 py-3 font-semibold text-white">Add your business</Link>
+        <Link href="/add-business" className="mt-4 inline-block rounded-lg bg-[#C9A227] px-5 py-3 font-semibold text-black">Add your business</Link>
       </section>
 
       <section aria-labelledby="verification">

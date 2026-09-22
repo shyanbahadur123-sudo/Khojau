@@ -102,7 +102,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
           <option value="price_asc">Price: low to high</option>
           <option value="price_desc">Price: high to low</option>
         </select>
-        <button type="submit" className="rounded-full bg-[#111111] px-4 py-2 font-semibold text-white">Apply</button>
+        <button type="submit" className="rounded-full bg-[#C9A227] px-4 py-2 font-semibold text-black">Apply</button>
         {hasActiveFilter && <a href="/search" className="rounded-full border border-black/15 px-4 py-2">Clear</a>}
       </form>
       <p className="text-sm text-[#6B7280]" role="status">
