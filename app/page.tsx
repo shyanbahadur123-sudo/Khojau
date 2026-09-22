@@ -6,7 +6,7 @@ import CategoryGrid from "@/components/CategoryGrid";
 import CategoryIcon from "@/components/CategoryIcon";
 import { CheckIcon } from "@/components/UiIcon";
 import ProviderCard from "@/components/ProviderCard";
-import { CATEGORIES, POPULAR_SERVICES } from "@/lib/categories";
+import { CATEGORIES } from "@/lib/categories";
 import { LOCATIONS } from "@/lib/locations";
 import { getApprovedProviders } from "@/lib/providers";
 import { stringifyJsonLd } from "@/lib/validation";
@@ -25,7 +25,6 @@ export default async function HomePage() {
   const all = await getApprovedProviders({ limit: 12 });
   const featured = all.filter((p) => p.plan === "featured" || p.plan === "premium");
   const latest = all.filter((p) => p.plan !== "featured" && p.plan !== "premium").slice(0, 6);
-  const popular = CATEGORIES.filter((c) => POPULAR_SERVICES.includes(c.slug));
 
   return (
     <div className="space-y-8 pt-6 sm:space-y-12">
@@ -35,15 +34,8 @@ export default async function HomePage() {
           Find the right local service in Nepal.
           <span className="mt-2 block text-lg font-normal leading-snug text-[#6B7280]">Verified local providers. Direct contact. No middlemen.</span>
         </h1>
-        <p className="mt-3 max-w-xl text-base text-[#6B7280]">
-          Discover electricians, plumbers, repair technicians, tutors, photographers and other local service
-          providers across Nepal. Call them directly or send a service request.
-        </p>
-        <div className="mt-6"><Suspense><SearchBar /></Suspense></div>
-        <p className="mt-3 text-xs font-medium uppercase tracking-wide text-[#6B7280]">
-          {CATEGORIES.length} service categories · {LOCATIONS.length} cities · Free to list
-        </p>
-        <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+        <div className="mt-5"><Suspense><SearchBar /></Suspense></div>
+        <div className="mt-2.5 flex flex-wrap items-center gap-2 text-[13px]">
           <span className="text-[#6B7280]">Try:</span>
           {EXAMPLE_SEARCHES.map((s) => (
             <Link key={s} href={`/search?q=${encodeURIComponent(s)}`} className="rounded-full bg-black/5 px-3 py-1 transition-colors hover:bg-black/10">
@@ -51,23 +43,6 @@ export default async function HomePage() {
             </Link>
           ))}
         </div>
-      </section>
-
-      <section aria-labelledby="popular-services">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 id="popular-services" className="text-xl font-bold">Popular services</h2>
-          <Link href="/services" className="text-sm font-semibold text-[#111111] hover:underline">View all categories</Link>
-        </div>
-        <ul className="flex flex-wrap gap-2">
-          {popular.map((c) => (
-            <li key={c.slug}>
-              <Link href={`/services/${c.slug}`} className="inline-flex items-center gap-2 rounded-full bg-black/5 px-4 py-2 text-sm font-medium text-[#0A0A0A] transition-colors hover:bg-black/10 hover:text-[#7A5C00]">
-                <CategoryIcon slug={c.slug} className="h-4 w-4 text-[#7A5C00]" />
-                {c.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
       </section>
 
       <section aria-labelledby="browse-categories">
