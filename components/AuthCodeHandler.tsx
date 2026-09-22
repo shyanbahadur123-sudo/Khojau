@@ -25,8 +25,10 @@ export default function AuthCodeHandler() {
       return;
     }
     setStatus("working");
+    // Pass ONLY the code: the token endpoint rejects anything else
+    // (a full URL here fails every exchange — verified in auth-js source).
     supabaseBrowser()
-      .auth.exchangeCodeForSession(window.location.href)
+      .auth.exchangeCodeForSession(code as string)
       .then(({ error }) => setStatus(error ? "error" : "done"))
       .catch(() => setStatus("error"));
   }, [params]);
