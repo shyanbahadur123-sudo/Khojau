@@ -66,6 +66,16 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {latest.length > 0 && (
+        <section aria-labelledby="latest">
+          <h2 id="latest" className="mb-1 text-xl font-bold tracking-tight">Recent</h2>
+          <p className="mb-4 text-sm text-[#6B7280]">Newly approved listings, newest first.</p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {latest.map((p) => <ProviderCard key={p.id} provider={p} />)}
+          </div>
+        </section>
+      )}
+
       <section aria-labelledby="browse-categories">
         <div className="mb-4 flex items-center justify-between">
           <h2 id="browse-categories" className="text-xl font-bold tracking-tight">Browse categories</h2>
@@ -134,15 +144,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {latest.length > 0 && (
-        <section aria-labelledby="latest">
-          <h2 id="latest" className="mb-1 text-xl font-bold tracking-tight">Recent</h2>
-          <p className="mb-4 text-sm text-[#6B7280]">Newly approved listings, newest first.</p>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {latest.map((p) => <ProviderCard key={p.id} provider={p} />)}
-          </div>
-        </section>
-      )}
       {all.length === 0 && (
         <section aria-label="Get started" className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-6 text-center shadow-sm sm:p-10">
           <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-[#C9A227]/15 text-[#7A5C00]">
