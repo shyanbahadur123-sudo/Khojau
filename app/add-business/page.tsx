@@ -24,17 +24,17 @@ export default function AddBusinessPage() {
   return (
     <div className="mx-auto max-w-2xl pt-6">
       <h1 className="text-2xl font-bold">Add your business</h1>
-      <p className="mt-1 text-sm text-[#66706E]">Free basic listing. Submissions are reviewed before going public.</p>
-      <div className="mt-3 rounded-xl border border-[#0B7168]/25 bg-[#0B7168]/5 p-4 text-sm">
+      <p className="mt-1 text-sm text-[#6B7280]">Free basic listing. Submissions are reviewed before going public.</p>
+      <div className="mt-3 rounded-xl border border-[#111111]/25 bg-[#111111]/5 p-4 text-sm">
         <p className="font-semibold">What happens next?</p>
-        <ol className="mt-1 list-decimal space-y-1 pl-5 text-[#17201F]/85">
+        <ol className="mt-1 list-decimal space-y-1 pl-5 text-[#0A0A0A]/85">
           <li>You submit your business details below.</li>
           <li>Our team reviews the listing (usually within a day or two).</li>
           <li>Once approved, customers can find and contact you. Track status in your dashboard.</li>
         </ol>
       </div>
       <form
-        className="mt-4 space-y-3 rounded-2xl bg-[#FFFDF8] p-6"
+        className="mt-4 space-y-3 rounded-2xl bg-[#FFFFFF] p-6"
         onSubmit={async (e) => {
           e.preventDefault();
           setError(null);
@@ -137,7 +137,7 @@ export default function AddBusinessPage() {
           </div>
         </details>
         {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
-        <button disabled={loading} className="h-12 w-full rounded-lg bg-[#0B7168] font-semibold text-white disabled:opacity-60">
+        <button disabled={loading} className="h-12 w-full rounded-lg bg-[#111111] font-semibold text-white disabled:opacity-60">
           {loading ? "Submitting…" : "Submit for review"}
         </button>
       </form>

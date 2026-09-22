@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     description: "Nepal-focused local service discovery and business directory.",
   },
   twitter: { card: "summary_large_image", title: "Khojau", description: "Find trusted local services near you." },
+  themeColor: "#0A0A0A",
   robots: { index: true, follow: true },
 };
 

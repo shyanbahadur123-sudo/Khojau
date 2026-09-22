@@ -50,7 +50,7 @@ export default async function DashboardPage() {
     return (
       <div className="pt-6">
         <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="mt-2 text-sm text-[#66706E]">Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.</p>
+        <p className="mt-2 text-sm text-[#6B7280]">Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.</p>
       </div>
     );
   }
@@ -89,15 +89,15 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6 pt-6">
       <h1 className="text-2xl font-bold">My listings</h1>
-      <p className="text-sm text-[#66706E]">Signed in as {user.email}{isAdminEmail(user.email) ? " · Admin" : ""}</p>
+      <p className="text-sm text-[#6B7280]">Signed in as {user.email}{isAdminEmail(user.email) ? " · Admin" : ""}</p>
       <div className="flex gap-2">
-        <a href="/add-business" className="rounded-lg bg-[#0B7168] px-4 py-2 font-semibold text-white">Add business</a>
+        <a href="/add-business" className="rounded-lg bg-[#111111] px-4 py-2 font-semibold text-white">Add business</a>
         {isAdminEmail(user.email) && <a href="/admin" className="rounded-lg border px-4 py-2 font-semibold">Admin dashboard</a>}
         <form action="/api/auth/signout" method="post"><button className="rounded-lg border px-4 py-2">Sign out</button></form>
       </div>
       <RequestManager incoming={(incoming ?? []) as unknown as ServiceRequestRow[]} mine={(myRequests ?? []) as unknown as ServiceRequestRow[]} />
       {rows.length === 0 ? (
-        <p className="rounded-xl bg-[#FFFDF8] p-6 text-sm text-[#66706E]">No listings yet. Submit your first business — it goes to pending review.</p>
+        <p className="rounded-xl bg-[#FFFFFF] p-6 text-sm text-[#6B7280]">No listings yet. Submit your first business — it goes to pending review.</p>
       ) : (
         <ul className="grid gap-4 xl:grid-cols-2">
           {rows.map((p) => {
@@ -119,11 +119,11 @@ export default async function DashboardPage() {
               price_max: p.price_max,
             };
             return (
-              <li key={p.slug} className="rounded-xl bg-[#FFFDF8] p-4">
+              <li key={p.slug} className="rounded-xl bg-[#FFFFFF] p-4">
                 <p className="font-semibold">{p.business_name}</p>
-                <p className="text-sm text-[#66706E]">{p.status} · {p.verification_status} · {p.plan}</p>
+                <p className="text-sm text-[#6B7280]">{p.status} · {p.verification_status} · {p.plan}</p>
                 {STATUS_HELP[p.status] && (
-                  <p className="mt-1 rounded-lg bg-black/5 p-2 text-xs text-[#66706E]">{STATUS_HELP[p.status]}</p>
+                  <p className="mt-1 rounded-lg bg-black/5 p-2 text-xs text-[#6B7280]">{STATUS_HELP[p.status]}</p>
                 )}
                 <ProviderEditor provider={editable} />
                 <ServiceManager providerId={p.id} initial={p.services ?? []} />

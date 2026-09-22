@@ -12,7 +12,7 @@ export default function ResetPasswordPage() {
 
   if (!isSupabaseConfigured()) {
     return (
-      <div className="mx-auto mt-6 max-w-md rounded-2xl bg-[#FFFDF8] p-6">
+      <div className="mx-auto mt-6 max-w-md rounded-2xl bg-[#FFFFFF] p-6">
         <h1 className="text-2xl font-bold">Set new password</h1>
         <p className="mt-2 text-sm">Authentication is not configured yet.</p>
       </div>
@@ -20,9 +20,9 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="mx-auto mt-6 max-w-md rounded-2xl bg-[#FFFDF8] p-6">
+    <div className="mx-auto mt-6 max-w-md rounded-2xl bg-[#FFFFFF] p-6">
       <h1 className="text-2xl font-bold">Set new password</h1>
-      <p className="mt-1 text-sm text-[#66706E]">Open this page from the reset link in your email, then choose a new password.</p>
+      <p className="mt-1 text-sm text-[#6B7280]">Open this page from the reset link in your email, then choose a new password.</p>
       <form
         className="mt-4 space-y-3"
         onSubmit={async (e) => {
@@ -51,7 +51,7 @@ export default function ResetPasswordPage() {
           <label htmlFor="password" className="text-sm font-semibold">New password</label>
           <input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1 h-11 w-full rounded-lg border border-black/15 px-3" />
         </div>
-        <button disabled={loading} className="h-11 w-full rounded-lg bg-[#0B7168] font-semibold text-white disabled:opacity-60">
+        <button disabled={loading} className="h-11 w-full rounded-lg bg-[#111111] font-semibold text-white disabled:opacity-60">
           {loading ? "Saving…" : "Save new password"}
         </button>
         {status && <p role="alert" className="text-sm text-red-700">{status}</p>}

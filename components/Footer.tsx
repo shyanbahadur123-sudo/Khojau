@@ -2,11 +2,11 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-black/10 bg-[#FFFDF8]">
+    <footer className="border-t border-black/10 bg-[#FFFFFF]">
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-10 sm:grid-cols-4 sm:px-6">
         <div>
-          <p className="font-bold text-[#0B7168]">Khojau</p>
-          <p className="mt-2 text-sm text-[#66706E]">Find trusted local services near you, across Nepal.</p>
+          <p className="font-bold text-[#111111]">Khojau</p>
+          <p className="mt-2 text-sm text-[#6B7280]">Find trusted local services near you, across Nepal.</p>
         </div>
         <nav aria-label="Discover">
           <p className="text-sm font-semibold">Discover</p>
@@ -35,7 +35,7 @@ export default function Footer() {
           </ul>
         </nav>
       </div>
-      <p className="border-t border-black/10 py-4 text-center text-xs text-[#66706E]">
+      <p className="border-t border-black/10 py-4 text-center text-xs text-[#6B7280]">
         © {new Date().getFullYear()} Khojau. Made for Nepal.
       </p>
     </footer>

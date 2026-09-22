@@ -10,14 +10,14 @@ export default function CategoryGrid({ limit }: { limit?: number }) {
         <li key={c.slug}>
           <Link
             href={`/services/${c.slug}`}
-            className="group flex h-full items-start gap-3 rounded-xl border border-black/10 bg-[#FFFDF8] p-4 transition-colors hover:border-[#0B7168]/50"
+            className="group flex h-full items-start gap-3 rounded-xl border border-black/10 bg-[#FFFFFF] p-4 transition-colors hover:border-[#111111]/50"
           >
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#0B7168]/10 text-[#0B7168] transition-colors group-hover:bg-[#0B7168]/15">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#111111]/10 text-[#111111] transition-colors group-hover:bg-[#111111]/15">
               <CategoryIcon slug={c.slug} className="h-5 w-5" />
             </span>
             <span className="min-w-0">
               <span className="block font-semibold leading-snug">{c.name}</span>
-              {c.description && <span className="mt-0.5 block text-xs leading-snug text-[#66706E]">{c.description}</span>}
+              {c.description && <span className="mt-0.5 block text-xs leading-snug text-[#6B7280]">{c.description}</span>}
             </span>
           </Link>
         </li>

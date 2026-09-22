@@ -88,9 +88,9 @@ export default function HoursManager({ providerId, initial }: { providerId: stri
   return (
     <section aria-label="Manage opening hours" className="mt-3 rounded-xl border border-black/10 bg-white/60 p-4">
       <h3 className="text-sm font-bold">Opening hours</h3>
-      <p className="mt-1 text-xs text-[#66706E]">Days without saved hours are shown as unspecified on your public page.</p>
+      <p className="mt-1 text-xs text-[#6B7280]">Days without saved hours are shown as unspecified on your public page.</p>
       {error && <p role="alert" className="mt-2 text-sm text-red-700">{error}</p>}
-      {saved && <p role="status" className="mt-2 text-sm font-medium text-[#0B7168]">{saved}</p>}
+      {saved && <p role="status" className="mt-2 text-sm font-medium text-[#111111]">{saved}</p>}
       <ul className="mt-2 space-y-2">
         {WEEKDAYS.map((label, weekday) => {
           const d = days.get(weekday);
@@ -126,9 +126,9 @@ export default function HoursManager({ providerId, initial }: { providerId: stri
                   />
                 </>
               )}
-              {!hasRow && closed && <span className="text-xs text-[#66706E]">unspecified</span>}
+              {!hasRow && closed && <span className="text-xs text-[#6B7280]">unspecified</span>}
               <span className="ml-auto flex gap-1">
-                <button disabled={busy !== null} onClick={() => void saveDay(weekday)} className="rounded bg-[#0B7168] px-2 py-1 text-xs font-semibold text-white disabled:opacity-60">
+                <button disabled={busy !== null} onClick={() => void saveDay(weekday)} className="rounded bg-[#111111] px-2 py-1 text-xs font-semibold text-white disabled:opacity-60">
                   {busy === weekday ? "…" : "Save"}
                 </button>
                 {hasRow && (

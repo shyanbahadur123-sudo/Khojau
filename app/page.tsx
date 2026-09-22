@@ -29,21 +29,21 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-12 pt-6">
-      <section aria-labelledby="hero-heading" className="rounded-2xl border border-black/10 bg-[#FFFDF8] p-6 shadow-sm sm:p-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#0B7168]">Nepal&rsquo;s local services directory</p>
+      <section aria-labelledby="hero-heading" className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-6 shadow-sm sm:p-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#111111]">Nepal&rsquo;s local services directory</p>
         <h1 id="hero-heading" className="mt-2 max-w-xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
           Find the right local service in Nepal.
-          <span className="mt-2 block text-lg font-normal leading-snug text-[#66706E]">Verified local providers. Direct contact. No middlemen.</span>
+          <span className="mt-2 block text-lg font-normal leading-snug text-[#6B7280]">Verified local providers. Direct contact. No middlemen.</span>
         </h1>
-        <p className="mt-3 max-w-xl text-base text-[#66706E]">
+        <p className="mt-3 max-w-xl text-base text-[#6B7280]">
           Discover electricians, plumbers, repair technicians, tutors, photographers and other local service
           providers across Nepal. Call them directly or send a service request.
         </p>
         <div className="mt-6"><Suspense><SearchBar /></Suspense></div>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
-          <span className="text-[#66706E]">Try:</span>
+          <span className="text-[#6B7280]">Try:</span>
           {EXAMPLE_SEARCHES.map((s) => (
-            <Link key={s} href={`/search?q=${encodeURIComponent(s)}`} className="rounded-full border border-black/15 bg-white px-3 py-1 hover:border-[#0B7168]">
+            <Link key={s} href={`/search?q=${encodeURIComponent(s)}`} className="rounded-full border border-black/15 bg-white px-3 py-1 hover:border-[#111111]">
               {s}
             </Link>
           ))}
@@ -53,13 +53,13 @@ export default async function HomePage() {
       <section aria-labelledby="popular-services">
         <div className="mb-4 flex items-center justify-between">
           <h2 id="popular-services" className="text-xl font-bold">Popular services</h2>
-          <Link href="/services" className="text-sm font-semibold text-[#0B7168] hover:underline">View all categories</Link>
+          <Link href="/services" className="text-sm font-semibold text-[#111111] hover:underline">View all categories</Link>
         </div>
         <ul className="flex flex-wrap gap-2">
           {popular.map((c) => (
             <li key={c.slug}>
-              <Link href={`/services/${c.slug}`} className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-[#FFFDF8] px-4 py-2 text-sm font-medium text-[#17201F] transition-colors hover:border-[#0B7168]/50 hover:text-[#0B7168]">
-                <CategoryIcon slug={c.slug} className="h-4 w-4 text-[#0B7168]" />
+              <Link href={`/services/${c.slug}`} className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-[#FFFFFF] px-4 py-2 text-sm font-medium text-[#0A0A0A] transition-colors hover:border-[#111111]/50 hover:text-[#111111]">
+                <CategoryIcon slug={c.slug} className="h-4 w-4 text-[#111111]" />
                 {c.name}
               </Link>
             </li>
@@ -75,14 +75,14 @@ export default async function HomePage() {
       <section aria-labelledby="popular-locations">
         <div className="mb-4 flex items-center justify-between">
           <h2 id="popular-locations" className="text-xl font-bold">Popular locations</h2>
-          <Link href="/locations" className="text-sm font-semibold text-[#0B7168] hover:underline">View all</Link>
+          <Link href="/locations" className="text-sm font-semibold text-[#111111] hover:underline">View all</Link>
         </div>
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {LOCATIONS.slice(0, 8).map((l) => (
             <li key={l.slug}>
-              <Link href={`/locations/${l.slug}`} className="block rounded-xl border border-black/10 bg-[#FFFDF8] p-4 font-semibold hover:border-[#0B7168]">
+              <Link href={`/locations/${l.slug}`} className="block rounded-xl border border-black/10 bg-[#FFFFFF] p-4 font-semibold hover:border-[#111111]">
                 {l.city}
-                <span className="block text-xs font-normal text-[#66706E]">{l.areas.slice(0, 3).join(" · ")}</span>
+                <span className="block text-xs font-normal text-[#6B7280]">{l.areas.slice(0, 3).join(" · ")}</span>
               </Link>
             </li>
           ))}
@@ -107,59 +107,59 @@ export default async function HomePage() {
         </section>
       )}
       {all.length === 0 && (
-        <section aria-label="Get started" className="rounded-2xl border border-black/10 bg-[#FFFDF8] p-6 text-center shadow-sm sm:p-10">
-          <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-[#0B7168]/10 text-[#0B7168]">
+        <section aria-label="Get started" className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-6 text-center shadow-sm sm:p-10">
+          <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-[#111111]/10 text-[#111111]">
             <CategoryIcon slug="other" className="h-6 w-6" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight">Be the first business on Khojau</h2>
-          <p className="mx-auto mt-2 max-w-md text-sm text-[#66706E]">
+          <p className="mx-auto mt-2 max-w-md text-sm text-[#6B7280]">
             Khojau is a new directory for trusted local services in Nepal. List your business for free and get discovered by customers nearby.
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
-            <Link href="/add-business" className="rounded-lg bg-[#0B7168] px-5 py-3 font-semibold text-white">List your business — it&apos;s free</Link>
+            <Link href="/add-business" className="rounded-lg bg-[#111111] px-5 py-3 font-semibold text-white">List your business — it&apos;s free</Link>
             <Link href="/request-service" className="rounded-lg border border-black/15 px-5 py-3 font-semibold">Request a service</Link>
           </div>
         </section>
       )}
 
-      <section aria-labelledby="how" className="rounded-2xl bg-[#FFFDF8] p-6 sm:p-8">
+      <section aria-labelledby="how" className="rounded-2xl bg-[#FFFFFF] p-6 sm:p-8">
         <h2 id="how" className="text-xl font-bold">How Khojau works</h2>
         <ol className="mt-4 grid gap-4 sm:grid-cols-3">
-          <li><p className="font-semibold">1. Search</p><p className="text-sm text-[#66706E]">Enter a service and location, or browse categories.</p></li>
-          <li><p className="font-semibold">2. Compare</p><p className="text-sm text-[#66706E]">Open profiles with services, prices, hours, and contact details.</p></li>
-          <li><p className="font-semibold">3. Contact</p><p className="text-sm text-[#66706E]">Call, message on WhatsApp, get directions, or send a service request.</p></li>
+          <li><p className="font-semibold">1. Search</p><p className="text-sm text-[#6B7280]">Enter a service and location, or browse categories.</p></li>
+          <li><p className="font-semibold">2. Compare</p><p className="text-sm text-[#6B7280]">Open profiles with services, prices, hours, and contact details.</p></li>
+          <li><p className="font-semibold">3. Contact</p><p className="text-sm text-[#6B7280]">Call, message on WhatsApp, get directions, or send a service request.</p></li>
         </ol>
-        <p className="mt-4 text-sm"><Link href="/how-it-works" className="font-semibold text-[#0B7168] hover:underline">Learn more about how Khojau works →</Link></p>
+        <p className="mt-4 text-sm"><Link href="/how-it-works" className="font-semibold text-[#111111] hover:underline">Learn more about how Khojau works →</Link></p>
       </section>
 
-      <section aria-labelledby="for-providers" className="rounded-2xl border border-[#0B7168]/25 bg-[#0B7168]/5 p-6 sm:p-8">
+      <section aria-labelledby="for-providers" className="rounded-2xl border border-[#111111]/25 bg-[#111111]/5 p-6 sm:p-8">
         <h2 id="for-providers" className="text-xl font-bold">For service providers</h2>
         <ul className="mt-3 grid gap-3 text-[15px] sm:grid-cols-2">
           {["List your business for free", "Show your services and prices", "Receive service requests directly", "Grow your local visibility"].map((t) => (
             <li key={t} className="flex items-start gap-2">
-              <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#0B7168]" />
+              <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#111111]" />
               <span>{t}</span>
             </li>
           ))}
         </ul>
         <div className="mt-5">
-          <Link href="/add-business" className="inline-block rounded-lg bg-[#0B7168] px-5 py-3 font-semibold text-white">Add your business</Link>
+          <Link href="/add-business" className="inline-block rounded-lg bg-[#111111] px-5 py-3 font-semibold text-white">Add your business</Link>
         </div>
       </section>
 
-      <section aria-labelledby="trust" className="rounded-2xl bg-[#FFFDF8] p-6 sm:p-8">
+      <section aria-labelledby="trust" className="rounded-2xl bg-[#FFFFFF] p-6 sm:p-8">
         <h2 id="trust" className="text-xl font-bold">Why trust Khojau listings?</h2>
-        <ul className="mt-3 max-w-2xl space-y-2 text-[15px] text-[#17201F]/85">
+        <ul className="mt-3 max-w-2xl space-y-2 text-[15px] text-[#0A0A0A]/85">
           <li><strong>Reviewed listings.</strong> Every business is reviewed by our team before it appears publicly.</li>
           <li><strong>Verified badge.</strong> Verified businesses have passed Khojau&apos;s current verification checks — currently contact and business-detail confirmation.</li>
           <li><strong>Direct contact.</strong> Phone numbers and addresses are shown as submitted, so you can verify details yourself before hiring.</li>
           <li><strong>Report problems.</strong> Wrong number or closed business? Every provider page has a report link our team reviews.</li>
         </ul>
-        <p className="mt-3 text-sm text-[#66706E]">Khojau does not display ratings or reviews yet — and never invents them.</p>
+        <p className="mt-3 text-sm text-[#6B7280]">Khojau does not display ratings or reviews yet — and never invents them.</p>
       </section>
 
-      <section aria-label="Get started" className="flex flex-col items-center gap-3 rounded-2xl bg-[#17201F] p-8 text-center sm:flex-row sm:justify-center sm:gap-4">
-        <Link href="/search" className="w-full rounded-lg bg-[#0B7168] px-6 py-3 font-semibold text-white sm:w-auto">Find a service</Link>
+      <section aria-label="Get started" className="flex flex-col items-center gap-3 rounded-2xl bg-[#0A0A0A] p-8 text-center sm:flex-row sm:justify-center sm:gap-4">
+        <Link href="/search" className="w-full rounded-lg bg-[#111111] px-6 py-3 font-semibold text-white sm:w-auto">Find a service</Link>
         <Link href="/add-business" className="w-full rounded-lg border border-white/30 px-6 py-3 font-semibold text-white sm:w-auto">List your business</Link>
       </section>
 

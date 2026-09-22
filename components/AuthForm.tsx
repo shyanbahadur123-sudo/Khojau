@@ -43,7 +43,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
 
   if (!isSupabaseConfigured()) {
     return (
-      <div className="mx-auto mt-6 max-w-md rounded-2xl bg-[#FFFDF8] p-6">
+      <div className="mx-auto mt-6 max-w-md rounded-2xl bg-[#FFFFFF] p-6">
         <h1 className="text-2xl font-bold">{mode === "register" ? "Create account" : "Log in"}</h1>
         <p className="mt-2 text-sm">Authentication is not configured yet. Add Supabase credentials to <code>.env.local</code>.</p>
       </div>
@@ -52,7 +52,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
 
   return (
     <form
-      className="mx-auto mt-6 max-w-md space-y-3 rounded-2xl bg-[#FFFDF8] p-6"
+      className="mx-auto mt-6 max-w-md space-y-3 rounded-2xl bg-[#FFFFFF] p-6"
       onSubmit={async (e) => {
         e.preventDefault();
         setError(null);
@@ -82,7 +82,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
       }}
     >
       <h1 className="text-2xl font-bold">{mode === "register" ? "Create account" : "Log in"}</h1>
-      <p className="text-sm text-[#66706E]">
+      <p className="text-sm text-[#6B7280]">
         {mode === "register" ? "One account for requesting services and listing your business." : "Welcome back."}
       </p>
       <button
@@ -99,7 +99,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
         </svg>
         {oauthLoading ? "Connecting…" : mode === "register" ? "Continue with Google" : "Sign in with Google"}
       </button>
-      <div className="flex items-center gap-3 text-xs text-[#66706E]" aria-hidden="true">
+      <div className="flex items-center gap-3 text-xs text-[#6B7280]" aria-hidden="true">
         <span className="h-px flex-1 bg-black/10" />
         <span>or with email</span>
         <span className="h-px flex-1 bg-black/10" />
@@ -111,14 +111,14 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
       <div>
         <label htmlFor="password" className="text-sm font-semibold">Password</label>
         <input id="password" type="password" required minLength={6} autoComplete={mode === "register" ? "new-password" : "current-password"} value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1 h-11 w-full rounded-lg border border-black/15 px-3" />
-        {mode === "register" && <p className="mt-1 text-xs text-[#66706E]">At least 6 characters.</p>}
+        {mode === "register" && <p className="mt-1 text-xs text-[#6B7280]">At least 6 characters.</p>}
       </div>
       {(error || oauthError) && <p role="alert" className="text-sm text-red-700">{error ?? oauthError}</p>}
-      {notice && <p role="status" className="text-sm text-[#0B7168]">{notice}</p>}
-      <button disabled={loading} className="h-11 w-full rounded-lg bg-[#0B7168] font-semibold text-white disabled:opacity-60">
+      {notice && <p role="status" className="text-sm text-[#111111]">{notice}</p>}
+      <button disabled={loading} className="h-11 w-full rounded-lg bg-[#111111] font-semibold text-white disabled:opacity-60">
         {loading ? "Please wait…" : mode === "register" ? "Register" : "Log in"}
       </button>
-      <p className="text-sm text-[#66706E]">
+      <p className="text-sm text-[#6B7280]">
         {mode === "register" ? (
           <>Already have an account? <a href="/login" className="underline">Log in</a></>
         ) : (

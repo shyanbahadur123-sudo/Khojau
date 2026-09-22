@@ -139,8 +139,8 @@ export default function ProviderEditor({ provider }: { provider: EditableProvide
         </div>
       </div>
       {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
-      {saved && <p role="status" className="text-sm font-medium text-[#0B7168]">{saved}</p>}
-      <button disabled={loading} className="h-11 rounded-lg bg-[#0B7168] px-5 font-semibold text-white disabled:opacity-60">
+      {saved && <p role="status" className="text-sm font-medium text-[#111111]">{saved}</p>}
+      <button disabled={loading} className="h-11 rounded-lg bg-[#111111] px-5 font-semibold text-white disabled:opacity-60">
         {loading ? "Saving…" : "Save changes"}
       </button>
     </form>

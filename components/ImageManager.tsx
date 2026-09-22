@@ -162,7 +162,7 @@ export default function ImageManager({ providerId, businessName, status, initial
     <section aria-label={`Photos for ${businessName}`} className="mt-3 rounded-xl border border-black/10 bg-white/60 p-4">
       <h3 className="text-sm font-bold">Photos — visible publicly once the listing is approved</h3>
       {!canUpload && (
-        <p className="mt-2 text-sm text-[#66706E]">
+        <p className="mt-2 text-sm text-[#6B7280]">
           Photos can be added after this listing is approved. Current status: <strong>{status}</strong>.
         </p>
       )}
@@ -181,7 +181,7 @@ export default function ImageManager({ providerId, businessName, status, initial
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={current} alt={`${businessName} ${kind}`} className="mt-1 h-24 w-full rounded-lg border object-cover" loading="lazy" />
               ) : (
-                <p className="mt-1 rounded-lg border border-dashed p-4 text-xs text-[#66706E]">No {kind} yet.</p>
+                <p className="mt-1 rounded-lg border border-dashed p-4 text-xs text-[#6B7280]">No {kind} yet.</p>
               )}
               <label className="mt-2 inline-block cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-medium">
                 {busy === kind ? "Uploading…" : current ? `Replace ${kind}` : `Upload ${kind}`}
@@ -221,7 +221,7 @@ export default function ImageManager({ providerId, businessName, status, initial
           </label>
         </div>
         {images.length === 0 ? (
-          <p className="mt-2 text-xs text-[#66706E]">No gallery photos yet. JPG, PNG, or WebP up to 2 MB each.</p>
+          <p className="mt-2 text-xs text-[#6B7280]">No gallery photos yet. JPG, PNG, or WebP up to 2 MB each.</p>
         ) : (
           <ul className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {images.map((img, i) => (

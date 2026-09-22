@@ -6,17 +6,17 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#0B7168",
-          dark: "#095A53",
-          light: "#E6F2F0",
+          DEFAULT: "#111111",
+          dark: "#000000",
+          light: "#F5F5F5",
         },
         cream: {
-          bg: "#F4F1E8",
-          card: "#FFFDF8",
+          bg: "#FAFAFA",
+          card: "#FFFFFF",
         },
         ink: {
-          DEFAULT: "#17201F",
-          muted: "#66706E",
+          DEFAULT: "#0A0A0A",
+          muted: "#6B7280",
         },
       },
       fontFamily: {

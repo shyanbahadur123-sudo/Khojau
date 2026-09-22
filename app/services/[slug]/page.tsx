@@ -26,14 +26,14 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
   const providers = rankProviders(await getApprovedProviders({ categorySlug: c.slug, limit: 48 }), c.name, "");
   return (
     <div className="space-y-6 pt-6">
-      <nav className="text-sm text-[#66706E]" aria-label="Breadcrumb">
+      <nav className="text-sm text-[#6B7280]" aria-label="Breadcrumb">
         <Link href="/" className="hover:underline">Home</Link> / <Link href="/services" className="hover:underline">Services</Link> / <span aria-current="page">{c.name}</span>
       </nav>
-      <h1 className="flex items-center gap-3 text-2xl font-bold tracking-tight"><span className="grid h-10 w-10 place-items-center rounded-lg bg-[#0B7168]/10 text-[#0B7168]"><CategoryIcon slug={c.slug} className="h-5 w-5" /></span>{c.name} in Nepal</h1>
-      {c.description && <p className="text-[#66706E]">{c.description}</p>}
+      <h1 className="flex items-center gap-3 text-2xl font-bold tracking-tight"><span className="grid h-10 w-10 place-items-center rounded-lg bg-[#111111]/10 text-[#111111]"><CategoryIcon slug={c.slug} className="h-5 w-5" /></span>{c.name} in Nepal</h1>
+      {c.description && <p className="text-[#6B7280]">{c.description}</p>}
       <Suspense><SearchBar compact /></Suspense>
       {providers.length === 0 ? (
-        <p className="rounded-xl bg-[#FFFDF8] p-6 text-sm text-[#66706E]">
+        <p className="rounded-xl bg-[#FFFFFF] p-6 text-sm text-[#6B7280]">
           No approved {c.name.toLowerCase()} listings yet. <Link className="underline" href="/add-business">Add your business</Link> or <Link className="underline" href="/request-service">request this service</Link>.
         </p>
       ) : (

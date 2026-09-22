@@ -34,17 +34,17 @@ export default function AdminProviderActions({ rows }: { rows: Row[] }) {
   return (
     <ul className="space-y-3">
       {rows.map((p) => (
-        <li key={p.id} className="rounded-xl bg-[#FFFDF8] p-4 text-sm">
+        <li key={p.id} className="rounded-xl bg-[#FFFFFF] p-4 text-sm">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <p className="font-bold">{p.business_name}</p>
-              <p className="text-[#66706E]">{p.area ? `${p.area}, ` : ""}{p.city} · {p.phone}</p>
-              <p className="text-[#66706E]">{p.status} · {p.verification_status} · {p.plan}</p>
+              <p className="text-[#6B7280]">{p.area ? `${p.area}, ` : ""}{p.city} · {p.phone}</p>
+              <p className="text-[#6B7280]">{p.status} · {p.verification_status} · {p.plan}</p>
             </div>
             <a href={`/provider/${p.slug}`} target="_blank" className="underline">View</a>
           </div>
           <div className="mt-2 flex flex-wrap gap-2">
-            <button disabled={busy !== null} onClick={() => act(p.id, "approve")} className="rounded-lg bg-[#0B7168] px-3 py-1.5 font-semibold text-white">Approve</button>
+            <button disabled={busy !== null} onClick={() => act(p.id, "approve")} className="rounded-lg bg-[#111111] px-3 py-1.5 font-semibold text-white">Approve</button>
             <button disabled={busy !== null} onClick={() => act(p.id, "reject")} className="rounded-lg border px-3 py-1.5">Reject</button>
             <button disabled={busy !== null} onClick={() => act(p.id, "suspend")} className="rounded-lg border px-3 py-1.5">Suspend</button>
             <button disabled={busy !== null} onClick={() => act(p.id, "verify")} className="rounded-lg border px-3 py-1.5">Verify</button>

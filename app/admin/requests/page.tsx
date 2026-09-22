@@ -26,18 +26,18 @@ export default async function AdminRequestsPage({ searchParams }: { searchParams
         ))}
       </nav>
       {(data ?? []).length === 0 ? (
-        <p className="rounded-xl bg-[#FFFDF8] p-4 text-sm text-[#66706E]">No {status.replace("_", " ")} requests.</p>
+        <p className="rounded-xl bg-[#FFFFFF] p-4 text-sm text-[#6B7280]">No {status.replace("_", " ")} requests.</p>
       ) : (
         <ul className="space-y-2 text-sm">
           {(data ?? []).map((r: { id: string; service: string; location: string; description: string; phone: string; preferred_time: string | null; status: RequestStatus; providers: { business_name: string } | { business_name: string }[] | null }) => (
-            <li key={r.id} className="rounded-xl bg-[#FFFDF8] p-4">
+            <li key={r.id} className="rounded-xl bg-[#FFFFFF] p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="font-semibold">{r.service} · {r.location}</p>
                 <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs font-semibold">{r.status.replace("_", " ")}</span>
               </div>
               <p className="mt-1">{r.description}</p>
-              <p className="mt-1 text-[#66706E]">
-                <a href={`tel:${r.phone}`} className="text-[#0B7168] hover:underline">{r.phone}</a>
+              <p className="mt-1 text-[#6B7280]">
+                <a href={`tel:${r.phone}`} className="text-[#111111] hover:underline">{r.phone}</a>
                 {r.preferred_time ? ` · ${r.preferred_time}` : ""}
                 {(Array.isArray(r.providers) ? r.providers[0] : r.providers) ? ` · ${(Array.isArray(r.providers) ? r.providers[0] : r.providers)?.business_name}` : " · unmatched"}
               </p>

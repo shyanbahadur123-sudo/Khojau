@@ -18,11 +18,11 @@ export default async function AdminReportsPage() {
     <div className="space-y-4 pt-6">
       <h1 className="text-2xl font-bold">Reports</h1>
       {(reports ?? []).length === 0 ? (
-        <p className="rounded-xl bg-[#FFFDF8] p-4 text-sm text-[#66706E]">No reports.</p>
+        <p className="rounded-xl bg-[#FFFFFF] p-4 text-sm text-[#6B7280]">No reports.</p>
       ) : (
         <ul className="space-y-2 text-sm">
           {(reports ?? []).map((r: { id: string; reason: string; contact: string | null; status: string; providers: { business_name: string } | { business_name: string }[] | null }) => (
-            <li key={r.id} className="rounded-xl bg-[#FFFDF8] p-4">
+            <li key={r.id} className="rounded-xl bg-[#FFFFFF] p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="font-semibold">{(Array.isArray(r.providers) ? r.providers[0] : r.providers)?.business_name ?? "Unknown listing"}</p>
                 <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs font-semibold">{r.status}</span>

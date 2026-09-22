@@ -8,9 +8,9 @@ export default function ReportButton({ providerId }: { providerId: string }) {
   const [status, setStatus] = useState<string | null>(null);
 
   return (
-    <section aria-label="Report listing" className="rounded-xl bg-[#FFFDF8] p-5 text-sm">
+    <section aria-label="Report listing" className="rounded-xl bg-[#FFFFFF] p-5 text-sm">
       {!open ? (
-        <button onClick={() => setOpen(true)} className="text-[#66706E] underline">Report this listing</button>
+        <button onClick={() => setOpen(true)} className="text-[#6B7280] underline">Report this listing</button>
       ) : (
         <form
           onSubmit={async (e) => {
@@ -37,10 +37,10 @@ export default function ReportButton({ providerId }: { providerId: string }) {
             placeholder="e.g. Wrong phone number, closed business…"
           />
           <div className="mt-2 flex gap-2">
-            <button type="submit" className="rounded-lg bg-[#17201F] px-4 py-2 font-semibold text-white">Submit</button>
+            <button type="submit" className="rounded-lg bg-[#0A0A0A] px-4 py-2 font-semibold text-white">Submit</button>
             <button type="button" onClick={() => setOpen(false)} className="rounded-lg border px-4 py-2">Cancel</button>
           </div>
-          {status && <p role="status" className="mt-2 text-[#66706E]">{status}</p>}
+          {status && <p role="status" className="mt-2 text-[#6B7280]">{status}</p>}
         </form>
       )}
     </section>

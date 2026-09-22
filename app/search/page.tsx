@@ -102,10 +102,10 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
           <option value="price_asc">Price: low to high</option>
           <option value="price_desc">Price: high to low</option>
         </select>
-        <button type="submit" className="rounded-full bg-[#0B7168] px-4 py-2 font-semibold text-white">Apply</button>
+        <button type="submit" className="rounded-full bg-[#111111] px-4 py-2 font-semibold text-white">Apply</button>
         {hasActiveFilter && <a href="/search" className="rounded-full border border-black/15 px-4 py-2">Clear</a>}
       </form>
-      <p className="text-sm text-[#66706E]" role="status">
+      <p className="text-sm text-[#6B7280]" role="status">
         {total === 0 ? "No providers found." : `${total} provider${total === 1 ? "" : "s"} found`}
         {query && <> for <strong>{query}</strong></>}
         {location && <> in <strong>{location}</strong></>}
@@ -114,9 +114,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
         {paged.map((p) => <ProviderCard key={p.id} provider={p} />)}
       </div>
       {total === 0 && (
-        <div className="rounded-xl bg-[#FFFDF8] p-6 text-sm">
+        <div className="rounded-xl bg-[#FFFFFF] p-6 text-sm">
           <p className="font-semibold">Nothing matched your search.</p>
-          <p className="mt-1 text-[#66706E]">Try a broader service (e.g. “repair”) or a nearby area. Or <a className="underline" href="/request-service">request the service</a> and we’ll help match you.</p>
+          <p className="mt-1 text-[#6B7280]">Try a broader service (e.g. “repair”) or a nearby area. Or <a className="underline" href="/request-service">request the service</a> and we’ll help match you.</p>
         </div>
       )}
       {total > PAGE_SIZE && (

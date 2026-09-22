@@ -34,18 +34,18 @@ export default function AuthCodeHandler() {
   if (status === "idle") return null;
   return (
     <div className="mx-auto w-full max-w-6xl px-4 sm:px-6" aria-live="polite">
-      <div className="mt-4 rounded-xl border border-[#0B7168]/30 bg-[#FFFDF8] p-4 text-sm">
+      <div className="mt-4 rounded-xl border border-[#111111]/30 bg-[#FFFFFF] p-4 text-sm">
         {status === "working" && <p>Confirming your email…</p>}
         {status === "done" && (
           <p>
             <strong>Email confirmed — welcome!</strong> You are now signed in.{" "}
-            <a href="/dashboard" className="font-semibold text-[#0B7168] hover:underline">Go to your dashboard →</a>
+            <a href="/dashboard" className="font-semibold text-[#111111] hover:underline">Go to your dashboard →</a>
           </p>
         )}
         {status === "error" && (
           <p>
             <strong>This link is invalid or has expired.</strong> Request a new confirmation email by registering again,{" "}
-            or <a href="/login" className="font-semibold text-[#0B7168] hover:underline">log in</a> if you already have an account.
+            or <a href="/login" className="font-semibold text-[#111111] hover:underline">log in</a> if you already have an account.
           </p>
         )}
       </div>

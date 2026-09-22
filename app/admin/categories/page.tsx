@@ -15,12 +15,12 @@ export default async function AdminCategoriesPage() {
   return (
     <div className="space-y-4 pt-6">
       <h1 className="text-2xl font-bold">Categories</h1>
-      <p className="text-sm text-[#66706E]">Canonical list has 22 categories. Run the seed in supabase/migrations/0001_init.sql to sync the DB.</p>
+      <p className="text-sm text-[#6B7280]">Canonical list has 22 categories. Run the seed in supabase/migrations/0001_init.sql to sync the DB.</p>
       <ul className="grid gap-2 sm:grid-cols-2">
         {CATEGORIES.map((c) => (
-          <li key={c.slug} className="flex items-center justify-between rounded-xl bg-[#FFFDF8] p-3 text-sm">
-            <span className="flex items-center gap-2"><CategoryIcon slug={c.slug} className="h-4 w-4 text-[#0B7168]" /><strong>{c.name}</strong> <code className="text-[#66706E]">{c.slug}</code></span>
-            <span className={inDb.has(c.slug) ? "text-[#0B7168]" : "text-amber-700"}>{inDb.has(c.slug) ? "in DB" : "missing"}</span>
+          <li key={c.slug} className="flex items-center justify-between rounded-xl bg-[#FFFFFF] p-3 text-sm">
+            <span className="flex items-center gap-2"><CategoryIcon slug={c.slug} className="h-4 w-4 text-[#111111]" /><strong>{c.name}</strong> <code className="text-[#6B7280]">{c.slug}</code></span>
+            <span className={inDb.has(c.slug) ? "text-[#111111]" : "text-amber-700"}>{inDb.has(c.slug) ? "in DB" : "missing"}</span>
           </li>
         ))}
       </ul>

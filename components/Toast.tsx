@@ -13,7 +13,7 @@ export default function Toast({ message, type = "info", onClose }: ToastProps) {
     const t = setTimeout(onClose, 4000);
     return () => clearTimeout(t);
   }, [onClose]);
-  const bg = type === "success" ? "bg-[#0B7168]" : type === "error" ? "bg-red-700" : "bg-[#17201F]";
+  const bg = type === "success" ? "bg-[#111111]" : type === "error" ? "bg-red-700" : "bg-[#0A0A0A]";
   const Glyph = type === "success" ? CheckIcon : type === "error" ? AlertIcon : InfoIcon;
   return (
     <div role="status" aria-live="polite" className={`fixed bottom-6 right-6 z-[100] max-w-sm rounded-xl ${bg} px-5 py-4 text-sm font-medium text-white shadow-2xl ring-1 ring-white/10 transition-transform`}>

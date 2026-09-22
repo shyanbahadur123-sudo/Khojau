@@ -22,19 +22,19 @@ export default async function LocationDetailPage({ params }: { params: { slug: s
   const providers = rankProviders(await getApprovedProviders({ search: l.city, limit: 48 }), "", l.city);
   return (
     <div className="space-y-6 pt-6">
-      <nav className="text-sm text-[#66706E]" aria-label="Breadcrumb">
+      <nav className="text-sm text-[#6B7280]" aria-label="Breadcrumb">
         <Link href="/" className="hover:underline">Home</Link> / <Link href="/locations" className="hover:underline">Locations</Link> / <span aria-current="page">{l.city}</span>
       </nav>
       <h1 className="text-2xl font-bold">Local services in {l.city}</h1>
       <div className="flex flex-wrap gap-2">
         {l.areas.map((a) => (
-          <Link key={a} href={`/search?location=${encodeURIComponent(`${a}, ${l.city}`)}`} className="rounded-full border border-black/15 bg-white px-3 py-1.5 text-sm hover:border-[#0B7168]">
+          <Link key={a} href={`/search?location=${encodeURIComponent(`${a}, ${l.city}`)}`} className="rounded-full border border-black/15 bg-white px-3 py-1.5 text-sm hover:border-[#111111]">
             {a}
           </Link>
         ))}
       </div>
       {providers.length === 0 ? (
-        <p className="rounded-xl bg-[#FFFDF8] p-6 text-sm text-[#66706E]">No approved listings in {l.city} yet.</p>
+        <p className="rounded-xl bg-[#FFFFFF] p-6 text-sm text-[#6B7280]">No approved listings in {l.city} yet.</p>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {providers.map((p) => <ProviderCard key={p.id} provider={p} />)}
