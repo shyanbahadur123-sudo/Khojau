@@ -28,12 +28,14 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
     setOauthLoading(true);
     try {
       const sb = supabaseBrowser();
-      // The callback validates `next` again server-side; OAuth itself is
-      // completed by Supabase + Google, never simulated locally.
-      const next = safeRedirectPath(params.get("next"));
+      // Bare path on purpose: the Supabase Redirect URL allow-list matches
+      // exact strings, so the registered value must be exactly
+      // `<origin>/auth/callback` with no query (?next= would break the match
+      // and Supabase would fall back to Site URL). Post-login landing is
+      // /dashboard; email/password logins keep deep-link `next` support.
       const { error: oauthErr } = await sb.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
       });
       if (oauthErr) throw oauthErr;
     } catch (err) {
