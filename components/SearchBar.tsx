@@ -32,10 +32,10 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
         id="service-input"
         value={service}
         onChange={(e) => setService(e.target.value)}
-        placeholder="What service do you need? e.g. Electrician"
+        placeholder="What do you need? e.g. Plumber"
         autoComplete="off"
         list="khojau-services"
-        className="h-12 flex-1 rounded-lg border border-black/15 bg-white px-4 text-base"
+        className="h-11 flex-1 rounded-lg border border-black/15 bg-white px-4 text-base sm:h-12"
       />
       <datalist id="khojau-services">
         {CATEGORIES.map((c) => (
@@ -47,10 +47,10 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
         id="location-input"
         value={location}
         onChange={(e) => setLocation(e.target.value)}
-        placeholder="Select location e.g. Baneshwor, Kathmandu"
+        placeholder="Where? e.g. Baneshwor"
         list="khojau-locations"
         autoComplete="off"
-        className="h-12 flex-1 rounded-lg border border-black/15 bg-white px-4 text-base sm:max-w-xs"
+        className="h-11 flex-1 rounded-lg border border-black/15 bg-white px-4 text-base sm:h-12 sm:max-w-xs"
       />
       <datalist id="khojau-locations">
         {LOCATIONS.flatMap((l) => [l.city, ...l.areas.map((a) => `${a}, ${l.city}`)]).map((v) => (
@@ -60,7 +60,7 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
       <button
         type="submit"
         disabled={submitting}
-        className="h-12 rounded-lg bg-[#C9A227] px-6 text-base font-semibold text-black hover:bg-[#B8941F] disabled:opacity-60"
+        className="h-11 rounded-lg bg-[#C9A227] px-6 text-base font-semibold text-black hover:bg-[#B8941F] disabled:opacity-60 sm:h-12"
       >
         {submitting ? "Searching…" : "Find Services"}
       </button>

@@ -28,20 +28,22 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-8 pt-6 sm:space-y-12">
-      <section aria-labelledby="hero-heading" className="rounded-2xl border border-black/10 border-t-2 border-t-[#C9A227] bg-[#FFFFFF] p-6 shadow-sm sm:p-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Nepal&rsquo;s local services directory</p>
-        <h1 id="hero-heading" className="mt-2 max-w-xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+      <section aria-labelledby="hero-heading" className="rounded-2xl border border-black/10 border-t-2 border-t-[#C9A227] bg-[#FFFFFF] p-5 shadow-sm sm:p-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[#7A5C00] sm:tracking-[0.14em]">Nepal&rsquo;s local services directory</p>
+        <h1 id="hero-heading" className="mt-2 max-w-xl text-[27px] font-bold leading-[1.15] tracking-tight sm:text-4xl">
           Find the right local service in Nepal.
-          <span className="mt-2 block text-lg font-normal leading-snug text-[#6B7280]">Verified local providers. Direct contact. No middlemen.</span>
+          <span className="mt-1.5 block text-base font-normal leading-snug text-[#6B7280] sm:text-lg">Verified local providers. Direct contact. No middlemen.</span>
         </h1>
-        <div className="mt-5"><Suspense><SearchBar /></Suspense></div>
-        <div className="mt-2.5 flex flex-wrap items-center gap-2 text-[13px]">
-          <span className="text-[#6B7280]">Try:</span>
+        <div className="mt-4"><Suspense><SearchBar /></Suspense></div>
+        <div className="mt-2.5 flex items-center gap-2 text-[13px]">
+          <span className="shrink-0 text-[#6B7280]">Try:</span>
+          <div className="flex flex-1 gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {EXAMPLE_SEARCHES.map((s) => (
-            <Link key={s} href={`/search?q=${encodeURIComponent(s)}`} className="rounded-full bg-black/5 px-3 py-1 transition-colors hover:bg-black/10">
+            <Link key={s} href={`/search?q=${encodeURIComponent(s)}`} className="shrink-0 whitespace-nowrap rounded-full bg-black/5 px-3 py-1 transition-colors hover:bg-black/10">
               {s}
             </Link>
           ))}
+          </div>
         </div>
       </section>
 
