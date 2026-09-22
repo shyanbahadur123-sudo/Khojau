@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import SearchBar from "@/components/SearchBar";
+import SearchBar, { SearchBarSkeleton } from "@/components/SearchBar";
 import CategoryGrid from "@/components/CategoryGrid";
 import CategoryIcon from "@/components/CategoryIcon";
 import { CheckIcon } from "@/components/UiIcon";
@@ -53,7 +53,7 @@ export default async function HomePage() {
           Find the right local service in Nepal.
           <span className="mt-1.5 block text-base font-normal leading-snug text-[#6B7280] sm:text-lg">Verified local providers. Direct contact. No middlemen.</span>
         </h1>
-        <div className="mt-4"><Suspense><SearchBar /></Suspense></div>
+        <div className="mt-4"><Suspense fallback={<SearchBarSkeleton />}><SearchBar /></Suspense></div>
         <div className="mt-2.5 flex items-center gap-2 text-[13px]">
           <span className="shrink-0 text-[#6B7280]">Try:</span>
           <div className="flex flex-1 gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

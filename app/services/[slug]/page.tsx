@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import ProviderCard from "@/components/ProviderCard";
-import SearchBar from "@/components/SearchBar";
+import SearchBar, { SearchBarSkeleton } from "@/components/SearchBar";
 import CategoryIcon from "@/components/CategoryIcon";
 import { CATEGORIES, categoryBySlug } from "@/lib/categories";
 import { getApprovedProviders } from "@/lib/providers";
@@ -42,7 +42,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
             : `${providers.length} approved provider${providers.length === 1 ? "" : "s"} · sorted by relevance`}
         </p>
       </div>
-      <Suspense><SearchBar compact /></Suspense>
+      <Suspense fallback={<SearchBarSkeleton />}><SearchBar compact /></Suspense>
       {providers.length === 0 ? (
         <div className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-8 text-center shadow-sm">
           <p className="text-lg font-bold tracking-tight">No {c.name.toLowerCase()} listings yet</p>

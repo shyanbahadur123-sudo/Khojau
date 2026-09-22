@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import SearchBar from "@/components/SearchBar";
+import SearchBar, { SearchBarSkeleton } from "@/components/SearchBar";
 import { LOCATIONS } from "@/lib/locations";
 
 export const metadata: Metadata = { title: "All locations", alternates: { canonical: "/locations" } };
@@ -14,7 +14,7 @@ export default function LocationsPage() {
         <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">All locations</h1>
         <p className="mt-1 text-sm text-[#6B7280]">{LOCATIONS.length} cities across Nepal. Pick one to browse providers or search an area.</p>
       </div>
-      <Suspense><SearchBar compact /></Suspense>
+      <Suspense fallback={<SearchBarSkeleton />}><SearchBar compact /></Suspense>
       <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {LOCATIONS.map((l) => (
           <li key={l.slug} className="rounded-xl border border-black/10 bg-[#FFFFFF] p-5 shadow-sm transition-all duration-200 hover:-translate-y-[2px] hover:shadow-md">

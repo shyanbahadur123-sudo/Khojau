@@ -132,7 +132,14 @@ function RequestForm() {
 
 export default function RequestServicePage() {
   return (
-    <Suspense>
+    <Suspense
+      fallback={
+        <div aria-hidden="true" className="mx-auto max-w-xl animate-pulse pt-6">
+          <div className="h-8 w-56 rounded bg-black/5" />
+          <div className="mt-4 h-64 rounded-2xl bg-black/5" />
+        </div>
+      }
+    >
       <RequestForm />
     </Suspense>
   );

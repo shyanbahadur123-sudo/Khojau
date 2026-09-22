@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import SearchBar from "@/components/SearchBar";
+import SearchBar, { SearchBarSkeleton } from "@/components/SearchBar";
 import ProviderCard from "@/components/ProviderCard";
 import { getApprovedProviders } from "@/lib/providers";
 import { filterProviders, rankProviders } from "@/lib/search";
@@ -69,7 +69,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
   return (
     <div className="space-y-6 pt-6">
       <h1 className="text-2xl font-bold">Search services</h1>
-      <Suspense><SearchBar compact /></Suspense>
+      <Suspense fallback={<SearchBarSkeleton />}><SearchBar compact /></Suspense>
       <form method="get" className="flex flex-wrap gap-2 text-sm" aria-label="Filters">
         <input type="hidden" name="q" value={query} />
         <input type="hidden" name="location" value={location} />

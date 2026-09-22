@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import SearchBar from "@/components/SearchBar";
+import SearchBar, { SearchBarSkeleton } from "@/components/SearchBar";
 import CategoryGrid from "@/components/CategoryGrid";
 import { CATEGORIES } from "@/lib/categories";
 import { LOCATIONS } from "@/lib/locations";
@@ -15,7 +15,7 @@ export default function ServicesPage() {
         <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">All services</h1>
         <p className="mt-1 text-sm text-[#6B7280]">{CATEGORIES.length} categories across {LOCATIONS.length} cities in Nepal.</p>
       </div>
-      <Suspense><SearchBar compact /></Suspense>
+      <Suspense fallback={<SearchBarSkeleton />}><SearchBar compact /></Suspense>
       <CategoryGrid />
     </div>
   );

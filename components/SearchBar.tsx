@@ -5,6 +5,18 @@ import { useState } from "react";
 import { CATEGORIES } from "@/lib/categories";
 import { LOCATIONS } from "@/lib/locations";
 
+// Server-rendered placeholder so the search control exists in HTML before
+// hydration (Suspense fallback). Matches the real bar's footprint.
+export function SearchBarSkeleton() {
+  return (
+    <div aria-hidden="true" className="flex w-full flex-col gap-2 sm:flex-row">
+      <div className="h-11 flex-1 animate-pulse rounded-lg bg-black/5 sm:h-12" />
+      <div className="h-11 flex-1 animate-pulse rounded-lg bg-black/5 sm:h-12 sm:max-w-xs" />
+      <div className="h-11 w-full animate-pulse rounded-lg bg-black/5 sm:h-12 sm:w-40" />
+    </div>
+  );
+}
+
 export default function SearchBar({ compact = false }: { compact?: boolean }) {
   const router = useRouter();
   const params = useSearchParams();
