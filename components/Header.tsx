@@ -17,6 +17,9 @@ export default function Header() {
           <Link href="/locations" className="hidden rounded-md px-3 py-2 hover:bg-black/5 sm:inline">
             Locations
           </Link>
+          <Link href="/login" className="hidden rounded-md px-3 py-2 hover:bg-black/5 sm:inline">
+            Log in
+          </Link>
           <Link
             href="/add-business"
             className="rounded-md bg-[#0B7168] px-3 py-2 font-semibold text-white hover:bg-[#095A53]"

@@ -18,6 +18,19 @@ Standalone Next.js + Supabase directory for Nepal. This folder is the entire pro
 - Provider: `/register` → `/add-business` → pending → `/dashboard`
 - Admin: `/admin` (allowlist via `ADMIN_EMAILS`) → approve/reject/verify/feature
 
+## Auth
+
+- Email/password via Supabase Auth (`@supabase/ssr`, cookie sessions).
+- Middleware refreshes tokens on every request, redirects guests away from
+  `/dashboard`, `/admin/*`, `/add-business`, and redirects signed-in users away
+  from `/login` and `/register`.
+- Password reset: `/forgot-password` → `/reset-password`. In the Supabase
+  dashboard (Authentication → URL Configuration), allowlist
+  `{SITE_URL}/reset-password` as a redirect URL.
+- `owner_id` on providers is always the authenticated user's id (set from the
+  session in `/add-business`); RLS + trigger prevent claiming others'
+  listings or self-approving. Service-role key stays server-side only.
+
 ## Scripts
 
 - `npm run build` / `npm run typecheck` / `npm run lint`
