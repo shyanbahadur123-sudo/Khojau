@@ -91,6 +91,18 @@ body {
   outline-color: #f5f5f5;
 }
 
+/* Native popups (select lists, datalists) ignore page colors and render
+   white-on-white in dark mode unless told otherwise. Explicit option
+   colors keep every dropdown readable in both themes. */
+.dark select,
+.dark option {
+  color-scheme: dark;
+}
+.dark option {
+  background-color: #171717;
+  color: #f5f5f5;
+}
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
