@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+// The directory must never serve yesterday's listings: revalidate the static
+// shell AND every Supabase fetch (including supabase-js calls, which ride on
+// Next's fetch cache) every 60 seconds. Approvals go live within a minute.
+export const revalidate = 60;
+
 const EXAMPLE_SEARCHES = ["Plumber", "Electrician", "AC repair", "Photographer", "Tutor", "Home cleaning"];
 
 function timeAgo(iso: string): string {
@@ -131,7 +136,8 @@ export default async function HomePage() {
 
       {latest.length > 0 && (
         <section aria-labelledby="latest">
-          <h2 id="latest" className="mb-4 text-xl font-bold">Recently added</h2>
+          <h2 id="latest" className="mb-1 text-xl font-bold tracking-tight">Recent</h2>
+          <p className="mb-4 text-sm text-[#6B7280]">Newly approved listings, newest first.</p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {latest.map((p) => <ProviderCard key={p.id} provider={p} />)}
           </div>

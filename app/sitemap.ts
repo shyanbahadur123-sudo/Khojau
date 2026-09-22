@@ -3,6 +3,9 @@ import { CATEGORIES } from "@/lib/categories";
 import { LOCATIONS } from "@/lib/locations";
 import { supabasePublic } from "@/lib/supabase";
 
+// Provider URLs refresh hourly; static routes are timeless.
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const staticRoutes = ["/", "/search", "/services", "/locations", "/add-business", "/contact", "/privacy", "/terms", "/request-service", "/how-it-works"];

@@ -11,6 +11,9 @@ export const metadata: Metadata = { title: "Search services", alternates: { cano
 const PAGE_SIZE = 12;
 const MAX_PAGE = 50;
 
+// Directory freshness: search results revalidate with the data cache.
+export const revalidate = 60;
+
 export default async function SearchPage({ searchParams }: { searchParams: Record<string, string | undefined> }) {
   // Per-field parsing with independent fallbacks: one malformed parameter
   // must never reset the rest of the query (e.g. page=abc keeps q intact).

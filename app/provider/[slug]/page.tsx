@@ -21,6 +21,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
+export const revalidate = 60;
+
 export default async function ProviderPage({ params }: { params: { slug: string } }) {
   const p = await getProviderBySlug(params.slug);
   if (!p) notFound();
