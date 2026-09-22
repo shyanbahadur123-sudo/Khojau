@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
 
@@ -9,6 +9,7 @@ export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const inFlight = useRef(false);
 
   if (!isSupabaseConfigured()) {
     return (
@@ -28,6 +29,8 @@ export default function ResetPasswordPage() {
         onSubmit={async (e) => {
           e.preventDefault();
           setStatus(null);
+          if (inFlight.current) return;
+          inFlight.current = true;
           setLoading(true);
           try {
             const sb = supabaseBrowser();
@@ -43,6 +46,7 @@ export default function ResetPasswordPage() {
           } catch (err) {
             setStatus(err instanceof Error ? err.message : "Update failed.");
           } finally {
+            inFlight.current = false;
             setLoading(false);
           }
         }}

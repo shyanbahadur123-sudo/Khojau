@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
 import { safeRedirectPath } from "@/lib/validation";
@@ -15,6 +15,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
   const [notice, setNotice] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState(false);
+  const inFlight = useRef(false);
 
   const oauthError =
     params.get("error") === "oauth_cancelled"
@@ -61,6 +62,8 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
           e.preventDefault();
           setError(null);
           setNotice(null);
+          if (inFlight.current) return;
+          inFlight.current = true;
           setLoading(true);
           try {
             const sb = supabaseBrowser();
@@ -89,6 +92,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
           } catch (err) {
             setError(err instanceof Error ? err.message : "Authentication failed");
           } finally {
+            inFlight.current = false;
             setLoading(false);
           }
         }}

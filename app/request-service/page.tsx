@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
 import { CheckIcon } from "@/components/UiIcon";
@@ -21,6 +21,8 @@ function RequestForm() {
   const [status, setStatus] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const inFlight = useRef(false);
 
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
@@ -30,7 +32,10 @@ function RequestForm() {
       .eq("status", "approved")
       .order("business_name")
       .limit(200)
-      .then(({ data }) => setProviders((data ?? []) as unknown as ProviderOption[]));
+      .then(({ data, error }) => {
+        if (error) setLoadError(true);
+        else setProviders((data ?? []) as unknown as ProviderOption[]);
+      });
   }, []);
 
   // Resolve ?provider=<slug> to the provider id once the list loads.
@@ -74,10 +79,19 @@ function RequestForm() {
     <div className="mx-auto max-w-xl pt-6">
       <h1 className="text-2xl font-bold">Request a service</h1>
       <p className="mt-1 text-sm text-[#6B7280]">Tell us what you need — {selected ? `${selected.business_name} will see it directly.` : "the Khojau team will manually match you with providers."}</p>
+      {loadError && (
+        <p role="alert" className="mt-3 rounded-lg bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-400">
+          Couldn&rsquo;t load the provider list. You can still submit — we&rsquo;ll match you manually.
+        </p>
+      )}
       <form
         className="mt-4 space-y-3 rounded-2xl bg-[#FFFFFF] p-6"
         onSubmit={async (e) => {
           e.preventDefault();
+          // Ref guard: a second tap before re-render must not create a
+          // duplicate service request (duplicate rows pollute moderation).
+          if (inFlight.current) return;
+          inFlight.current = true;
           setStatus("Sending…");
           setLoading(true);
           try {
@@ -94,6 +108,7 @@ function RequestForm() {
           } catch (err) {
             setStatus(err instanceof Error ? err.message : "Could not submit. Check your inputs.");
           } finally {
+            inFlight.current = false;
             setLoading(false);
           }
         }}

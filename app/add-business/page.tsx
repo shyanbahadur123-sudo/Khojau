@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
 import { providerSchema, slugify } from "@/lib/validation";
@@ -11,6 +11,7 @@ export default function AddBusinessPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const inFlight = useRef(false);
 
   if (!isSupabaseConfigured()) {
     return (
@@ -46,6 +47,9 @@ export default function AddBusinessPage() {
         onSubmit={async (e) => {
           e.preventDefault();
           setError(null);
+          // Ref guard: double submit would create duplicate listings.
+          if (inFlight.current) return;
+          inFlight.current = true;
           setLoading(true);
           try {
             const form = new FormData(e.currentTarget as HTMLFormElement);
@@ -93,6 +97,7 @@ export default function AddBusinessPage() {
               setError(msg);
             }
           } finally {
+            inFlight.current = false;
             setLoading(false);
           }
         }}
