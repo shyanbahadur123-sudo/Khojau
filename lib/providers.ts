@@ -37,10 +37,11 @@ export async function getProviderBySlug(slug: string): Promise<Provider | null> 
   if (!db) return null;
   const { data, error } = await db
     .from("providers")
-    .select("*, categories(name,slug), provider_images(id,url,caption,sort)")
+    .select("*, categories(name,slug), provider_images(id,url,caption,sort), services(id,name,price_min,price_max), provider_hours(weekday,open_time,close_time,is_closed)")
     .eq("slug", slug)
     .eq("status", "approved")
     .order("sort", { referencedTable: "provider_images", ascending: true })
+    .order("weekday", { referencedTable: "provider_hours", ascending: true })
     .single();
   if (error) return null;
   return data as unknown as Provider;

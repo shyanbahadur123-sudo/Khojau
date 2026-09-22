@@ -34,6 +34,19 @@ export const reportSchema = z.object({
   contact: z.string().max(50).optional().or(z.literal("")),
 });
 
+export const serviceItemSchema = z.object({
+  name: z.string().min(2).max(80),
+  price_min: z.coerce.number().int().min(0).max(1000000).optional(),
+  price_max: z.coerce.number().int().min(0).max(1000000).optional(),
+});
+
+export const hoursItemSchema = z.object({
+  weekday: z.coerce.number().int().min(0).max(6),
+  open_time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM").nullable(),
+  close_time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM").nullable(),
+  is_closed: z.boolean(),
+});
+
 export const serviceRequestSchema = z.object({
   service: z.string().min(2).max(120),
   location: z.string().min(2).max(120),

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProviderBySlug } from "@/lib/providers";
 import { directionsUrl, whatsappUrl } from "@/lib/search";
+import { WEEKDAYS } from "@/types/database";
 import { VerifiedBadge } from "@/components/ProviderCard";
 import ReportButton from "@/components/ReportButton";
 import ContactTracker from "@/components/ContactTracker";
@@ -117,6 +118,41 @@ export default async function ProviderPage({ params }: { params: { slug: string 
           </a>
         </section>
       </div>
+
+      {((p.services ?? []).length > 0 || (p.provider_hours ?? []).length > 0) && (
+        <div className="grid gap-4 sm:grid-cols-2">
+          {(p.services ?? []).length > 0 && (
+            <section aria-labelledby="services" className="rounded-xl bg-[#FFFDF8] p-5">
+              <h2 id="services" className="font-bold">Services & prices</h2>
+              <ul className="mt-2 divide-y divide-black/10 text-sm">
+                {(p.services ?? []).map((s) => (
+                  <li key={s.id} className="flex items-center justify-between gap-2 py-2">
+                    <span>{s.name}</span>
+                    {(s.price_min != null || s.price_max != null) && (
+                      <span className="text-[#66706E]">Rs.{s.price_min ?? "?"}–{s.price_max ?? "?"}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {(p.provider_hours ?? []).length > 0 && (
+            <section aria-labelledby="hours" className="rounded-xl bg-[#FFFDF8] p-5">
+              <h2 id="hours" className="font-bold">Opening hours</h2>
+              <ul className="mt-2 divide-y divide-black/10 text-sm">
+                {(p.provider_hours ?? []).map((h) => (
+                  <li key={h.weekday} className="flex items-center justify-between gap-2 py-2">
+                    <span>{WEEKDAYS[h.weekday] ?? `Day ${h.weekday}`}</span>
+                    <span className="text-[#66706E]">
+                      {h.is_closed || !h.open_time ? "Closed" : `${h.open_time}–${h.close_time ?? ""}`}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
+      )}
 
       <ReportButton providerId={p.id} />
 

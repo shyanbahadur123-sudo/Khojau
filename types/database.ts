@@ -17,6 +17,22 @@ export interface ProviderImage {
   sort: number;
 }
 
+export interface ServiceItem {
+  id: string;
+  name: string;
+  price_min: number | null;
+  price_max: number | null;
+}
+
+export interface ProviderHourItem {
+  weekday: number;
+  open_time: string | null;
+  close_time: string | null;
+  is_closed: boolean;
+}
+
+export const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 export interface Provider {
   id: string;
   owner_id: string | null;
@@ -46,6 +62,8 @@ export interface Provider {
   updated_at: string;
   categories?: Pick<Category, "name" | "slug"> | null;
   provider_images?: ProviderImage[];
+  services?: ServiceItem[];
+  provider_hours?: ProviderHourItem[];
 }
 
 export interface ProviderHour {
