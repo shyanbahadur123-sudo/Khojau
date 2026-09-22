@@ -42,46 +42,19 @@ export default async function ProviderPage({ params }: { params: { slug: string 
         <p className="mt-1 text-sm text-[#66706E]">
           {p.categories?.name ?? "Local service"} · {p.area ? `${p.area}, ` : ""}{p.city}
         </p>
-        {p.description && <p className="mt-3 max-w-2xl whitespace-pre-line text-[15px] leading-relaxed">{p.description}</p>}
+        <p className="mt-2 text-xs text-[#66706E]">
+          {p.verification_status === "verified" ? (
+            <>Verified business — contact and business details checked by Khojau. <a href="/how-it-works#verification" className="underline">What does this mean?</a></>
+          ) : (
+            <>Listing reviewed by Khojau. Always confirm details directly before hiring.</>
+          )}
+        </p>
         {(p.price_min != null || p.price_max != null) && (
           <p className="mt-3 text-sm"><strong>Price range:</strong> Rs.{p.price_min ?? "?"} – Rs.{p.price_max ?? "?"}</p>
         )}
       </header>
 
-      {(p.cover_image_url || p.logo_url || (p.provider_images ?? []).length > 0) && (
-        <section aria-label={`Photos of ${p.business_name}`} className="overflow-hidden rounded-2xl bg-[#FFFDF8] shadow-sm">
-          {p.cover_image_url && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={p.cover_image_url} alt={`${p.business_name} cover photo`} className="h-48 w-full object-cover sm:h-64" loading="lazy" />
-          )}
-          <div className="flex flex-wrap items-center gap-4 p-6">
-            {p.logo_url && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={p.logo_url} alt={`${p.business_name} logo`} className="h-20 w-20 rounded-xl border object-cover" loading="lazy" />
-            )}
-            {(p.provider_images ?? []).length > 0 && (
-              <ul className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
-                {(p.provider_images ?? []).map((img, i) => (
-                  <li key={img.id}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={img.url} alt={img.caption || `${p.business_name} photo ${i + 1}`} className="h-32 w-full rounded-lg object-cover" loading="lazy" />
-                    {img.caption && <p className="mt-1 text-xs text-[#66706E]">{img.caption}</p>}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </section>
-      )}
-
       <ContactTracker providerId={p.id} />
-
-      <div className="rounded-xl border border-[#0B7168]/30 bg-[#0B7168]/5 p-4 text-sm">
-        <p className="font-semibold">Prefer to send details instead of calling?</p>
-        <a href={`/request-service?provider=${p.slug}`} className="mt-2 inline-block rounded-lg bg-[#0B7168] px-4 py-2 font-semibold text-white">
-          Request this service
-        </a>
-      </div>
 
       {/* Sticky mobile contact bar */}
       <div className="sticky bottom-3 z-30 grid grid-cols-3 gap-2 rounded-xl border border-black/10 bg-[#FFFDF8] p-2 shadow-lg sm:static sm:flex sm:shadow-none">
@@ -102,30 +75,12 @@ export default async function ProviderPage({ params }: { params: { slug: string 
         </a>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <section aria-labelledby="contact" className="rounded-xl bg-[#FFFDF8] p-5">
-          <h2 id="contact" className="font-bold">Contact & address</h2>
-          <dl className="mt-2 space-y-1 text-sm">
-            <div><dt className="inline font-semibold">Phone: </dt><dd className="inline"><a href={`tel:${p.phone}`} className="text-[#0B7168] hover:underline">{p.phone}</a></dd></div>
-            {p.address && <div><dt className="inline font-semibold">Address: </dt><dd className="inline">{p.address}{p.area ? `, ${p.area}` : ""}, {p.city}</dd></div>}
-            {p.email && <div><dt className="inline font-semibold">Email: </dt><dd className="inline">{p.email}</dd></div>}
-            {p.website && <div><dt className="inline font-semibold">Website: </dt><dd className="inline"><a href={p.website} target="_blank" rel="noopener" className="text-[#0B7168] hover:underline">{p.website}</a></dd></div>}
-            {(p.facebook || p.instagram) && (
-              <div className="flex gap-3 pt-1">
-                {p.facebook && <a href={p.facebook} target="_blank" rel="noopener" className="text-[#0B7168] hover:underline">Facebook</a>}
-                {p.instagram && <a href={p.instagram} target="_blank" rel="noopener" className="text-[#0B7168] hover:underline">Instagram</a>}
-              </div>
-            )}
-          </dl>
+      {p.description && (
+        <section aria-labelledby="about" className="rounded-2xl bg-[#FFFDF8] p-6 shadow-sm">
+          <h2 id="about" className="text-lg font-bold">About {p.business_name}</h2>
+          <p className="mt-2 max-w-2xl whitespace-pre-line text-[15px] leading-relaxed">{p.description}</p>
         </section>
-        <section aria-labelledby="map" className="rounded-xl bg-[#FFFDF8] p-5">
-          <h2 id="map" className="font-bold">Map</h2>
-          <p className="mt-2 text-sm text-[#66706E]">{p.address ?? `${p.area ?? ""} ${p.city}`.trim()}</p>
-          <a href={dir} target="_blank" rel="noopener" className="mt-3 inline-block rounded-lg bg-[#17201F] px-4 py-2 text-sm font-semibold text-white">
-            Open in Google Maps
-          </a>
-        </section>
-      </div>
+      )}
 
       {((p.services ?? []).length > 0 || (p.provider_hours ?? []).length > 0) && (
         <div className="grid gap-4 sm:grid-cols-2">
@@ -164,6 +119,64 @@ export default async function ProviderPage({ params }: { params: { slug: string 
           )}
         </div>
       )}
+
+      {(p.cover_image_url || p.logo_url || (p.provider_images ?? []).length > 0) && (
+        <section aria-label={`Photos of ${p.business_name}`} className="overflow-hidden rounded-2xl bg-[#FFFDF8] shadow-sm">
+          {p.cover_image_url && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={p.cover_image_url} alt={`${p.business_name} cover photo`} className="aspect-[16/9] w-full object-cover sm:aspect-[21/9]" loading="lazy" />
+          )}
+          <div className="flex flex-wrap items-center gap-4 p-6">
+            {p.logo_url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={p.logo_url} alt={`${p.business_name} logo`} className="aspect-square h-20 w-20 rounded-xl border object-cover" loading="lazy" />
+            )}
+            {(p.provider_images ?? []).length > 0 && (
+              <ul className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
+                {(p.provider_images ?? []).map((img, i) => (
+                  <li key={img.id}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={img.url} alt={img.caption || `${p.business_name} photo ${i + 1}`} className="aspect-[4/3] w-full rounded-lg object-cover" loading="lazy" />
+                    {img.caption && <p className="mt-1 text-xs text-[#66706E]">{img.caption}</p>}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </section>
+      )}
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <section aria-labelledby="contact" className="rounded-xl bg-[#FFFDF8] p-5">
+          <h2 id="contact" className="font-bold">Contact & address</h2>
+          <dl className="mt-2 space-y-1 text-sm">
+            <div><dt className="inline font-semibold">Phone: </dt><dd className="inline"><a href={`tel:${p.phone}`} className="text-[#0B7168] hover:underline">{p.phone}</a></dd></div>
+            {p.address && <div><dt className="inline font-semibold">Address: </dt><dd className="inline">{p.address}{p.area ? `, ${p.area}` : ""}, {p.city}</dd></div>}
+            {p.email && <div><dt className="inline font-semibold">Email: </dt><dd className="inline">{p.email}</dd></div>}
+            {p.website && <div><dt className="inline font-semibold">Website: </dt><dd className="inline"><a href={p.website} target="_blank" rel="noopener" className="text-[#0B7168] hover:underline">{p.website}</a></dd></div>}
+            {(p.facebook || p.instagram) && (
+              <div className="flex gap-3 pt-1">
+                {p.facebook && <a href={p.facebook} target="_blank" rel="noopener" className="text-[#0B7168] hover:underline">Facebook</a>}
+                {p.instagram && <a href={p.instagram} target="_blank" rel="noopener" className="text-[#0B7168] hover:underline">Instagram</a>}
+              </div>
+            )}
+          </dl>
+        </section>
+        <section aria-labelledby="map" className="rounded-xl bg-[#FFFDF8] p-5">
+          <h2 id="map" className="font-bold">Map</h2>
+          <p className="mt-2 text-sm text-[#66706E]">{p.address ?? `${p.area ?? ""} ${p.city}`.trim()}</p>
+          <a href={dir} target="_blank" rel="noopener" className="mt-3 inline-block min-h-[44px] rounded-lg bg-[#17201F] px-4 py-2 text-sm font-semibold text-white">
+            Open in Google Maps
+          </a>
+        </section>
+      </div>
+
+      <div className="rounded-xl border border-[#0B7168]/30 bg-[#0B7168]/5 p-4 text-sm sm:flex sm:items-center sm:justify-between sm:gap-4">
+        <p className="font-semibold">Prefer to send details instead of calling? The provider will call you back.</p>
+        <a href={`/request-service?provider=${p.slug}`} className="mt-2 inline-block min-h-[44px] rounded-lg bg-[#0B7168] px-4 py-2 font-semibold text-white sm:mt-0 sm:shrink-0">
+          Request this service
+        </a>
+      </div>
 
       <ReportButton providerId={p.id} />
 

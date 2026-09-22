@@ -25,6 +25,14 @@ export default function AddBusinessPage() {
     <div className="mx-auto max-w-2xl pt-6">
       <h1 className="text-2xl font-bold">Add your business</h1>
       <p className="mt-1 text-sm text-[#66706E]">Free basic listing. Submissions are reviewed before going public.</p>
+      <div className="mt-3 rounded-xl border border-[#0B7168]/25 bg-[#0B7168]/5 p-4 text-sm">
+        <p className="font-semibold">What happens next?</p>
+        <ol className="mt-1 list-decimal space-y-1 pl-5 text-[#17201F]/85">
+          <li>You submit your business details below.</li>
+          <li>Our team reviews the listing (usually within a day or two).</li>
+          <li>Once approved, customers can find and contact you. Track status in your dashboard.</li>
+        </ol>
+      </div>
       <form
         className="mt-4 space-y-3 rounded-2xl bg-[#FFFDF8] p-6"
         onSubmit={async (e) => {

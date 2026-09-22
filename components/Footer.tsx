@@ -14,6 +14,7 @@ export default function Footer() {
             <li><Link href="/services" className="hover:underline">All services</Link></li>
             <li><Link href="/locations" className="hover:underline">All locations</Link></li>
             <li><Link href="/search" className="hover:underline">Search</Link></li>
+            <li><Link href="/how-it-works" className="hover:underline">How it works</Link></li>
           </ul>
         </nav>
         <nav aria-label="Business">

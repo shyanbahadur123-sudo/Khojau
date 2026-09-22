@@ -15,30 +15,40 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+const EXAMPLE_SEARCHES = ["Plumber", "Electrician", "AC repair", "Photographer", "Tutor", "Home cleaning"];
+
 export default async function HomePage() {
-  const featured = (await getApprovedProviders({ limit: 6 })).filter((p) =>
-    ["featured", "premium"].includes(p.plan)
-  );
-  const latest = await getApprovedProviders({ limit: 6 });
+  // Single bounded fetch; sections derive from it (no duplicate queries).
+  const all = await getApprovedProviders({ limit: 12 });
+  const featured = all.filter((p) => p.plan === "featured" || p.plan === "premium");
+  const latest = all.filter((p) => p.plan !== "featured" && p.plan !== "premium").slice(0, 6);
   const popular = CATEGORIES.filter((c) => POPULAR_SERVICES.includes(c.slug));
 
   return (
     <div className="space-y-12 pt-6">
       <section aria-labelledby="hero-heading" className="rounded-2xl bg-[#FFFDF8] p-6 shadow-sm sm:p-10">
         <h1 id="hero-heading" className="max-w-xl text-3xl font-bold leading-tight sm:text-4xl">
-          Find trusted local services near you.
+          Find the right local service in Nepal.
         </h1>
         <p className="mt-3 max-w-xl text-base text-[#66706E]">
           Discover electricians, plumbers, repair technicians, tutors, photographers and other local service
-          providers across Nepal.
+          providers across Nepal. Call them directly or send a service request.
         </p>
         <div className="mt-6"><Suspense><SearchBar /></Suspense></div>
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+          <span className="text-[#66706E]">Try:</span>
+          {EXAMPLE_SEARCHES.map((s) => (
+            <Link key={s} href={`/search?q=${encodeURIComponent(s)}`} className="rounded-full border border-black/15 bg-white px-3 py-1 hover:border-[#0B7168]">
+              {s}
+            </Link>
+          ))}
+        </div>
       </section>
 
       <section aria-labelledby="popular-services">
         <div className="mb-4 flex items-center justify-between">
           <h2 id="popular-services" className="text-xl font-bold">Popular services</h2>
-          <Link href="/services" className="text-sm font-semibold text-[#0B7168] hover:underline">View all</Link>
+          <Link href="/services" className="text-sm font-semibold text-[#0B7168] hover:underline">View all categories</Link>
         </div>
         <ul className="flex flex-wrap gap-2">
           {popular.map((c) => (
@@ -57,7 +67,10 @@ export default async function HomePage() {
       </section>
 
       <section aria-labelledby="popular-locations">
-        <h2 id="popular-locations" className="mb-4 text-xl font-bold">Popular locations</h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 id="popular-locations" className="text-xl font-bold">Popular locations</h2>
+          <Link href="/locations" className="text-sm font-semibold text-[#0B7168] hover:underline">View all</Link>
+        </div>
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {LOCATIONS.slice(0, 8).map((l) => (
             <li key={l.slug}>
@@ -87,24 +100,56 @@ export default async function HomePage() {
           </div>
         </section>
       )}
-      {latest.length === 0 && (
-        <section aria-label="Getting started" className="rounded-2xl border border-dashed border-black/20 p-6 text-sm text-[#66706E]">
-          No public listings yet. Connect Supabase (see README + .env.example), run{" "}
-          <code>supabase/migrations/0001_init.sql</code>, then add providers from the admin dashboard.
+      {all.length === 0 && (
+        <section aria-label="Get started" className="rounded-2xl border border-black/10 bg-[#FFFDF8] p-6 text-center sm:p-8">
+          <h2 className="text-xl font-bold">Be the first business on Khojau</h2>
+          <p className="mx-auto mt-2 max-w-md text-sm text-[#66706E]">
+            Khojau is a new directory for trusted local services in Nepal. List your business for free and get discovered by customers nearby.
+          </p>
+          <div className="mt-4 flex flex-wrap justify-center gap-3">
+            <Link href="/add-business" className="rounded-lg bg-[#0B7168] px-5 py-3 font-semibold text-white">List your business — it&apos;s free</Link>
+            <Link href="/request-service" className="rounded-lg border border-black/15 px-5 py-3 font-semibold">Request a service</Link>
+          </div>
         </section>
       )}
 
       <section aria-labelledby="how" className="rounded-2xl bg-[#FFFDF8] p-6 sm:p-8">
         <h2 id="how" className="text-xl font-bold">How Khojau works</h2>
         <ol className="mt-4 grid gap-4 sm:grid-cols-3">
-          <li><p className="font-semibold">1. Search</p><p className="text-sm text-[#66706E]">Enter a service and location.</p></li>
-          <li><p className="font-semibold">2. Compare</p><p className="text-sm text-[#66706E]">Open verified profiles with contact details.</p></li>
-          <li><p className="font-semibold">3. Contact</p><p className="text-sm text-[#66706E]">Call, message on WhatsApp, or get directions.</p></li>
+          <li><p className="font-semibold">1. Search</p><p className="text-sm text-[#66706E]">Enter a service and location, or browse categories.</p></li>
+          <li><p className="font-semibold">2. Compare</p><p className="text-sm text-[#66706E]">Open profiles with services, prices, hours, and contact details.</p></li>
+          <li><p className="font-semibold">3. Contact</p><p className="text-sm text-[#66706E]">Call, message on WhatsApp, get directions, or send a service request.</p></li>
         </ol>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Link href="/add-business" className="rounded-lg bg-[#0B7168] px-5 py-3 font-semibold text-white">List your business — it&apos;s free</Link>
-          <Link href="/request-service" className="rounded-lg border border-black/15 px-5 py-3 font-semibold">Request a service</Link>
+        <p className="mt-4 text-sm"><Link href="/how-it-works" className="font-semibold text-[#0B7168] hover:underline">Learn more about how Khojau works →</Link></p>
+      </section>
+
+      <section aria-labelledby="for-providers" className="rounded-2xl border border-[#0B7168]/25 bg-[#0B7168]/5 p-6 sm:p-8">
+        <h2 id="for-providers" className="text-xl font-bold">For service providers</h2>
+        <ul className="mt-3 grid gap-2 text-[15px] sm:grid-cols-2">
+          <li>✓ List your business for free</li>
+          <li>✓ Show your services and prices</li>
+          <li>✓ Receive service requests directly</li>
+          <li>✓ Grow your local visibility</li>
+        </ul>
+        <div className="mt-5">
+          <Link href="/add-business" className="inline-block rounded-lg bg-[#0B7168] px-5 py-3 font-semibold text-white">Add your business</Link>
         </div>
+      </section>
+
+      <section aria-labelledby="trust" className="rounded-2xl bg-[#FFFDF8] p-6 sm:p-8">
+        <h2 id="trust" className="text-xl font-bold">Why trust Khojau listings?</h2>
+        <ul className="mt-3 max-w-2xl space-y-2 text-[15px] text-[#17201F]/85">
+          <li><strong>Reviewed listings.</strong> Every business is reviewed by our team before it appears publicly.</li>
+          <li><strong>Verified badge.</strong> Verified businesses have passed Khojau&apos;s current verification checks — currently contact and business-detail confirmation.</li>
+          <li><strong>Direct contact.</strong> Phone numbers and addresses are shown as submitted, so you can verify details yourself before hiring.</li>
+          <li><strong>Report problems.</strong> Wrong number or closed business? Every provider page has a report link our team reviews.</li>
+        </ul>
+        <p className="mt-3 text-sm text-[#66706E]">Khojau does not display ratings or reviews yet — and never invents them.</p>
+      </section>
+
+      <section aria-label="Get started" className="flex flex-col items-center gap-3 rounded-2xl bg-[#17201F] p-8 text-center sm:flex-row sm:justify-center sm:gap-4">
+        <Link href="/search" className="w-full rounded-lg bg-[#0B7168] px-6 py-3 font-semibold text-white sm:w-auto">Find a service</Link>
+        <Link href="/add-business" className="w-full rounded-lg border border-white/30 px-6 py-3 font-semibold text-white sm:w-auto">List your business</Link>
       </section>
 
       <script
@@ -115,7 +160,7 @@ export default async function HomePage() {
             "@type": "WebSite",
             name: "Khojau",
             url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-            potentialAction: { "@type": "SearchAction", target: "{url}/search?service={query}", "query-input": "required name=query" },
+            potentialAction: { "@type": "SearchAction", target: "{url}/search?q={query}", "query-input": "required name=query" },
           }),
         }}
       />

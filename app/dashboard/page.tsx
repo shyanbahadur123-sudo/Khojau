@@ -10,6 +10,13 @@ import type { ProviderImage, ProviderHourItem, ServiceItem, ServiceRequestRow } 
 
 export const metadata = { title: "Dashboard" };
 
+const STATUS_HELP: Record<string, string> = {
+  pending: "Under review — our team checks every listing before it goes public. This usually takes a day or two.",
+  approved: "Live — customers can find and contact this business.",
+  rejected: "Not approved — the listing didn't meet our quality checks. You can edit the details and it will stay visible here.",
+  suspended: "Temporarily hidden from the public. Contact us if you think this is a mistake.",
+};
+
 interface OwnedProvider {
   id: string;
   business_name: string;
@@ -115,6 +122,9 @@ export default async function DashboardPage() {
               <li key={p.slug} className="rounded-xl bg-[#FFFDF8] p-4">
                 <p className="font-semibold">{p.business_name}</p>
                 <p className="text-sm text-[#66706E]">{p.status} · {p.verification_status} · {p.plan}</p>
+                {STATUS_HELP[p.status] && (
+                  <p className="mt-1 rounded-lg bg-black/5 p-2 text-xs text-[#66706E]">{STATUS_HELP[p.status]}</p>
+                )}
                 <ProviderEditor provider={editable} />
                 <ServiceManager providerId={p.id} initial={p.services ?? []} />
                 <HoursManager providerId={p.id} initial={p.provider_hours ?? []} />

@@ -12,6 +12,7 @@ import {
 } from "../lib/validation.js";
 import { validateImageFile } from "../lib/image-validation.js";
 import { rateLimit } from "../lib/rate-limit.js";
+import { REQUEST_STATUS_LABEL, REQUEST_NEXT_ACTIONS, formatRequestStatus } from "../lib/request-status.js";
 
 describe("F-01 JSON-LD escaping", () => {
   it("neutralizes a script breakout payload", () => {
@@ -119,5 +120,19 @@ describe("rate limiter", () => {
     assert.ok(rateLimit(a, 1, 60_000));
     assert.ok(!rateLimit(a, 1, 60_000));
     assert.ok(rateLimit(b, 1, 60_000));
+  });
+});
+
+describe("request status labels", () => {
+  it("labels every status and mirrors the status-flow trigger", () => {
+    assert.equal(formatRequestStatus("open"), "Open");
+    assert.equal(formatRequestStatus("in_progress"), "In progress");
+    assert.equal(formatRequestStatus("completed"), "Completed");
+    assert.equal(formatRequestStatus("cancelled"), "Cancelled");
+    assert.deepEqual(REQUEST_NEXT_ACTIONS.open.map((a) => a.to), ["in_progress", "cancelled"]);
+    assert.deepEqual(REQUEST_NEXT_ACTIONS.in_progress.map((a) => a.to), ["completed", "cancelled"]);
+    assert.deepEqual(REQUEST_NEXT_ACTIONS.completed, []);
+    assert.deepEqual(REQUEST_NEXT_ACTIONS.cancelled, []);
+    assert.equal(Object.keys(REQUEST_STATUS_LABEL).length, 4);
   });
 });

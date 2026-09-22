@@ -63,18 +63,6 @@ export const providerSchema = z.object({
   price_max: z.coerce.number().int().min(0).max(1000000).optional(),
 });
 
-export const searchParamsSchema = z.object({
-  q: z.string().max(100).optional().default(""),
-  service: z.string().max(100).optional().default(""),
-  location: z.string().max(100).optional().default(""),
-  category: z.string().max(60).optional().default(""),
-  verified: z.string().optional().default(""),
-  plan: z.string().optional().default(""),
-  minPrice: z.coerce.number().optional(),
-  maxPrice: z.coerce.number().optional(),
-  page: z.coerce.number().int().min(1).default(1),
-});
-
 export const reportSchema = z.object({
   provider_id: z.string().uuid(),
   reason: z.string().min(3).max(500),

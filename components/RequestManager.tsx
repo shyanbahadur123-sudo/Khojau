@@ -2,34 +2,15 @@
 
 import { useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase";
-import type { RequestStatus, ServiceRequestRow } from "@/types/database";
-
-const NEXT_ACTIONS: Record<RequestStatus, { label: string; to: RequestStatus }[]> = {
-  open: [
-    { label: "Start progress", to: "in_progress" },
-    { label: "Cancel", to: "cancelled" },
-  ],
-  in_progress: [
-    { label: "Mark completed", to: "completed" },
-    { label: "Cancel", to: "cancelled" },
-  ],
-  completed: [],
-  cancelled: [],
-};
-
-const STATUS_LABEL: Record<RequestStatus, string> = {
-  open: "Open",
-  in_progress: "In progress",
-  completed: "Completed",
-  cancelled: "Cancelled",
-};
+import { REQUEST_NEXT_ACTIONS, formatRequestStatus, type RequestStatus } from "@/lib/request-status";
+import type { ServiceRequestRow } from "@/types/database";
 
 function RequestCard({ r, children }: { r: ServiceRequestRow; children?: React.ReactNode }) {
   return (
     <li className="rounded-lg border border-black/10 p-3 text-sm">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="font-semibold">{r.service}</p>
-        <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs font-semibold">{STATUS_LABEL[r.status]}</span>
+        <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs font-semibold">{formatRequestStatus(r.status)}</span>
       </div>
       <p className="mt-1 text-[#66706E]">{r.location}{r.preferred_time ? ` · ${r.preferred_time}` : ""}</p>
       <p className="mt-1 whitespace-pre-line">{r.description}</p>
@@ -72,9 +53,9 @@ export default function RequestManager({ incoming, mine }: { incoming: ServiceRe
           <ul className="mt-2 space-y-2">
             {rows.map((r) => (
               <RequestCard key={r.id} r={r}>
-                {NEXT_ACTIONS[r.status].length > 0 && (
+                {REQUEST_NEXT_ACTIONS[r.status].length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-2">
-                    {NEXT_ACTIONS[r.status].map((a) => (
+                    {REQUEST_NEXT_ACTIONS[r.status].map((a) => (
                       <button
                         key={a.to}
                         disabled={busy !== null}

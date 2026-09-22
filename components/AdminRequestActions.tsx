@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { RequestStatus } from "@/types/database";
+import { REQUEST_STATUS_LABEL, type RequestStatus } from "@/lib/request-status";
 
 const OPTIONS: RequestStatus[] = ["open", "in_progress", "completed", "cancelled"];
 
@@ -27,7 +27,7 @@ export default function AdminRequestActions({ id, current }: { id: string; curre
     <span className="flex flex-wrap gap-1">
       {OPTIONS.filter((o) => o !== current).map((o) => (
         <button key={o} disabled={busy} onClick={() => void act(o)} className="rounded border px-2 py-1 text-xs disabled:opacity-60">
-          → {o.replace("_", " ")}
+          → {REQUEST_STATUS_LABEL[o]}
         </button>
       ))}
     </span>
