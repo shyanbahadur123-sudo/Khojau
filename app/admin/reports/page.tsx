@@ -1,43 +1,40 @@
 import { redirect } from "next/navigation";
-import { supabaseServer } from "@/lib/supabase-server";
-import { supabaseAdmin, isAdminEmail } from "@/lib/supabase";
+import { getAdminContext } from "@/lib/admin";
+import AdminReportActions from "@/components/AdminReportActions";
 
-export const metadata = { title: "Admin — Reports & requests" };
+export const metadata = { title: "Admin — Reports" };
 
 export default async function AdminReportsPage() {
-  const sb = supabaseServer();
-  const { data: { user } } = sb ? await sb.auth.getUser() : { data: { user: null } };
-  if (!user || !isAdminEmail(user.email)) redirect("/login");
-  const admin = supabaseAdmin();
-  const [{ data: reports }, { data: requests }] = admin
-    ? await Promise.all([
-        admin.from("reports").select("id,reason,contact,status,created_at,provider_id").eq("status", "open").order("created_at", { ascending: false }).limit(50),
-        admin.from("service_requests").select("id,service,location,description,phone,status,created_at").eq("status", "open").order("created_at", { ascending: false }).limit(50),
-      ])
-    : [{ data: [] }, { data: [] }];
+  const ctx = await getAdminContext();
+  if (!ctx) redirect("/login");
+
+  const { data: reports } = await ctx.admin
+    .from("reports")
+    .select("id,reason,contact,status,created_at,provider_id,providers(business_name)")
+    .order("created_at", { ascending: false })
+    .limit(100);
 
   return (
-    <div className="space-y-8 pt-6">
-      <section>
-        <h1 className="text-2xl font-bold">Open reports</h1>
-        <ul className="mt-3 space-y-2 text-sm">
-          {(reports ?? []).length === 0 && <li className="rounded-xl bg-[#FFFDF8] p-4 text-[#66706E]">No open reports.</li>}
-          {(reports ?? []).map((r: { id: string; reason: string; contact: string | null; provider_id: string }) => (
-            <li key={r.id} className="rounded-xl bg-[#FFFDF8] p-4">{r.reason}{r.contact ? ` — ${r.contact}` : ""}</li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h2 className="text-xl font-bold">Service requests (lead matching)</h2>
-        <ul className="mt-3 space-y-2 text-sm">
-          {(requests ?? []).length === 0 && <li className="rounded-xl bg-[#FFFDF8] p-4 text-[#66706E]">No open requests.</li>}
-          {(requests ?? []).map((r: { id: string; service: string; location: string; description: string; phone: string }) => (
+    <div className="space-y-4 pt-6">
+      <h1 className="text-2xl font-bold">Reports</h1>
+      {(reports ?? []).length === 0 ? (
+        <p className="rounded-xl bg-[#FFFDF8] p-4 text-sm text-[#66706E]">No reports.</p>
+      ) : (
+        <ul className="space-y-2 text-sm">
+          {(reports ?? []).map((r: { id: string; reason: string; contact: string | null; status: string; providers: { business_name: string } | { business_name: string }[] | null }) => (
             <li key={r.id} className="rounded-xl bg-[#FFFDF8] p-4">
-              <strong>{r.service}</strong> in {r.location} — {r.phone}<br />{r.description}
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="font-semibold">{(Array.isArray(r.providers) ? r.providers[0] : r.providers)?.business_name ?? "Unknown listing"}</p>
+                <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs font-semibold">{r.status}</span>
+              </div>
+              <p className="mt-1">{r.reason}{r.contact ? ` — ${r.contact}` : ""}</p>
+              {r.status === "open" && (
+                <div className="mt-2"><AdminReportActions id={r.id} /></div>
+              )}
             </li>
           ))}
         </ul>
-      </section>
+      )}
     </div>
   );
 }

@@ -1,19 +1,15 @@
 import { redirect } from "next/navigation";
-import { supabaseServer } from "@/lib/supabase-server";
-import { supabaseAdmin, isAdminEmail } from "@/lib/supabase";
+import { getAdminContext } from "@/lib/admin";
 import AdminProviderActions from "@/components/AdminProviderActions";
 
 export const metadata = { title: "Admin — Providers" };
 
 export default async function AdminProvidersPage({ searchParams }: { searchParams: { status?: string } }) {
-  const sb = supabaseServer();
-  const { data: { user } } = sb ? await sb.auth.getUser() : { data: { user: null } };
-  if (!user || !isAdminEmail(user.email)) redirect("/login");
-  const admin = supabaseAdmin();
-  if (!admin) return <div className="pt-6"><h1 className="text-2xl font-bold">Providers</h1><p className="text-sm">Set SUPABASE_SERVICE_ROLE_KEY in server env.</p></div>;
+  const ctx = await getAdminContext();
+  if (!ctx) redirect("/login");
 
   const status = searchParams.status ?? "";
-  let q = admin.from("providers").select("id,business_name,slug,city,area,phone,status,verification_status,plan").order("updated_at", { ascending: false }).limit(100);
+  let q = ctx.admin.from("providers").select("id,business_name,slug,city,area,phone,status,verification_status,plan").order("updated_at", { ascending: false }).limit(100);
   if (status) q = q.eq("status", status);
   const { data } = await q;
 

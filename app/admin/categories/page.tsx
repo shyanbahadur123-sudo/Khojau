@@ -1,16 +1,14 @@
 import { redirect } from "next/navigation";
-import { supabaseServer } from "@/lib/supabase-server";
-import { supabaseAdmin, isAdminEmail } from "@/lib/supabase";
+import { getAdminContext } from "@/lib/admin";
 import { CATEGORIES } from "@/lib/categories";
 
 export const metadata = { title: "Admin — Categories" };
 
 export default async function AdminCategoriesPage() {
-  const sb = supabaseServer();
-  const { data: { user } } = sb ? await sb.auth.getUser() : { data: { user: null } };
-  if (!user || !isAdminEmail(user.email)) redirect("/login");
-  const admin = supabaseAdmin();
-  const { data } = admin ? await admin.from("categories").select("name,slug") : { data: null };
+  const ctx = await getAdminContext();
+  if (!ctx) redirect("/login");
+  const admin = ctx.admin;
+  const { data } = await admin.from("categories").select("name,slug");
   const inDb = new Set((data ?? []).map((c: { slug: string }) => c.slug));
 
   return (
