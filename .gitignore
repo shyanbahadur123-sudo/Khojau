@@ -19,3 +19,5 @@ coverage/
 
 # local OpenCode tooling (project MCP config, no secrets)
 opencode.jsonc
+
+.vercel
