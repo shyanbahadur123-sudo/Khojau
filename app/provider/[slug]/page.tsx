@@ -46,6 +46,32 @@ export default async function ProviderPage({ params }: { params: { slug: string 
         )}
       </header>
 
+      {(p.cover_image_url || p.logo_url || (p.provider_images ?? []).length > 0) && (
+        <section aria-label={`Photos of ${p.business_name}`} className="overflow-hidden rounded-2xl bg-[#FFFDF8] shadow-sm">
+          {p.cover_image_url && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={p.cover_image_url} alt={`${p.business_name} cover photo`} className="h-48 w-full object-cover sm:h-64" loading="lazy" />
+          )}
+          <div className="flex flex-wrap items-center gap-4 p-6">
+            {p.logo_url && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={p.logo_url} alt={`${p.business_name} logo`} className="h-20 w-20 rounded-xl border object-cover" loading="lazy" />
+            )}
+            {(p.provider_images ?? []).length > 0 && (
+              <ul className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
+                {(p.provider_images ?? []).map((img, i) => (
+                  <li key={img.id}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={img.url} alt={img.caption || `${p.business_name} photo ${i + 1}`} className="h-32 w-full rounded-lg object-cover" loading="lazy" />
+                    {img.caption && <p className="mt-1 text-xs text-[#66706E]">{img.caption}</p>}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </section>
+      )}
+
       <ContactTracker providerId={p.id} />
 
       {/* Sticky mobile contact bar */}

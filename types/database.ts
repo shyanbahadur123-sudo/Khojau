@@ -10,6 +10,13 @@ export interface Category {
   description: string | null;
 }
 
+export interface ProviderImage {
+  id: string;
+  url: string;
+  caption: string | null;
+  sort: number;
+}
+
 export interface Provider {
   id: string;
   owner_id: string | null;
@@ -38,6 +45,7 @@ export interface Provider {
   created_at: string;
   updated_at: string;
   categories?: Pick<Category, "name" | "slug"> | null;
+  provider_images?: ProviderImage[];
 }
 
 export interface ProviderHour {
