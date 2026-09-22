@@ -4,40 +4,53 @@ import SearchBar from "@/components/SearchBar";
 import ProviderCard from "@/components/ProviderCard";
 import { getApprovedProviders } from "@/lib/providers";
 import { filterProviders, rankProviders } from "@/lib/search";
-import { searchParamsSchema } from "@/lib/validation";
-import { categoryBySlug } from "@/lib/categories";
+import { CATEGORIES, categoryBySlug } from "@/lib/categories";
 
 export const metadata: Metadata = { title: "Search services", alternates: { canonical: "/search" } };
 
 const PAGE_SIZE = 12;
+const MAX_PAGE = 50;
 
 export default async function SearchPage({ searchParams }: { searchParams: Record<string, string | undefined> }) {
-  const parsedResult = searchParamsSchema.safeParse(searchParams);
-  const q = parsedResult.success ? parsedResult.data : { service: "", location: "", category: "", verified: "", plan: "", page: 1 as number, minPrice: undefined, maxPrice: undefined };
-  const service = (searchParams.service ?? "") as string;
-  const location = (searchParams.location ?? "") as string;
-  const category = (searchParams.category ?? "") as string;
-  const verifiedOnly = searchParams.verified === "1" || searchParams.verified === "true";
-  const plan = (searchParams.plan ?? "") as string;
-  const page = Math.max(1, Number(searchParams.page ?? 1) || 1);
+  // Per-field parsing with independent fallbacks: one malformed parameter
+  // must never reset the rest of the query (e.g. page=abc keeps q intact).
+  const str = (k: string, max = 100) => (typeof searchParams[k] === "string" ? (searchParams[k] as string).slice(0, max) : "");
+  const num = (k: string) => {
+    const n = Number.parseInt(str(k, 10), 10);
+    return Number.isFinite(n) ? n : NaN;
+  };
 
-  const categorySlug = category || (categoryBySlug(service)?.slug ?? "");
-  let providers = await getApprovedProviders({ search: `${service} ${location}`.trim(), categorySlug: categorySlug || undefined, limit: 100 });
-  providers = filterProviders(providers, {
-    verifiedOnly,
-    plan: plan || undefined,
-    minPrice: parsedResult.success ? parsedResult.data.minPrice : undefined,
-    maxPrice: parsedResult.success ? parsedResult.data.maxPrice : undefined,
-  });
-  providers = rankProviders(providers, service, location);
+  // Canonical `q`, legacy `service` fallback. Validated + length-capped.
+  const query = (str("q") || str("service")).trim().slice(0, 100);
+  const location = str("location").trim().slice(0, 100);
+  // Category must be a known slug; unknown values are ignored, never queried raw.
+  const rawCategory = str("category", 60);
+  const categorySlug = CATEGORIES.some((c) => c.slug === rawCategory)
+    ? rawCategory
+    : categoryBySlug(query)?.slug ?? "";
+  const verifiedRaw = str("verified", 10);
+  const verifiedOnly = verifiedRaw === "1" || verifiedRaw.toLowerCase() === "true";
+  const rawPlan = str("plan", 20);
+  const plan = ["free", "featured", "premium"].includes(rawPlan) ? rawPlan : "";
+  const rawPage = num("page");
+  const page = Math.min(MAX_PAGE, Math.max(1, Number.isFinite(rawPage) ? rawPage : 1));
+  const rawMin = Number(str("minPrice", 20));
+  const rawMax = Number(str("maxPrice", 20));
+  const minPrice = Number.isFinite(rawMin) && rawMin >= 0 ? rawMin : undefined;
+  const maxPrice = Number.isFinite(rawMax) && rawMax >= 0 ? rawMax : undefined;
+  const verifiedParam = verifiedOnly ? "1" : "";
+
+  let providers = await getApprovedProviders({ search: query, location, categorySlug: categorySlug || undefined, limit: 60 });
+  providers = filterProviders(providers, { verifiedOnly, plan: plan || undefined, minPrice, maxPrice });
+  providers = rankProviders(providers, query, location);
   const total = providers.length;
   const paged = providers.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const buildHref = (next: Record<string, string>) => {
     const p = new URLSearchParams();
-    const base: Record<string, string> = { service, location, category, plan, verified: searchParams.verified ?? "" };
+    const base: Record<string, string> = { q: query, location, category: categorySlug, plan, verified: verifiedParam };
     const merged = { ...base, ...next };
-    for (const [k, v] of Object.entries(merged)) if (v) p.set(k, v);
+    for (const [k, val] of Object.entries(merged)) if (val) p.set(k, val);
     return `/search?${p.toString()}`;
   };
 
@@ -46,7 +59,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
       <h1 className="text-2xl font-bold">Search services</h1>
       <Suspense><SearchBar compact /></Suspense>
       <form method="get" className="flex flex-wrap gap-2 text-sm" aria-label="Filters">
-        <input type="hidden" name="service" value={service} />
+        <input type="hidden" name="q" value={query} />
         <input type="hidden" name="location" value={location} />
         <label className="flex items-center gap-1 rounded-full border border-black/15 bg-white px-3 py-2">
           <input type="checkbox" name="verified" value="1" defaultChecked={verifiedOnly} /> Verified only
@@ -58,11 +71,11 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
           <option value="premium">Premium</option>
         </select>
         <button type="submit" className="rounded-full bg-[#0B7168] px-4 py-2 font-semibold text-white">Apply</button>
-        {(service || location) && <a href="/search" className="rounded-full border border-black/15 px-4 py-2">Clear</a>}
+        {(query || location) && <a href="/search" className="rounded-full border border-black/15 px-4 py-2">Clear</a>}
       </form>
       <p className="text-sm text-[#66706E]" role="status">
         {total === 0 ? "No providers found." : `${total} provider${total === 1 ? "" : "s"} found`}
-        {service && <> for <strong>{service}</strong></>}
+        {query && <> for <strong>{query}</strong></>}
         {location && <> in <strong>{location}</strong></>}
       </p>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

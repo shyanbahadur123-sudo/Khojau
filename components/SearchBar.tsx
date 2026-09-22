@@ -7,7 +7,7 @@ import { LOCATIONS } from "@/lib/locations";
 export default function SearchBar({ compact = false }: { compact?: boolean }) {
   const router = useRouter();
   const params = useSearchParams();
-  const [service, setService] = useState(params.get("service") ?? "");
+  const [service, setService] = useState(params.get("q") ?? params.get("service") ?? "");
   const [location, setLocation] = useState(params.get("location") ?? "");
 
   return (
@@ -18,7 +18,7 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
       onSubmit={(e) => {
         e.preventDefault();
         const q = new URLSearchParams();
-        if (service.trim()) q.set("service", service.trim());
+        if (service.trim()) q.set("q", service.trim());
         if (location.trim()) q.set("location", location.trim());
         router.push(`/search?${q.toString()}`);
       }}

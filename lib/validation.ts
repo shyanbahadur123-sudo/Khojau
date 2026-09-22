@@ -18,6 +18,7 @@ export const providerSchema = z.object({
 });
 
 export const searchParamsSchema = z.object({
+  q: z.string().max(100).optional().default(""),
   service: z.string().max(100).optional().default(""),
   location: z.string().max(100).optional().default(""),
   category: z.string().max(60).optional().default(""),
