@@ -1,12 +1,17 @@
 import { redirect } from "next/navigation";
-import { getAdminContext } from "@/lib/admin";
+import { getAdminStatus } from "@/lib/admin";
+import AdminNotice from "@/components/AdminNotice";
 import AdminProviderActions from "@/components/AdminProviderActions";
 
 export const metadata = { title: "Admin — Providers" };
 
 export default async function AdminProvidersPage({ searchParams }: { searchParams: { status?: string } }) {
-  const ctx = await getAdminContext();
-  if (!ctx) redirect("/login");
+  const gate = await getAdminStatus();
+  if (!gate.ok && gate.reason !== "signed-out") {
+    return <AdminNotice reason={gate.reason} email={gate.email} />;
+  }
+  if (!gate.ok) redirect("/login");
+  const ctx = gate.ctx;
 
   const status = searchParams.status ?? "";
   let q = ctx.admin.from("providers").select("id,business_name,slug,city,area,phone,status,verification_status,plan").order("updated_at", { ascending: false }).limit(100);

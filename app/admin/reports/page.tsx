@@ -1,12 +1,17 @@
 import { redirect } from "next/navigation";
-import { getAdminContext } from "@/lib/admin";
+import { getAdminStatus } from "@/lib/admin";
+import AdminNotice from "@/components/AdminNotice";
 import AdminReportActions from "@/components/AdminReportActions";
 
 export const metadata = { title: "Admin — Reports" };
 
 export default async function AdminReportsPage() {
-  const ctx = await getAdminContext();
-  if (!ctx) redirect("/login");
+  const gate = await getAdminStatus();
+  if (!gate.ok && gate.reason !== "signed-out") {
+    return <AdminNotice reason={gate.reason} email={gate.email} />;
+  }
+  if (!gate.ok) redirect("/login");
+  const ctx = gate.ctx;
 
   const { data: reports } = await ctx.admin
     .from("reports")

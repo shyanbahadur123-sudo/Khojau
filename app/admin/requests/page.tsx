@@ -1,13 +1,18 @@
 import { redirect } from "next/navigation";
-import { getAdminContext } from "@/lib/admin";
+import { getAdminStatus } from "@/lib/admin";
+import AdminNotice from "@/components/AdminNotice";
 import AdminRequestActions from "@/components/AdminRequestActions";
 import type { RequestStatus } from "@/types/database";
 
 export const metadata = { title: "Admin — Requests" };
 
 export default async function AdminRequestsPage({ searchParams }: { searchParams: { status?: string } }) {
-  const ctx = await getAdminContext();
-  if (!ctx) redirect("/login");
+  const gate = await getAdminStatus();
+  if (!gate.ok && gate.reason !== "signed-out") {
+    return <AdminNotice reason={gate.reason} email={gate.email} />;
+  }
+  if (!gate.ok) redirect("/login");
+  const ctx = gate.ctx;
 
   const status = searchParams.status ?? "open";
   const { data } = await ctx.admin

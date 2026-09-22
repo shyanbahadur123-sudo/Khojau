@@ -11,15 +11,33 @@ export interface AdminContext {
 
 /** Server-only admin gate. Returns null when the caller is not an admin. */
 export async function getAdminContext(): Promise<AdminContext | null> {
+  const status = await getAdminStatus();
+  return status.ok ? status.ctx : null;
+}
+
+export type AdminStatus =
+  | { ok: true; ctx: AdminContext }
+  | { ok: false; reason: "signed-out" | "forbidden" | "unconfigured"; email?: string };
+
+/**
+ * Fine-grained gate for admin PAGES (API routes keep using getAdminContext).
+ * Distinguishes three very different situations that must never share one
+ * message: not signed in (→ login), signed in without admin rights (→ 403
+ * explanation, fail-closed), and admin email present but server key missing
+ * (→ setup instructions, no secret material).
+ */
+export async function getAdminStatus(): Promise<AdminStatus> {
   const sb = supabaseServer();
-  if (!sb) return null;
+  if (!sb) return { ok: false, reason: "unconfigured" };
   const {
     data: { user },
   } = await sb.auth.getUser();
-  if (!user || !isAdminEmail(user.email)) return null;
+  if (!user) return { ok: false, reason: "signed-out" };
+  const email = user.email ?? "";
+  if (!isAdminEmail(user.email)) return { ok: false, reason: "forbidden", email };
   const admin = supabaseAdmin();
-  if (!admin) return null;
-  return { userId: user.id, email: user.email ?? "", admin };
+  if (!admin) return { ok: false, reason: "unconfigured", email };
+  return { ok: true, ctx: { userId: user.id, email, admin } };
 }
 
 export async function audit(

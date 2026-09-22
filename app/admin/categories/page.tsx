@@ -1,13 +1,18 @@
 import { redirect } from "next/navigation";
-import { getAdminContext } from "@/lib/admin";
+import { getAdminStatus } from "@/lib/admin";
+import AdminNotice from "@/components/AdminNotice";
 import { CATEGORIES } from "@/lib/categories";
 import CategoryIcon from "@/components/CategoryIcon";
 
 export const metadata = { title: "Admin — Categories" };
 
 export default async function AdminCategoriesPage() {
-  const ctx = await getAdminContext();
-  if (!ctx) redirect("/login");
+  const gate = await getAdminStatus();
+  if (!gate.ok && gate.reason !== "signed-out") {
+    return <AdminNotice reason={gate.reason} email={gate.email} />;
+  }
+  if (!gate.ok) redirect("/login");
+  const ctx = gate.ctx;
   const admin = ctx.admin;
   const { data } = await admin.from("categories").select("name,slug");
   const inDb = new Set((data ?? []).map((c: { slug: string }) => c.slug));

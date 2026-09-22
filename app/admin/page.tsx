@@ -1,13 +1,17 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { getAdminContext } from "@/lib/admin";
+import { getAdminStatus } from "@/lib/admin";
+import AdminNotice from "@/components/AdminNotice";
 
 export const metadata = { title: "Admin dashboard" };
 
 export default async function AdminPage() {
-  const ctx = await getAdminContext();
-  if (!ctx) redirect("/login");
-  const { admin, email } = ctx;
+  const status = await getAdminStatus();
+  if (!status.ok && status.reason !== "signed-out") {
+    return <AdminNotice reason={status.reason} email={status.email} />;
+  }
+  if (!status.ok) redirect("/login");
+  const { admin, email } = status.ctx;
 
   const [p, a, r, s, audit] = await Promise.all([
     admin.from("providers").select("id", { count: "exact", head: true }).eq("status", "pending"),
