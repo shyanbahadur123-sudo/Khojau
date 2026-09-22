@@ -5,7 +5,8 @@ import ImageManager from "@/components/ImageManager";
 import ProviderEditor, { type EditableProvider } from "@/components/ProviderEditor";
 import ServiceManager from "@/components/ServiceManager";
 import HoursManager from "@/components/HoursManager";
-import type { ProviderImage, ProviderHourItem, ServiceItem } from "@/types/database";
+import RequestManager from "@/components/RequestManager";
+import type { ProviderImage, ProviderHourItem, ServiceItem, ServiceRequestRow } from "@/types/database";
 
 export const metadata = { title: "Dashboard" };
 
@@ -59,6 +60,25 @@ export default async function DashboardPage() {
     .order("weekday", { referencedTable: "provider_hours", ascending: true });
   const rows = (data ?? []) as unknown as OwnedProvider[];
 
+  // Customer view: requests I submitted while signed in.
+  const { data: myRequests } = await sb
+    .from("service_requests")
+    .select("id,service,location,description,preferred_time,phone,status,provider_id,service_id,customer_id,created_at,providers(business_name,slug)")
+    .eq("customer_id", user.id)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  // Provider view: requests addressed to my listings.
+  const myIds = rows.map((p) => p.id);
+  const { data: incoming } = myIds.length
+    ? await sb
+        .from("service_requests")
+        .select("id,service,location,description,preferred_time,phone,status,provider_id,service_id,customer_id,created_at,providers(business_name,slug)")
+        .in("provider_id", myIds)
+        .order("created_at", { ascending: false })
+        .limit(100)
+    : { data: [] as ServiceRequestRow[] | null };
+
   return (
     <div className="space-y-6 pt-6">
       <h1 className="text-2xl font-bold">My listings</h1>
@@ -68,6 +88,7 @@ export default async function DashboardPage() {
         {isAdminEmail(user.email) && <a href="/admin" className="rounded-lg border px-4 py-2 font-semibold">Admin dashboard</a>}
         <form action="/api/auth/signout" method="post"><button className="rounded-lg border px-4 py-2">Sign out</button></form>
       </div>
+      <RequestManager incoming={(incoming ?? []) as unknown as ServiceRequestRow[]} mine={(myRequests ?? []) as unknown as ServiceRequestRow[]} />
       {rows.length === 0 ? (
         <p className="rounded-xl bg-[#FFFDF8] p-6 text-sm text-[#66706E]">No listings yet. Submit your first business — it goes to pending review.</p>
       ) : (

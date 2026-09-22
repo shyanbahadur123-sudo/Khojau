@@ -82,3 +82,20 @@ export interface ServiceRequest {
   preferred_time: string | null;
   phone: string;
 }
+
+export type RequestStatus = "open" | "in_progress" | "completed" | "cancelled";
+
+export interface ServiceRequestRow {
+  id: string;
+  service: string;
+  location: string;
+  description: string;
+  preferred_time: string | null;
+  phone: string;
+  status: RequestStatus;
+  provider_id: string | null;
+  service_id: string | null;
+  customer_id: string | null;
+  created_at: string;
+  providers?: { business_name: string; slug: string } | null;
+}

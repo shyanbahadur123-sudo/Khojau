@@ -75,6 +75,13 @@ export default async function ProviderPage({ params }: { params: { slug: string 
 
       <ContactTracker providerId={p.id} />
 
+      <div className="rounded-xl border border-[#0B7168]/30 bg-[#0B7168]/5 p-4 text-sm">
+        <p className="font-semibold">Prefer to send details instead of calling?</p>
+        <a href={`/request-service?provider=${p.slug}`} className="mt-2 inline-block rounded-lg bg-[#0B7168] px-4 py-2 font-semibold text-white">
+          Request this service
+        </a>
+      </div>
+
       {/* Sticky mobile contact bar */}
       <div className="sticky bottom-3 z-30 grid grid-cols-3 gap-2 rounded-xl border border-black/10 bg-[#FFFDF8] p-2 shadow-lg sm:static sm:flex sm:shadow-none">
         <a href={`tel:${p.phone}`} className="rounded-lg bg-[#0B7168] px-4 py-3 text-center font-semibold text-white" data-track="phone_click">
@@ -128,9 +135,12 @@ export default async function ProviderPage({ params }: { params: { slug: string 
                 {(p.services ?? []).map((s) => (
                   <li key={s.id} className="flex items-center justify-between gap-2 py-2">
                     <span>{s.name}</span>
-                    {(s.price_min != null || s.price_max != null) && (
-                      <span className="text-[#66706E]">Rs.{s.price_min ?? "?"}–{s.price_max ?? "?"}</span>
-                    )}
+                    <span className="flex items-center gap-2">
+                      {(s.price_min != null || s.price_max != null) && (
+                        <span className="text-[#66706E]">Rs.{s.price_min ?? "?"}–{s.price_max ?? "?"}</span>
+                      )}
+                      <a href={`/request-service?provider=${p.slug}&service=${s.id}`} className="font-semibold text-[#0B7168] hover:underline">Request</a>
+                    </span>
                   </li>
                 ))}
               </ul>

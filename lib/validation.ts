@@ -53,6 +53,8 @@ export const serviceRequestSchema = z.object({
   description: z.string().min(10).max(2000),
   preferred_time: z.string().max(120).optional().or(z.literal("")),
   phone: z.string().regex(/^(\+?977[- ]?)?9[678]\d{8}$/, "Enter a valid Nepal mobile number"),
+  provider_id: z.string().uuid().optional().or(z.literal("")),
+  service_id: z.string().uuid().optional().or(z.literal("")),
 });
 
 export function slugify(input: string) {
