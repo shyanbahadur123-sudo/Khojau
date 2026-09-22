@@ -17,7 +17,7 @@ export default function CategoryGrid({ limit }: { limit?: number }) {
             </span>
             <span className="min-w-0">
               <span className="block font-semibold leading-snug">{c.name}</span>
-              {c.description && <span className="mt-0.5 block text-xs leading-snug text-[#6B7280]">{c.description}</span>}
+              {c.description && <span className="mt-0.5 hidden text-xs leading-snug text-[#6B7280] sm:block">{c.description}</span>}
             </span>
           </Link>
         </li>

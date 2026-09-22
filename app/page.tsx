@@ -28,7 +28,7 @@ export default async function HomePage() {
   const popular = CATEGORIES.filter((c) => POPULAR_SERVICES.includes(c.slug));
 
   return (
-    <div className="space-y-12 pt-6">
+    <div className="space-y-8 pt-6 sm:space-y-12">
       <section aria-labelledby="hero-heading" className="rounded-2xl border border-black/10 border-t-2 border-t-[#C9A227] bg-[#FFFFFF] p-6 shadow-sm sm:p-10">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Nepal&rsquo;s local services directory</p>
         <h1 id="hero-heading" className="mt-2 max-w-xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">

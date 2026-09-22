@@ -16,7 +16,7 @@ export default function Toast({ message, type = "info", onClose }: ToastProps) {
   const bg = type === "success" ? "bg-[#111111]" : type === "error" ? "bg-red-700" : "bg-[#0A0A0A]";
   const Glyph = type === "success" ? CheckIcon : type === "error" ? AlertIcon : InfoIcon;
   return (
-    <div role="status" aria-live="polite" className={`fixed bottom-6 right-6 z-[100] max-w-sm rounded-xl ${bg} px-5 py-4 text-sm font-medium text-white shadow-2xl ring-1 ring-white/10 transition-transform`}>
+    <div role="status" aria-live="polite" className={`fixed bottom-4 left-4 right-4 z-[100] rounded-xl ${bg} px-5 py-4 text-sm font-medium text-white shadow-2xl ring-1 ring-white/10 sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-sm`}>
       <div className="flex items-center gap-3">
         <Glyph className="h-5 w-5 shrink-0" />
         <span>{message}</span>

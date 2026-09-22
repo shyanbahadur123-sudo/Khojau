@@ -29,7 +29,7 @@ export default async function ProviderPage({ params }: { params: { slug: string 
 
   return (
     <div className="space-y-6 pt-6">
-      <nav aria-label="Breadcrumb" className="text-sm text-[#6B7280]">
+      <nav aria-label="Breadcrumb" className="break-words text-sm text-[#6B7280]">
         <Link href="/" className="hover:underline">Home</Link> / <Link href="/search" className="hover:underline">Search</Link> / <span aria-current="page">{p.business_name}</span>
       </nav>
 
@@ -58,23 +58,25 @@ export default async function ProviderPage({ params }: { params: { slug: string 
 
       <ContactTracker providerId={p.id} />
 
-      {/* Sticky mobile contact bar */}
-      <div className="sticky bottom-3 z-30 grid grid-cols-3 gap-2 rounded-xl border border-black/10 bg-[#FFFFFF] p-2 shadow-lg sm:static sm:flex sm:shadow-none">
+      {/* Sticky mobile contact bar: stacked Call + side-by-side pair on small screens */}
+      <div className="sticky bottom-3 z-30 flex flex-col gap-2 rounded-xl border border-black/10 bg-[#FFFFFF] p-2 shadow-lg sm:static sm:grid sm:grid-cols-3 sm:shadow-none">
         <a href={`tel:${p.phone}`} className="rounded-lg bg-[#C9A227] px-4 py-3 text-center font-semibold text-black" data-track="phone_click">
-          Call
+          Call {p.phone}
         </a>
+        <div className="grid grid-cols-2 gap-2 sm:contents">
         {wa ? (
-          <a href={wa} target="_blank" rel="noopener" className="rounded-lg border border-[#111111] px-4 py-3 text-center font-semibold text-[#111111]" data-track="message_click">
+          <a href={wa} target="_blank" rel="noopener" className="rounded-lg border border-black/25 px-4 py-3 text-center font-semibold" data-track="message_click">
             Message
           </a>
         ) : (
-          <a href={`sms:${p.phone}`} className="rounded-lg border border-[#111111] px-4 py-3 text-center font-semibold text-[#111111]" data-track="message_click">
+          <a href={`sms:${p.phone}`} className="rounded-lg border border-black/25 px-4 py-3 text-center font-semibold" data-track="message_click">
             Message
           </a>
         )}
         <a href={dir} target="_blank" rel="noopener" className="rounded-lg border border-black/15 px-4 py-3 text-center font-semibold" data-track="directions_click">
           Directions
         </a>
+        </div>
       </div>
 
       {p.description && (
