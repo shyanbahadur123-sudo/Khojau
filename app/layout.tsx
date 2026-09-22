@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: "Khojau", description: "Find trusted local services near you." },
   robots: { index: true, follow: true },
   icons: {
-    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C9A227'/%3E%3Ctext x='29' y='45' font-size='36' font-weight='bold' text-anchor='middle' fill='%23000'%3E%E0%A4%96%3C/text%3E%3C/svg%3E",
+    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect x='1' y='1' width='34' height='34' rx='9' fill='%230A0A0A'/%3E%3Ccircle cx='15' cy='15' r='8' fill='none' stroke='%23C9A227' stroke-width='2.6'/%3E%3Cline x1='20.8' y1='20.8' x2='27' y2='27' stroke='%23C9A227' stroke-width='3' stroke-linecap='round'/%3E%3Ctext x='15' y='19.5' text-anchor='middle' font-size='10.5' font-weight='bold' fill='%23C9A227'%3E%E0%A4%96%3C/text%3E%3C/svg%3E",
   },
 };
 

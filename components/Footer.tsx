@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LogoMark from "@/components/Logo";
 
 export default function Footer() {
   return (
@@ -6,11 +7,8 @@ export default function Footer() {
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-10 sm:grid-cols-4 sm:px-6">
         <div>
           <p className="flex items-center gap-2 font-bold text-[#0A0A0A]">
-            <span aria-hidden="true" className="relative grid h-6 w-6 place-items-center rounded-lg bg-[#C9A227] text-sm font-bold leading-none text-black">
-              ख
-              <span className="absolute -bottom-[2px] -right-[2px] h-[8px] w-[2.5px] rotate-45 rounded-full bg-[#0A0A0A]" />
-            </span>
-            Khojau
+            <LogoMark className="h-7 w-7" />
+            <span>Khojau<span aria-hidden="true" className="text-[#C9A227]">.</span></span>
           </p>
           <p className="mt-2 text-sm text-[#6B7280]">Find trusted local services near you, across Nepal.</p>
         </div>
