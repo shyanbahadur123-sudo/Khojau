@@ -28,7 +28,7 @@ export default async function LocationDetailPage({ params }: { params: { slug: s
       <h1 className="text-2xl font-bold">Local services in {l.city}</h1>
       <div className="flex flex-wrap gap-2">
         {l.areas.map((a) => (
-          <Link key={a} href={`/search?location=${encodeURIComponent(`${a}, ${l.city}`)}`} className="rounded-full border border-black/15 bg-white px-3 py-1.5 text-sm hover:border-[#111111]">
+          <Link key={a} href={`/search?location=${encodeURIComponent(`${a}, ${l.city}`)}`} className="rounded-full bg-black/5 px-3 py-1.5 text-sm transition-colors hover:bg-black/10">
             {a}
           </Link>
         ))}

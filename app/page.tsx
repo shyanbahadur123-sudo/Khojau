@@ -43,7 +43,7 @@ export default async function HomePage() {
         <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
           <span className="text-[#6B7280]">Try:</span>
           {EXAMPLE_SEARCHES.map((s) => (
-            <Link key={s} href={`/search?q=${encodeURIComponent(s)}`} className="rounded-full border border-black/15 bg-white px-3 py-1 hover:border-[#111111]">
+            <Link key={s} href={`/search?q=${encodeURIComponent(s)}`} className="rounded-full bg-black/5 px-3 py-1 transition-colors hover:bg-black/10">
               {s}
             </Link>
           ))}
@@ -58,7 +58,7 @@ export default async function HomePage() {
         <ul className="flex flex-wrap gap-2">
           {popular.map((c) => (
             <li key={c.slug}>
-              <Link href={`/services/${c.slug}`} className="inline-flex items-center gap-2 rounded-full border border-black/15 bg-[#FFFFFF] px-4 py-2 text-sm font-medium text-[#0A0A0A] transition-colors hover:border-[#7A5C00]/60 hover:text-[#7A5C00]">
+              <Link href={`/services/${c.slug}`} className="inline-flex items-center gap-2 rounded-full bg-black/5 px-4 py-2 text-sm font-medium text-[#0A0A0A] transition-colors hover:bg-black/10 hover:text-[#7A5C00]">
                 <CategoryIcon slug={c.slug} className="h-4 w-4 text-[#7A5C00]" />
                 {c.name}
               </Link>
@@ -80,7 +80,7 @@ export default async function HomePage() {
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {LOCATIONS.slice(0, 8).map((l) => (
             <li key={l.slug}>
-              <Link href={`/locations/${l.slug}`} className="block rounded-xl border border-black/10 bg-[#FFFFFF] p-4 font-semibold hover:border-[#111111]">
+              <Link href={`/locations/${l.slug}`} className="block rounded-xl bg-black/5 p-4 font-semibold transition-colors hover:bg-black/10">
                 {l.city}
                 <span className="block text-xs font-normal text-[#6B7280]">{l.areas.slice(0, 3).join(" · ")}</span>
               </Link>

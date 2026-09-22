@@ -70,10 +70,10 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
       <form method="get" className="flex flex-wrap gap-2 text-sm" aria-label="Filters">
         <input type="hidden" name="q" value={query} />
         <input type="hidden" name="location" value={location} />
-        <label className="flex items-center gap-1 rounded-full border border-black/15 bg-white px-3 py-2">
+        <label className="flex items-center gap-1 rounded-full bg-black/5 px-3 py-2">
           <input type="checkbox" name="verified" value="1" defaultChecked={verifiedOnly} /> Verified only
         </label>
-        <select name="plan" defaultValue={plan} className="rounded-full border border-black/15 bg-white px-3 py-2" aria-label="Plan filter">
+        <select name="plan" defaultValue={plan} className="rounded-full bg-black/5 px-3 py-2" aria-label="Plan filter">
           <option value="">All plans</option>
           <option value="free">Free</option>
           <option value="featured">Featured</option>
@@ -86,7 +86,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
           defaultValue={minPrice ?? ""}
           placeholder="Min Rs."
           aria-label="Minimum price"
-          className="w-28 rounded-full border border-black/15 bg-white px-3 py-2"
+          className="w-28 rounded-full bg-black/5 px-3 py-2"
         />
         <input
           type="number"
@@ -95,15 +95,15 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
           defaultValue={maxPrice ?? ""}
           placeholder="Max Rs."
           aria-label="Maximum price"
-          className="w-28 rounded-full border border-black/15 bg-white px-3 py-2"
+          className="w-28 rounded-full bg-black/5 px-3 py-2"
         />
-        <select name="sort" defaultValue={sort} className="rounded-full border border-black/15 bg-white px-3 py-2" aria-label="Sort results">
+        <select name="sort" defaultValue={sort} className="rounded-full bg-black/5 px-3 py-2" aria-label="Sort results">
           <option value="relevance">Best match</option>
           <option value="price_asc">Price: low to high</option>
           <option value="price_desc">Price: high to low</option>
         </select>
         <button type="submit" className="rounded-full bg-[#C9A227] px-4 py-2 font-semibold text-black">Apply</button>
-        {hasActiveFilter && <a href="/search" className="rounded-full border border-black/15 px-4 py-2">Clear</a>}
+        {hasActiveFilter && <a href="/search" className="rounded-full bg-black/5 px-4 py-2 transition-colors hover:bg-black/10">Clear</a>}
       </form>
       <p className="text-sm text-[#6B7280]" role="status">
         {total === 0 ? "No providers found." : `${total} provider${total === 1 ? "" : "s"} found`}

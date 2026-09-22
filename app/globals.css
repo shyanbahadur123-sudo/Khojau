@@ -56,6 +56,9 @@ body {
 .dark [class*="hover:bg-black/5"]:hover {
   background-color: rgba(255, 255, 255, 0.07);
 }
+.dark [class*="hover:bg-black/10"]:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
 .dark [class*="hover:bg-[#000000]"]:hover {
   background-color: #e5e5e5;
 }
