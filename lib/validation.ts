@@ -64,3 +64,24 @@ export function slugify(input: string) {
     .replace(/(^-|-$)+/g, "")
     .slice(0, 80);
 }
+
+/**
+ * Allow only same-origin relative redirect targets ("/dashboard", "/search?...").
+ * Rejects absolute URLs, protocol-relative URLs, backslashes, and control chars,
+ * closing the open-redirect hole in `?next=` handling. Pure and unit-testable.
+ */
+export function safeRedirectPath(raw: string | null | undefined, fallback = "/dashboard"): string {
+  if (!raw || raw.length > 200) return fallback;
+  if (!raw.startsWith("/")) return fallback;
+  if (raw.startsWith("//")) return fallback;
+  if (raw.includes("\\")) return fallback;
+  // eslint-disable-next-line no-control-regex
+  if (/[\x00-\x1f\x7f]/.test(raw)) return fallback;
+  try {
+    const u = new URL(raw, "http://localhost");
+    if (u.origin !== "http://localhost") return fallback;
+    return u.pathname + u.search + u.hash;
+  } catch {
+    return fallback;
+  }
+}

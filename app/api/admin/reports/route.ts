@@ -18,7 +18,10 @@ export async function POST(req: Request) {
   if (!row) return NextResponse.json({ error: "Report not found" }, { status: 404 });
 
   const { error } = await ctx.admin.from("reports").update({ status: parsed.data.action }).eq("id", parsed.data.id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("admin report update failed:", error.code);
+    return NextResponse.json({ error: "Operation failed. Please try again." }, { status: 500 });
+  }
 
   await audit(ctx.admin, {
     actor_id: ctx.userId,

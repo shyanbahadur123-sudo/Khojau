@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
+import { safeRedirectPath } from "@/lib/validation";
 
 export default function AuthForm({ mode }: { mode: "login" | "register" }) {
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
             const { error } = await sb.auth.signInWithPassword({ email, password });
             if (error) throw error;
           }
-          router.push(params.get("next") ?? "/dashboard");
+          router.push(safeRedirectPath(params.get("next")));
           router.refresh();
         } catch (err) {
           setError(err instanceof Error ? err.message : "Authentication failed");

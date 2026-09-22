@@ -20,7 +20,10 @@ export async function POST(req: Request) {
   // Service-role bypasses RLS and the status-flow trigger exempts
   // service_role, so operators may set any valid status directly.
   const { error } = await ctx.admin.from("service_requests").update({ status: parsed.data.to }).eq("id", parsed.data.id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("admin request update failed:", error.code);
+    return NextResponse.json({ error: "Operation failed. Please try again." }, { status: 500 });
+  }
 
   await audit(ctx.admin, {
     actor_id: ctx.userId,

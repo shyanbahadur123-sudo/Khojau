@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { audit, getAdminContext } from "@/lib/admin";
 import { z } from "zod";
 
+// Generic failure message: never leak constraint/DB internals to the browser.
+const FAILED = "Operation failed. Please try again.";
+
 const schema = z.object({
   id: z.string().uuid(),
   action: z.enum(["approve", "reject", "suspend", "verify", "unverify", "plan", "delete"]),
@@ -38,11 +41,17 @@ export async function POST(req: Request) {
 
   if (patch) {
     const { error } = await ctx.admin.from("providers").update(patch).eq("id", id);
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) {
+      console.error("admin provider update failed:", error.code);
+      return NextResponse.json({ error: FAILED }, { status: 500 });
+    }
   } else {
     // delete
     const { error } = await ctx.admin.from("providers").delete().eq("id", id);
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) {
+      console.error("admin provider delete failed:", error.code);
+      return NextResponse.json({ error: FAILED }, { status: 500 });
+    }
   }
 
   await audit(ctx.admin, {
