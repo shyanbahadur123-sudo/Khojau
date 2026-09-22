@@ -68,7 +68,10 @@ export default async function HomePage() {
 
       {latest.length > 0 && (
         <section aria-labelledby="latest" className="scroll-mt-20">
-          <h2 id="latest" className="mb-1 text-xl font-bold tracking-tight">Recent</h2>
+          <div className="mb-1 flex items-center justify-between">
+            <h2 id="latest" className="text-xl font-bold tracking-tight">Recent</h2>
+            <Link href="/recent" className="text-sm font-semibold text-[#0A0A0A] hover:underline">View all</Link>
+          </div>
           <p className="mb-4 text-sm text-[#6B7280]">Newly approved listings, newest first.</p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {latest.map((p) => <ProviderCard key={p.id} provider={p} />)}

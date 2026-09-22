@@ -8,7 +8,7 @@ export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const staticRoutes = ["/", "/search", "/services", "/locations", "/add-business", "/contact", "/privacy", "/terms", "/request-service", "/how-it-works"];
+  const staticRoutes = ["/", "/search", "/recent", "/services", "/locations", "/add-business", "/contact", "/privacy", "/terms", "/request-service", "/how-it-works"];
   const db = supabasePublic();
   let providerUrls: MetadataRoute.Sitemap = [];
   if (db) {
