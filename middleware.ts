@@ -39,7 +39,11 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(login);
   }
   if (user && AUTH_PAGES.has(path)) {
-    return NextResponse.redirect(new URL("/dashboard", base));
+    // Role-aware landing: admins start in the moderation hub, everyone
+    // else on their personal dashboard. Emails come from server env only.
+    const admins = (process.env.ADMIN_EMAILS ?? "").split(",").map((s) => s.trim().toLowerCase());
+    const isAdmin = Boolean(user.email) && admins.includes((user.email ?? "").toLowerCase());
+    return NextResponse.redirect(new URL(isAdmin ? "/admin" : "/dashboard", base));
   }
   return res;
 }
