@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { publicOrigin } from "@/lib/validation";
 
-export async function POST() {
+export async function POST(req: Request) {
+  const base = publicOrigin(req);
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !anon) return NextResponse.redirect(new URL("/login", process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"));
+  if (!url || !anon) return NextResponse.redirect(new URL("/login", base));
   const cookieStore = cookies();
   const sb = createServerClient(url, anon, {
     cookies: {
@@ -15,5 +17,5 @@ export async function POST() {
     },
   });
   await sb.auth.signOut();
-  return NextResponse.redirect(new URL("/", process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"));
+  return NextResponse.redirect(new URL("/", base));
 }

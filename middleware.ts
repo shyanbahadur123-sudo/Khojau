@@ -22,14 +22,24 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await sb.auth.getUser();
   const path = req.nextUrl.pathname;
+  // Proxy-aware base (duplicated from lib/validation to keep middleware
+  // edge-light with zero imports): guests must land on the login page of
+  // the address they opened, never the internal origin.
+  const fwdProto = req.headers.get("x-forwarded-proto")?.split(",")[0].trim();
+  const fwdHost =
+    req.headers.get("x-forwarded-host")?.split(",")[0].trim() || req.headers.get("host")?.split(",")[0].trim();
+  const base =
+    fwdHost && !/[\s\\]/.test(fwdHost)
+      ? `${fwdProto || req.nextUrl.protocol.replace(":", "")}://${fwdHost}`
+      : req.nextUrl.origin;
   const isProtected = PROTECTED_PREFIXES.some((p) => path === p || path.startsWith(p + "/"));
   if (!user && isProtected) {
-    const login = new URL("/login", req.url);
+    const login = new URL("/login", base);
     login.searchParams.set("next", path);
     return NextResponse.redirect(login);
   }
   if (user && AUTH_PAGES.has(path)) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+    return NextResponse.redirect(new URL("/dashboard", base));
   }
   return res;
 }

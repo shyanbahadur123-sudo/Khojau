@@ -122,6 +122,27 @@ export function safeRedirectPath(raw: string | null | undefined, fallback = "/da
 }
 
 /**
+ * Public origin of the current request, proxy-aware.
+ * Reads X-Forwarded-Proto/Host (set by Vercel, Cloudflare Tunnel, nginx…)
+ * so auth redirects land on the address the user actually opened — not the
+ * internal origin (localhost) the app server sees behind the proxy.
+ * Only ever used as the base for same-app paths (validated `next` targets
+ * or hardcoded routes), never for user-supplied absolute URLs.
+ */
+export function publicOrigin(req: Request): string {
+  const first = (v: string | null) => (v ?? "").split(",")[0].trim();
+  try {
+    const fallback = new URL(req.url);
+    const proto = first(req.headers.get("x-forwarded-proto")) || fallback.protocol.replace(":", "");
+    const host = first(req.headers.get("x-forwarded-host")) || first(req.headers.get("host")) || fallback.host;
+    if (!host || /[\s\\]/.test(host)) return fallback.origin;
+    return `${proto || "https"}://${host}`;
+  } catch {
+    return "http://localhost:3000";
+  }
+}
+
+/**
  * Serialize data for an HTML <script type="application/ld+json"> block.
  * JSON.stringify alone is NOT safe here: it leaves `<` intact, so a value
  * containing `</script>` would terminate the script element (stored XSS).

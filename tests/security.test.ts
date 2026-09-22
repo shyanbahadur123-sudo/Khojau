@@ -9,6 +9,7 @@ import {
   safeExternalUrl,
   externalUrlField,
   safeRedirectPath,
+  publicOrigin,
 } from "../lib/validation.js";
 import { validateImageFile } from "../lib/image-validation.js";
 import { rateLimit } from "../lib/rate-limit.js";
@@ -93,6 +94,43 @@ describe("safeRedirectPath", () => {
     assert.equal(safeRedirectPath("//evil.example"), "/dashboard");
     assert.equal(safeRedirectPath("/\\evil"), "/dashboard");
     assert.equal(safeRedirectPath(null), "/dashboard");
+  });
+});
+
+describe("publicOrigin (proxy-aware auth redirects)", () => {
+  const req = (url: string, headers: Record<string, string> = {}) => new Request(url, { headers });
+
+  it("prefers forwarded host/proto behind a tunnel or proxy", () => {
+    const r = req("http://localhost:3000/auth/callback?code=x", {
+      "x-forwarded-proto": "https",
+      "x-forwarded-host": "hon-comparisons-oval-pubmed.trycloudflare.com",
+    });
+    assert.equal(publicOrigin(r), "https://hon-comparisons-oval-pubmed.trycloudflare.com");
+  });
+
+  it("falls back to the request origin with no proxy headers", () => {
+    assert.equal(publicOrigin(req("http://localhost:3000/x")), "http://localhost:3000");
+  });
+
+  it("takes the first entry of a forwarded chain", () => {
+    const r = req("http://internal:3000/x", {
+      "x-forwarded-proto": "https, http",
+      "x-forwarded-host": "public.example, internal",
+    });
+    assert.equal(publicOrigin(r), "https://public.example");
+  });
+
+  it("rejects smuggled hosts and falls back safely", () => {
+    const evil = req("http://localhost:3000/x", {
+      "x-forwarded-proto": "https",
+      "x-forwarded-host": "evil.example\\@x",
+    });
+    assert.equal(publicOrigin(evil), "http://localhost:3000");
+    const evil2 = req("http://localhost:3000/x", {
+      "x-forwarded-proto": "https",
+      "x-forwarded-host": "evil.example/x y",
+    });
+    assert.equal(publicOrigin(evil2), "http://localhost:3000");
   });
 });
 
