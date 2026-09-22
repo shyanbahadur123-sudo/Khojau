@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Suspense } from "react";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -19,14 +20,27 @@ export const metadata: Metadata = {
     description: "Nepal-focused local service discovery and business directory.",
   },
   twitter: { card: "summary_large_image", title: "Khojau", description: "Find trusted local services near you." },
-  themeColor: "#0A0A0A",
   robots: { index: true, follow: true },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FAFAFA" },
+    { media: "(prefers-color-scheme: dark)", color: "#0A0A0A" },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen antialiased">
+        <Script
+          id="khojau-theme"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("khojau-theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}})();`,
+          }}
+        />
         <a href="#main" className="skip-link">
           Skip to content
         </a>

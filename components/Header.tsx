@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CloseIcon } from "@/components/UiIcon";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -38,7 +39,10 @@ export default function Header() {
           >
             Add Business
           </Link>
+          <ThemeToggle />
         </nav>
+        <div className="flex items-center gap-2 sm:hidden">
+          <ThemeToggle />
         <button
           aria-label="Open menu"
           aria-expanded={mobileOpen}
@@ -68,6 +72,7 @@ export default function Header() {
             </nav>
           </>
         )}
+        </div>
       </div>
     </header>
   );

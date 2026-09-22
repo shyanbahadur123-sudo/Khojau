@@ -6,15 +6,83 @@
   color-scheme: light;
 }
 
+.dark {
+  color-scheme: dark;
+}
+
 body {
   background-color: #FAFAFA;
   color: #0a0a0a;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
+.dark body {
+  background-color: #0a0a0a;
+  color: #f5f5f5;
+}
+
 ::selection {
   background: #0a0a0a;
   color: #ffffff;
+}
+
+.dark ::selection {
+  background: #f5f5f5;
+  color: #0a0a0a;
+}
+
+/* ---------- Premium monochrome dark theme ----------
+   Single override layer driven by `.dark` on <html>.
+   Attribute-substring selectors catch every opacity variant
+   (e.g. bg-[#FFFFFF] also matches bg-[#FFFFFF]/95), so no
+   per-file dark: variants are needed and photos are untouched. */
+.dark [class*="bg-[#FFFFFF]"],
+.dark [class*="bg-white"] {
+  background-color: #141414;
+}
+.dark [class*="bg-[#111111]"] {
+  background-color: #f5f5f5;
+}
+/* Tinted translucents become white-on-dark washes (later = wins). */
+.dark [class*="bg-[#111111]/"] {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+.dark [class*="bg-neutral-900"] {
+  background-color: #ededed;
+}
+.dark [class*="bg-black/5"] {
+  background-color: rgba(255, 255, 255, 0.07);
+}
+.dark [class*="hover:bg-black/5"]:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+}
+.dark [class*="hover:bg-[#000000]"]:hover {
+  background-color: #e5e5e5;
+}
+.dark [class*="text-white"] {
+  color: #0a0a0a;
+}
+.dark [class*="text-[#0A0A0A]"],
+.dark [class*="text-[#111111]"] {
+  color: #f5f5f5;
+}
+.dark [class*="text-[#6B7280]"] {
+  color: #a3a3a3;
+}
+.dark [class*="border-black/"] {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.dark [class*="border-[#111111]"] {
+  border-color: #ededed;
+}
+.dark [class*="border-[#111111]/"] {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.dark [class*="divide-black/"] > * + * {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.dark *:focus-visible {
+  outline-color: #f5f5f5;
 }
 
 a:focus-visible,
