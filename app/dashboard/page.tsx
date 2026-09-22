@@ -141,7 +141,7 @@ export default async function DashboardPage() {
         </div>
       ) : (
         <ul className="mt-3 grid gap-4 xl:grid-cols-2">
-          {rows.map((p) => {
+          {rows.map((p, idx) => {
             const editable: EditableProvider = {
               id: p.id,
               business_name: p.business_name,
@@ -159,30 +159,55 @@ export default async function DashboardPage() {
               price_min: p.price_min,
               price_max: p.price_max,
             };
+            const svcCount = p.services?.length ?? 0;
+            const photoCount = (p.provider_images?.length ?? 0) + (p.logo_url ? 1 : 0) + (p.cover_image_url ? 1 : 0);
+            const openHere = incomingRows.filter((r) => r.provider_id === p.id && r.status === "open").length;
             return (
               <li key={p.slug} className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-5 shadow-sm">
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="text-base font-bold tracking-tight">{p.business_name}</p>
                   <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${STATUS_CHIP[p.status] ?? STATUS_CHIP.suspended}`}>{p.status}</span>
+                  {openHere > 0 && (
+                    <a href="#requests" className="rounded-full bg-[#C9A227]/15 px-2 py-0.5 text-xs font-semibold text-[#7A5C00]">
+                      {openHere} open request{openHere === 1 ? "" : "s"}
+                    </a>
+                  )}
                   {p.status === "approved" && (
                     <a href={`/provider/${p.slug}`} className="ml-auto text-xs font-semibold text-[#0A0A0A] underline underline-offset-2">View public page →</a>
                   )}
                 </div>
-                <p className="mt-1 text-sm text-[#6B7280]">{p.verification_status} · {p.plan} plan</p>
+                <p className="mt-1 text-sm text-[#6B7280]">{p.verification_status} · {p.plan} plan · {svcCount} service{svcCount === 1 ? "" : "s"} · {photoCount} photo{photoCount === 1 ? "" : "s"}</p>
+                {p.verification_status !== "verified" && (
+                  <p className="mt-1 text-xs text-[#6B7280]">Not verified yet — <a href="/how-it-works#verification" className="underline underline-offset-2">what verification means</a>.</p>
+                )}
+                {p.status === "approved" && (
+                  <p className="mt-1 text-xs text-[#6B7280]">Want more visibility? <a href="/contact" className="underline underline-offset-2">Ask about Featured plans</a>.</p>
+                )}
                 {STATUS_HELP[p.status] && (
                   <p className="mt-2 rounded-lg bg-black/5 p-2 text-xs text-[#6B7280]">{STATUS_HELP[p.status]}</p>
                 )}
                 <ProviderEditor provider={editable} />
-                <ServiceManager providerId={p.id} initial={p.services ?? []} />
-                <HoursManager providerId={p.id} initial={p.provider_hours ?? []} />
-                <ImageManager
-                  providerId={p.id}
-                  businessName={p.business_name}
-                  status={p.status}
-                  initialLogo={p.logo_url}
-                  initialCover={p.cover_image_url}
-                  initialImages={p.provider_images ?? []}
-                />
+                <details open={idx === 0} className="mt-3 rounded-xl border border-black/10">
+                  <summary className="cursor-pointer px-4 py-3 text-sm font-semibold">Services ({svcCount})</summary>
+                  <div className="px-4 pb-4"><ServiceManager providerId={p.id} initial={p.services ?? []} /></div>
+                </details>
+                <details open={idx === 0} className="mt-3 rounded-xl border border-black/10">
+                  <summary className="cursor-pointer px-4 py-3 text-sm font-semibold">Opening hours</summary>
+                  <div className="px-4 pb-4"><HoursManager providerId={p.id} initial={p.provider_hours ?? []} /></div>
+                </details>
+                <details open={idx === 0} className="mt-3 rounded-xl border border-black/10">
+                  <summary className="cursor-pointer px-4 py-3 text-sm font-semibold">Photos ({photoCount})</summary>
+                  <div className="px-4 pb-4">
+                    <ImageManager
+                      providerId={p.id}
+                      businessName={p.business_name}
+                      status={p.status}
+                      initialLogo={p.logo_url}
+                      initialCover={p.cover_image_url}
+                      initialImages={p.provider_images ?? []}
+                    />
+                  </div>
+                </details>
               </li>
             );
           })}
