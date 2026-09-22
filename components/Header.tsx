@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { CloseIcon } from "@/components/UiIcon";
 import ThemeToggle from "@/components/ThemeToggle";
 import LogoMark from "@/components/Logo";
+import { AuthMenuItems, AuthNavLink } from "@/components/AuthButton";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -29,9 +30,7 @@ export default function Header() {
           <Link href="/locations" className="hidden rounded-md px-3 py-2 hover:bg-black/5 sm:inline">
             Locations
           </Link>
-          <Link href="/login" className="hidden rounded-md px-3 py-2 hover:bg-black/5 sm:inline">
-            Log in
-          </Link>
+          <AuthNavLink />
           <Link
             href="/add-business"
             className="rounded-md bg-[#C9A227] px-3 py-2 font-semibold text-black hover:bg-[#B8941F]"
@@ -63,8 +62,7 @@ export default function Header() {
                 <li><Link onClick={() => setMobileOpen(false)} href="/services" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Services</Link></li>
                 <li><Link onClick={() => setMobileOpen(false)} href="/locations" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Locations</Link></li>
                 <li><Link onClick={() => setMobileOpen(false)} href="/how-it-works" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">How it works</Link></li>
-                <li><Link onClick={() => setMobileOpen(false)} href="/login" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Log in</Link></li>
-                <li><Link onClick={() => setMobileOpen(false)} href="/dashboard" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Dashboard</Link></li>
+                <AuthMenuItems onNavigate={() => setMobileOpen(false)} />
                 <li><Link onClick={() => setMobileOpen(false)} href="/add-business" className="block rounded-lg bg-[#C9A227] px-3 py-2.5 font-semibold text-black">Add Business — it&apos;s free</Link></li>
                 <li><button onClick={() => setMobileOpen(false)} className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left hover:bg-black/5" aria-label="Close menu"><CloseIcon className="h-4 w-4" /> Close</button></li>
               </ul>
