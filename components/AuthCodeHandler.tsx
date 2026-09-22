@@ -27,10 +27,24 @@ export default function AuthCodeHandler() {
     setStatus("working");
     // Pass ONLY the code: the token endpoint rejects anything else
     // (a full URL here fails every exchange — verified in auth-js source).
-    supabaseBrowser()
-      .auth.exchangeCodeForSession(code as string)
-      .then(({ error }) => setStatus(error ? "error" : "done"))
-      .catch(() => setStatus("error"));
+    // Afterwards, trust the SESSION, not the call: the browser client can
+    // auto-detect the same URL session first (consuming the single-use
+    // code), in which case our exchange errors while the user is in fact
+    // signed in. getUser() settles who is right.
+    void (async () => {
+      try {
+        const sb = supabaseBrowser();
+        const { error } = await sb.auth.exchangeCodeForSession(code as string);
+        if (!error) {
+          setStatus("done");
+          return;
+        }
+        const { data } = await sb.auth.getUser();
+        setStatus(data.user ? "done" : "error");
+      } catch {
+        setStatus("error");
+      }
+    })();
   }, [params]);
 
   if (status === "idle") return null;
