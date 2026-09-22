@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getAdminContext } from "@/lib/admin";
 import { CATEGORIES } from "@/lib/categories";
+import CategoryIcon from "@/components/CategoryIcon";
 
 export const metadata = { title: "Admin — Categories" };
 
@@ -18,7 +19,7 @@ export default async function AdminCategoriesPage() {
       <ul className="grid gap-2 sm:grid-cols-2">
         {CATEGORIES.map((c) => (
           <li key={c.slug} className="flex items-center justify-between rounded-xl bg-[#FFFDF8] p-3 text-sm">
-            <span><span aria-hidden>{c.icon} </span><strong>{c.name}</strong> <code className="text-[#66706E]">{c.slug}</code></span>
+            <span className="flex items-center gap-2"><CategoryIcon slug={c.slug} className="h-4 w-4 text-[#0B7168]" /><strong>{c.name}</strong> <code className="text-[#66706E]">{c.slug}</code></span>
             <span className={inDb.has(c.slug) ? "text-[#0B7168]" : "text-amber-700"}>{inDb.has(c.slug) ? "in DB" : "missing"}</span>
           </li>
         ))}

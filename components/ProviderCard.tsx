@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Provider } from "@/types/database";
 import { sizedImageUrl } from "@/lib/storage";
+import { CheckIcon } from "@/components/UiIcon";
 
 export function VerifiedBadge() {
   return (
@@ -9,7 +10,7 @@ export function VerifiedBadge() {
       title="Verified: this business passed Khojau's contact and business-detail checks. Learn more."
       className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#0B7168]/10 px-2 py-0.5 text-xs font-semibold text-[#0B7168] hover:bg-[#0B7168]/20"
     >
-      <span aria-hidden>✓</span> Verified
+      <CheckIcon className="h-3.5 w-3.5" /> Verified
     </Link>
   );
 }

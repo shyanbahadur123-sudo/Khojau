@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/categories";
+import CategoryIcon from "@/components/CategoryIcon";
 
 export default function CategoryGrid({ limit }: { limit?: number }) {
   const list = limit ? CATEGORIES.slice(0, limit) : CATEGORIES;
@@ -9,11 +10,15 @@ export default function CategoryGrid({ limit }: { limit?: number }) {
         <li key={c.slug}>
           <Link
             href={`/services/${c.slug}`}
-            className="flex h-full flex-col gap-1 rounded-xl border border-black/10 bg-[#FFFDF8] p-4 hover:border-[#0B7168]"
+            className="group flex h-full items-start gap-3 rounded-xl border border-black/10 bg-[#FFFDF8] p-4 transition-colors hover:border-[#0B7168]/50"
           >
-            <span aria-hidden className="text-2xl">{c.icon}</span>
-            <span className="font-semibold">{c.name}</span>
-            {c.description && <span className="text-xs text-[#66706E]">{c.description}</span>}
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#0B7168]/10 text-[#0B7168] transition-colors group-hover:bg-[#0B7168]/15">
+              <CategoryIcon slug={c.slug} className="h-5 w-5" />
+            </span>
+            <span className="min-w-0">
+              <span className="block font-semibold leading-snug">{c.name}</span>
+              {c.description && <span className="mt-0.5 block text-xs leading-snug text-[#66706E]">{c.description}</span>}
+            </span>
           </Link>
         </li>
       ))}

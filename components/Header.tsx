@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { CloseIcon } from "@/components/UiIcon";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -42,9 +43,13 @@ export default function Header() {
           aria-label="Open menu"
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen(true)}
-          className="grid h-10 w-10 cursor-pointer place-items-center rounded-lg border border-black/15 text-xl hover:bg-black/5 sm:hidden"
+          className="grid h-10 w-10 cursor-pointer place-items-center gap-0 rounded-lg border border-black/15 hover:bg-black/5 sm:hidden"
         >
-          <span aria-hidden>☰</span>
+          <span aria-hidden="true" className="flex flex-col gap-[5px]">
+            <span className="block h-[2px] w-5 rounded bg-current" />
+            <span className="block h-[2px] w-5 rounded bg-current" />
+            <span className="block h-[2px] w-5 rounded bg-current" />
+          </span>
         </button>
         {mobileOpen && (
           <>
@@ -58,7 +63,7 @@ export default function Header() {
                 <li><Link onClick={() => setMobileOpen(false)} href="/login" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Log in</Link></li>
                 <li><Link onClick={() => setMobileOpen(false)} href="/dashboard" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Dashboard</Link></li>
                 <li><Link onClick={() => setMobileOpen(false)} href="/add-business" className="block rounded-lg bg-[#0B7168] px-3 py-2.5 font-semibold text-white">Add Business — it&apos;s free</Link></li>
-                <li><button onClick={() => setMobileOpen(false)} className="w-full rounded-lg px-3 py-2.5 text-left hover:bg-black/5" aria-label="Close menu">✕ Close</button></li>
+                <li><button onClick={() => setMobileOpen(false)} className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left hover:bg-black/5" aria-label="Close menu"><CloseIcon className="h-4 w-4" /> Close</button></li>
               </ul>
             </nav>
           </>

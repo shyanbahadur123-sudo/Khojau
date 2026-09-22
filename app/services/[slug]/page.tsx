@@ -4,9 +4,11 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import ProviderCard from "@/components/ProviderCard";
 import SearchBar from "@/components/SearchBar";
+import CategoryIcon from "@/components/CategoryIcon";
 import { categoryBySlug } from "@/lib/categories";
 import { getApprovedProviders } from "@/lib/providers";
 import { rankProviders } from "@/lib/search";
+import { stringifyJsonLd } from "@/lib/validation";
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const c = categoryBySlug(params.slug);
@@ -27,7 +29,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
       <nav className="text-sm text-[#66706E]" aria-label="Breadcrumb">
         <Link href="/" className="hover:underline">Home</Link> / <Link href="/services" className="hover:underline">Services</Link> / <span aria-current="page">{c.name}</span>
       </nav>
-      <h1 className="text-2xl font-bold"><span aria-hidden>{c.icon} </span>{c.name} in Nepal</h1>
+      <h1 className="flex items-center gap-3 text-2xl font-bold tracking-tight"><span className="grid h-10 w-10 place-items-center rounded-lg bg-[#0B7168]/10 text-[#0B7168]"><CategoryIcon slug={c.slug} className="h-5 w-5" /></span>{c.name} in Nepal</h1>
       {c.description && <p className="text-[#66706E]">{c.description}</p>}
       <Suspense><SearchBar compact /></Suspense>
       {providers.length === 0 ? (
@@ -39,7 +41,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
           {providers.map((p) => <ProviderCard key={p.id} provider={p} />)}
         </div>
       )}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "CollectionPage", name: `${c.name} in Nepal` }) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: stringifyJsonLd({ "@context": "https://schema.org", "@type": "CollectionPage", name: `${c.name} in Nepal` }) }} />
     </div>
   );
 }

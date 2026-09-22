@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
+import { CheckIcon } from "@/components/UiIcon";
 
 interface ProviderOption {
   id: string;
@@ -56,8 +57,10 @@ function RequestForm() {
     return (
       <div className="mx-auto max-w-xl pt-6">
         <div className="rounded-2xl bg-[#FFFDF8] p-8 text-center">
-          <p className="text-3xl" aria-hidden>✓</p>
-          <h1 className="mt-2 text-2xl font-bold">Request received</h1>
+          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#0B7168]/10 text-[#0B7168]">
+            <CheckIcon className="h-6 w-6" />
+          </div>
+          <h1 className="mt-3 text-2xl font-bold tracking-tight">Request received</h1>
           <p className="mt-2 text-sm text-[#66706E]">
             {selected ? `We shared your request with ${selected.business_name}. They will contact you on your phone.` : "The Khojau team will match you with providers and contact you on your phone."}
           </p>
