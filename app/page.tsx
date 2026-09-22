@@ -29,7 +29,7 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-12 pt-6">
-      <section aria-labelledby="hero-heading" className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-6 shadow-sm sm:p-10">
+      <section aria-labelledby="hero-heading" className="rounded-2xl border border-black/10 border-t-2 border-t-[#C9A227] bg-[#FFFFFF] p-6 shadow-sm sm:p-10">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Nepal&rsquo;s local services directory</p>
         <h1 id="hero-heading" className="mt-2 max-w-xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
           Find the right local service in Nepal.
@@ -40,6 +40,9 @@ export default async function HomePage() {
           providers across Nepal. Call them directly or send a service request.
         </p>
         <div className="mt-6"><Suspense><SearchBar /></Suspense></div>
+        <p className="mt-3 text-xs font-medium uppercase tracking-wide text-[#6B7280]">
+          {CATEGORIES.length} service categories · {LOCATIONS.length} cities · Free to list
+        </p>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
           <span className="text-[#6B7280]">Try:</span>
           {EXAMPLE_SEARCHES.map((s) => (
@@ -68,7 +71,10 @@ export default async function HomePage() {
       </section>
 
       <section aria-labelledby="browse-categories">
-        <h2 id="browse-categories" className="mb-4 text-xl font-bold">Browse categories</h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 id="browse-categories" className="text-xl font-bold tracking-tight">Browse categories</h2>
+          <Link href="/services" className="text-sm font-semibold text-[#0A0A0A] hover:underline">View all</Link>
+        </div>
         <CategoryGrid limit={8} />
       </section>
 
@@ -123,11 +129,21 @@ export default async function HomePage() {
       )}
 
       <section aria-labelledby="how" className="rounded-2xl bg-[#FFFFFF] p-6 sm:p-8">
-        <h2 id="how" className="text-xl font-bold">How Khojau works</h2>
+        <h2 id="how" className="text-xl font-bold tracking-tight">How Khojau works</h2>
         <ol className="mt-4 grid gap-4 sm:grid-cols-3">
-          <li><p className="font-semibold">1. Search</p><p className="text-sm text-[#6B7280]">Enter a service and location, or browse categories.</p></li>
-          <li><p className="font-semibold">2. Compare</p><p className="text-sm text-[#6B7280]">Open profiles with services, prices, hours, and contact details.</p></li>
-          <li><p className="font-semibold">3. Contact</p><p className="text-sm text-[#6B7280]">Call, message on WhatsApp, get directions, or send a service request.</p></li>
+          {[
+            ["1", "Search", "Enter a service and location, or browse categories."],
+            ["2", "Compare", "Open profiles with services, prices, hours, and contact details."],
+            ["3", "Contact", "Call, message on WhatsApp, get directions, or send a service request."],
+          ].map(([n, t, d]) => (
+            <li key={n} className="flex items-start gap-3">
+              <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#C9A227]/15 text-sm font-bold text-[#7A5C00]">{n}</span>
+              <span>
+                <span className="block font-semibold">{t}</span>
+                <span className="mt-0.5 block text-sm text-[#6B7280]">{d}</span>
+              </span>
+            </li>
+          ))}
         </ol>
         <p className="mt-4 text-sm"><Link href="/how-it-works" className="font-semibold text-[#111111] hover:underline">Learn more about how Khojau works →</Link></p>
       </section>
