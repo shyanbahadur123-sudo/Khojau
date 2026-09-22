@@ -38,17 +38,26 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
   const rawMax = Number(str("maxPrice", 20));
   const minPrice = Number.isFinite(rawMin) && rawMin >= 0 ? rawMin : undefined;
   const maxPrice = Number.isFinite(rawMax) && rawMax >= 0 ? rawMax : undefined;
+  const rawSort = str("sort", 20);
+  const sort = ["price_asc", "price_desc"].includes(rawSort) ? rawSort : "relevance";
   const verifiedParam = verifiedOnly ? "1" : "";
+  const hasActiveFilter = Boolean(query || location || categorySlug || plan || verifiedOnly || minPrice != null || maxPrice != null);
 
   let providers = await getApprovedProviders({ search: query, location, categorySlug: categorySlug || undefined, limit: 60 });
   providers = filterProviders(providers, { verifiedOnly, plan: plan || undefined, minPrice, maxPrice });
   providers = rankProviders(providers, query, location);
+  // Explicit sort overrides relevance ranking. Unknown values fall back to relevance (validated above).
+  if (sort === "price_asc") {
+    providers = [...providers].sort((a, b) => (a.price_min ?? Number.MAX_SAFE_INTEGER) - (b.price_min ?? Number.MAX_SAFE_INTEGER));
+  } else if (sort === "price_desc") {
+    providers = [...providers].sort((a, b) => (b.price_max ?? b.price_min ?? -1) - (a.price_max ?? a.price_min ?? -1));
+  }
   const total = providers.length;
   const paged = providers.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const buildHref = (next: Record<string, string>) => {
     const p = new URLSearchParams();
-    const base: Record<string, string> = { q: query, location, category: categorySlug, plan, verified: verifiedParam };
+    const base: Record<string, string> = { q: query, location, category: categorySlug, plan, verified: verifiedParam, sort: sort === "relevance" ? "" : sort };
     const merged = { ...base, ...next };
     for (const [k, val] of Object.entries(merged)) if (val) p.set(k, val);
     return `/search?${p.toString()}`;
@@ -70,8 +79,31 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
           <option value="featured">Featured</option>
           <option value="premium">Premium</option>
         </select>
+        <input
+          type="number"
+          name="minPrice"
+          min={0}
+          defaultValue={minPrice ?? ""}
+          placeholder="Min Rs."
+          aria-label="Minimum price"
+          className="w-28 rounded-full border border-black/15 bg-white px-3 py-2"
+        />
+        <input
+          type="number"
+          name="maxPrice"
+          min={0}
+          defaultValue={maxPrice ?? ""}
+          placeholder="Max Rs."
+          aria-label="Maximum price"
+          className="w-28 rounded-full border border-black/15 bg-white px-3 py-2"
+        />
+        <select name="sort" defaultValue={sort} className="rounded-full border border-black/15 bg-white px-3 py-2" aria-label="Sort results">
+          <option value="relevance">Best match</option>
+          <option value="price_asc">Price: low to high</option>
+          <option value="price_desc">Price: high to low</option>
+        </select>
         <button type="submit" className="rounded-full bg-[#0B7168] px-4 py-2 font-semibold text-white">Apply</button>
-        {(query || location) && <a href="/search" className="rounded-full border border-black/15 px-4 py-2">Clear</a>}
+        {hasActiveFilter && <a href="/search" className="rounded-full border border-black/15 px-4 py-2">Clear</a>}
       </form>
       <p className="text-sm text-[#66706E]" role="status">
         {total === 0 ? "No providers found." : `${total} provider${total === 1 ? "" : "s"} found`}

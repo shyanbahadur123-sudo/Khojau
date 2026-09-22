@@ -33,15 +33,14 @@ textarea:focus-visible {
 }
 
 .skip-link {
-  position: absolute;
-  left: -9999px;
-  top: 0;
+  position: fixed;
+  top: 0; left: 0;
   background: #0b7168;
   color: #fff;
-  padding: 0.5rem 1rem;
-  z-index: 50;
+  padding: 0.65rem 1rem;
+  z-index: 100;
+  font-weight: 600;
+  transform: translateY(-110%);
+  transition: transform 0.15s ease;
 }
-.skip-link:focus {
-  left: 0.5rem;
-  top: 0.5rem;
-}
+.skip-link:focus { transform: translateY(0); }

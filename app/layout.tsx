@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import AuthCodeHandler from "@/components/AuthCodeHandler";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -28,6 +30,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <Header />
+        <Suspense>
+          <AuthCodeHandler />
+        </Suspense>
         <main id="main" className="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6">
           {children}
         </main>

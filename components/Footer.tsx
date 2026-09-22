@@ -22,6 +22,7 @@ export default function Footer() {
           <ul className="mt-2 space-y-1 text-sm">
             <li><Link href="/add-business" className="hover:underline">Add your business</Link></li>
             <li><Link href="/request-service" className="hover:underline">Request a service</Link></li>
+            <li><Link href="/register" className="hover:underline">Create account</Link></li>
             <li><Link href="/dashboard" className="hover:underline">Dashboard</Link></li>
           </ul>
         </nav>

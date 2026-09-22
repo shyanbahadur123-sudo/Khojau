@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Provider } from "@/types/database";
+import { sizedImageUrl } from "@/lib/storage";
 
 export function VerifiedBadge() {
   return (
@@ -15,11 +16,11 @@ export function VerifiedBadge() {
 
 export default function ProviderCard({ provider }: { provider: Provider }) {
   return (
-    <article className="flex gap-3 rounded-xl border border-black/10 bg-[#FFFDF8] p-4 shadow-sm transition-shadow hover:shadow">
+    <article className="group flex gap-3 rounded-xl border border-black/10 bg-[#FFFDF8] p-4 shadow-sm transition-all duration-200 ease-out hover:shadow-md hover:-translate-y-[2px] hover:border-[#0B7168]/30">
       {provider.logo_url ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={provider.logo_url}
+          src={sizedImageUrl(provider.logo_url, 200)}
           alt=""
           aria-hidden="true"
           loading="lazy"

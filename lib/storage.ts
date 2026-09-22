@@ -15,6 +15,17 @@ export function publicImageUrl(supabaseUrl: string, path: string): string {
   return `${supabaseUrl.replace(/\/$/, "")}/storage/v1/object/public/${PROVIDER_IMAGES_BUCKET}/${path}`;
 }
 
+/**
+ * Sized variant of a public image URL via Supabase Image Transformation
+ * (`?width=&quality=`). If transformations are disabled on the project, the
+ * params are ignored and the original is served — never an error. Keeps
+ * mobile downloads small: cards 200px, gallery 800px, cover 1200px.
+ */
+export function sizedImageUrl(url: string, width: 200 | 400 | 800 | 1200): string {
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}width=${width}&quality=75`;
+}
+
 /** Extract the in-bucket path back from one of our public URLs (for deletes). Null when foreign. */
 export function storagePathFromPublicUrl(url: string): string | null {
   const marker = `/storage/v1/object/public/${PROVIDER_IMAGES_BUCKET}/`;

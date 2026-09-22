@@ -17,5 +17,3 @@ export const LOCATIONS: LocationEntry[] = [
 
 export const locationBySlug = (slug: string) =>
   LOCATIONS.find((l) => l.slug === slug.toLowerCase());
-
-export const cityNames = () => LOCATIONS.map((l) => l.city);

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProviderBySlug } from "@/lib/providers";
 import { directionsUrl, whatsappUrl } from "@/lib/search";
 import { stringifyJsonLd } from "@/lib/validation";
+import { sizedImageUrl } from "@/lib/storage";
 import { WEEKDAYS } from "@/types/database";
 import { VerifiedBadge } from "@/components/ProviderCard";
 import ReportButton from "@/components/ReportButton";
@@ -28,7 +30,7 @@ export default async function ProviderPage({ params }: { params: { slug: string 
   return (
     <div className="space-y-6 pt-6">
       <nav aria-label="Breadcrumb" className="text-sm text-[#66706E]">
-        <a href="/" className="hover:underline">Home</a> / <a href="/search" className="hover:underline">Search</a> / <span aria-current="page">{p.business_name}</span>
+        <Link href="/" className="hover:underline">Home</Link> / <Link href="/search" className="hover:underline">Search</Link> / <span aria-current="page">{p.business_name}</span>
       </nav>
 
       <header className="rounded-2xl bg-[#FFFDF8] p-6 shadow-sm">
@@ -124,19 +126,19 @@ export default async function ProviderPage({ params }: { params: { slug: string 
         <section aria-label={`Photos of ${p.business_name}`} className="overflow-hidden rounded-2xl bg-[#FFFDF8] shadow-sm">
           {p.cover_image_url && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={p.cover_image_url} alt={`${p.business_name} cover photo`} className="aspect-[16/9] w-full object-cover sm:aspect-[21/9]" loading="lazy" />
+            <img src={sizedImageUrl(p.cover_image_url, 1200)} alt={`${p.business_name} cover photo`} className="aspect-[16/9] w-full object-cover sm:aspect-[21/9]" loading="lazy" />
           )}
           <div className="flex flex-wrap items-center gap-4 p-6">
             {p.logo_url && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={p.logo_url} alt={`${p.business_name} logo`} className="aspect-square h-20 w-20 rounded-xl border object-cover" loading="lazy" />
+              <img src={sizedImageUrl(p.logo_url, 200)} alt={`${p.business_name} logo`} className="aspect-square h-20 w-20 rounded-xl border object-cover" loading="lazy" />
             )}
             {(p.provider_images ?? []).length > 0 && (
               <ul className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3">
                 {(p.provider_images ?? []).map((img, i) => (
                   <li key={img.id}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={img.url} alt={img.caption || `${p.business_name} photo ${i + 1}`} className="aspect-[4/3] w-full rounded-lg object-cover" loading="lazy" />
+                    <img src={sizedImageUrl(img.url, 800)} alt={img.caption || `${p.business_name} photo ${i + 1}`} className="aspect-[4/3] w-full rounded-lg object-cover" loading="lazy" />
                     {img.caption && <p className="mt-1 text-xs text-[#66706E]">{img.caption}</p>}
                   </li>
                 ))}

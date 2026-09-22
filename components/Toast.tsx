@@ -1,0 +1,25 @@
+"use client";
+import { useEffect } from "react";
+
+interface ToastProps {
+  message: string;
+  type?: "success" | "info" | "error";
+  onClose: () => void;
+}
+
+export default function Toast({ message, type = "info", onClose }: ToastProps) {
+  useEffect(() => {
+    const t = setTimeout(onClose, 4000);
+    return () => clearTimeout(t);
+  }, [onClose]);
+  const bg = type === "success" ? "bg-[#0B7168]" : type === "error" ? "bg-red-600" : "bg-[#17201F]";
+  return (
+    <div role="status" aria-live="polite" className={`fixed bottom-6 right-6 z-[100] max-w-sm rounded-xl ${bg} px-5 py-4 text-sm font-medium text-white shadow-2xl ring-1 ring-white/10 transition-transform`}>
+      <div className="flex items-center gap-3">
+        <span aria-hidden className="text-lg">{type === "success" ? "✓" : type === "error" ? "⚠" : "ℹ"}</span>
+        <span>{message}</span>
+        <button onClick={onClose} aria-label="Close notification" className="ml-auto text-white/70 hover:text-white">✕</button>
+      </div>
+    </div>
+  );
+}

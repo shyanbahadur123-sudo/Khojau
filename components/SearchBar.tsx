@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { CATEGORIES } from "@/lib/categories";
 import { LOCATIONS } from "@/lib/locations";
 
 export default function SearchBar({ compact = false }: { compact?: boolean }) {
@@ -9,14 +10,17 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
   const params = useSearchParams();
   const [service, setService] = useState(params.get("q") ?? params.get("service") ?? "");
   const [location, setLocation] = useState(params.get("location") ?? "");
+  const [submitting, setSubmitting] = useState(false);
 
   return (
     <form
       role="search"
       aria-label="Find services"
-      className={`flex w-full flex-col gap-2 ${compact ? "sm:flex-row" : "sm:flex-row"}`}
+      className="flex w-full flex-col gap-2 sm:flex-row"
       onSubmit={(e) => {
         e.preventDefault();
+        if (submitting) return;
+        setSubmitting(true);
         const q = new URLSearchParams();
         if (service.trim()) q.set("q", service.trim());
         if (location.trim()) q.set("location", location.trim());
@@ -30,8 +34,14 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
         onChange={(e) => setService(e.target.value)}
         placeholder="What service do you need? e.g. Electrician"
         autoComplete="off"
+        list="khojau-services"
         className="h-12 flex-1 rounded-lg border border-black/15 bg-white px-4 text-base"
       />
+      <datalist id="khojau-services">
+        {CATEGORIES.map((c) => (
+          <option key={c.slug} value={c.name} />
+        ))}
+      </datalist>
       <label className="sr-only" htmlFor="location-input">Select location</label>
       <input
         id="location-input"
@@ -49,9 +59,10 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
       </datalist>
       <button
         type="submit"
-        className="h-12 rounded-lg bg-[#0B7168] px-6 text-base font-semibold text-white hover:bg-[#095A53]"
+        disabled={submitting}
+        className="h-12 rounded-lg bg-[#0B7168] px-6 text-base font-semibold text-white hover:bg-[#095A53] disabled:opacity-60"
       >
-        Find Services
+        {submitting ? "Searching…" : "Find Services"}
       </button>
     </form>
   );

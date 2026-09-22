@@ -7,6 +7,7 @@ import ProviderCard from "@/components/ProviderCard";
 import { CATEGORIES, POPULAR_SERVICES } from "@/lib/categories";
 import { LOCATIONS } from "@/lib/locations";
 import { getApprovedProviders } from "@/lib/providers";
+import { stringifyJsonLd } from "@/lib/validation";
 
 export const metadata: Metadata = {
   title: "Khojau — Find Trusted Local Services Near You",
@@ -26,9 +27,12 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-12 pt-6">
-      <section aria-labelledby="hero-heading" className="rounded-2xl bg-[#FFFDF8] p-6 shadow-sm sm:p-10">
-        <h1 id="hero-heading" className="max-w-xl text-3xl font-bold leading-tight sm:text-4xl">
+      <section aria-labelledby="hero-heading" className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0B7168]/10 via-[#FFFDF8] to-[#0B7168]/5 p-6 shadow-md sm:p-10">
+        <div className="absolute top-0 right-0 -mt-16 -mr-16 h-40 w-40 rounded-full bg-[#0B7168]/5 blur-3xl sm:h-60 sm:w-60" aria-hidden="true" />
+        <div className="absolute bottom-0 left-0 -mb-10 -ml-10 h-32 w-32 rounded-full bg-[#0B7168]/5 blur-2xl" aria-hidden="true" />
+        <h1 id="hero-heading" className="relative max-w-xl text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
           Find the right local service in Nepal.
+          <span className="mt-1 block text-base font-normal text-[#0B7168]/70 sm:text-lg">Trusted, verified providers. Direct contact. No middlemen.</span>
         </h1>
         <p className="mt-3 max-w-xl text-base text-[#66706E]">
           Discover electricians, plumbers, repair technicians, tutors, photographers and other local service
@@ -101,8 +105,9 @@ export default async function HomePage() {
         </section>
       )}
       {all.length === 0 && (
-        <section aria-label="Get started" className="rounded-2xl border border-black/10 bg-[#FFFDF8] p-6 text-center sm:p-8">
-          <h2 className="text-xl font-bold">Be the first business on Khojau</h2>
+        <section aria-label="Get started" className="relative overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br from-[#0B7168]/5 to-[#FFFDF8] p-6 text-center sm:p-10">
+          <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-[#0B7168]/10 text-3xl shadow-inner">🌱</div>
+          <h2 className="text-2xl font-extrabold">Be the first business on Khojau</h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-[#66706E]">
             Khojau is a new directory for trusted local services in Nepal. List your business for free and get discovered by customers nearby.
           </p>
@@ -155,12 +160,12 @@ export default async function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: stringifyJsonLd({
             "@context": "https://schema.org",
             "@type": "WebSite",
             name: "Khojau",
             url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-            potentialAction: { "@type": "SearchAction", target: "{url}/search?q={query}", "query-input": "required name=query" },
+            potentialAction: { "@type": "SearchAction", target: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/search?q={query}`, "query-input": "required name=query" },
           }),
         }}
       />
