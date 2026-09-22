@@ -1,14 +1,60 @@
 import { z } from "zod";
 
+const ALLOWED_URL_SCHEMES = new Set(["http:", "https:"]);
+
+/**
+ * Strict public-URL validator. Returns the normalized href, or null.
+ * Only absolute http(s) URLs pass. Rejects javascript:, data:, vbscript:,
+ * file:, about:, schemeless/relative URLs, whitespace-padded input, control
+ * characters, and unparseable values. Case-insensitive scheme handling comes
+ * from the URL parser itself (it lowercases the scheme).
+ */
+export function safeExternalUrl(input: string): string | null {
+  if (typeof input !== "string") return null;
+  const trimmed = input.trim();
+  if (trimmed.length === 0 || trimmed.length > 500) return null;
+  // eslint-disable-next-line no-control-regex
+  if (/[\x00-\x1f\x7f]/.test(trimmed)) return null;
+  // Raw whitespace never appears in a legitimate pasted URL; the URL parser
+  // silently strips tabs/newlines, so reject instead of normalizing.
+  if (/\s/.test(trimmed)) return null;
+  let u: URL;
+  try {
+    u = new URL(trimmed);
+  } catch {
+    return null;
+  }
+  if (!ALLOWED_URL_SCHEMES.has(u.protocol)) return null;
+  // Require an authority section (blocks bare "mailto:x"-style values that
+  // carry no host). Note: "http:foo" normalizes to host "foo", which is a
+  // plain http URL and therefore safe to accept.
+  if (!u.host) return null;
+  return u.href;
+}
+
+/** Zod field for optional public website/social URLs: http(s) only, normalized. */
+export const externalUrlField = z
+  .string()
+  .max(500)
+  .refine((v) => v.trim() === "" || safeExternalUrl(v) !== null, {
+    message: "Use a full http(s) URL, e.g. https://example.com",
+  })
+  .transform((v) => {
+    if (v.trim() === "") return v;
+    return (safeExternalUrl(v) ?? v).slice(0, 500);
+  })
+  .optional()
+  .or(z.literal(""));
+
 export const providerSchema = z.object({
   business_name: z.string().min(2).max(120),
   category_slug: z.string().min(2).max(60),
   phone: z.string().regex(/^(\+?977[- ]?)?9[678]\d{8}$/, "Enter a valid Nepal mobile number"),
   whatsapp: z.string().max(20).optional().or(z.literal("")),
   email: z.string().email().optional().or(z.literal("")),
-  website: z.string().url().optional().or(z.literal("")),
-  facebook: z.string().url().optional().or(z.literal("")),
-  instagram: z.string().url().optional().or(z.literal("")),
+  website: externalUrlField,
+  facebook: externalUrlField,
+  instagram: externalUrlField,
   city: z.string().min(2).max(80),
   area: z.string().max(80).optional().or(z.literal("")),
   address: z.string().max(200).optional().or(z.literal("")),
@@ -85,4 +131,22 @@ export function safeRedirectPath(raw: string | null | undefined, fallback = "/da
   } catch {
     return fallback;
   }
+}
+
+/**
+ * Serialize data for an HTML <script type="application/ld+json"> block.
+ * JSON.stringify alone is NOT safe here: it leaves `<` intact, so a value
+ * containing `</script>` would terminate the script element (stored XSS).
+ * Escaping `<`, `>`, `&` (plus U+2028/2029 line separators, which are valid
+ * in JS strings but historically split <script> parsing) as \uXXXX keeps the
+ * JSON valid — JSON permits \u escapes in strings — while making it
+ * impossible to form `</script>` in the output HTML.
+ */
+export function stringifyJsonLd(data: unknown): string {
+  return JSON.stringify(data)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
 }

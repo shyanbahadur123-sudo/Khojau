@@ -2,10 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  images: {
-    remotePatterns: [{ protocol: "https", hostname: "**" }],
-    formats: ["image/avif", "image/webp"],
-  },
+  // NOTE: no `images` optimizer configuration. The app renders provider
+  // photos with plain <img> tags (Supabase-served), so the /_next/image
+  // optimizer endpoint would be pure attack surface with zero benefit.
+  // If next/image is ever adopted, restrict remotePatterns to the exact
+  // Supabase storage hostname instead of a wildcard.
   async headers() {
     return [
       {

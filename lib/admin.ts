@@ -25,12 +25,21 @@ export async function getAdminContext(): Promise<AdminContext | null> {
 export async function audit(
   admin: NonNullable<ReturnType<typeof supabaseAdmin>>,
   entry: { actor_id: string; action: string; target_type: string; target_id: string; metadata?: Record<string, unknown> }
-): Promise<void> {
-  await admin.from("admin_audit_log").insert({
+): Promise<boolean> {
+  // Decision: audit failures must never block moderation (an urgent suspend
+  // must go through even if the audit table hiccups), but they must never be
+  // silent either — the admin UI claims every action is logged. Callers keep
+  // succeeding while this returns false AND logs server-side for follow-up.
+  const { error } = await admin.from("admin_audit_log").insert({
     actor_id: entry.actor_id,
     action: entry.action,
     target_type: entry.target_type,
     target_id: entry.target_id,
     metadata: entry.metadata ?? {},
   });
+  if (error) {
+    console.error("admin audit insert failed:", error.code, entry.action, entry.target_type);
+    return false;
+  }
+  return true;
 }

@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "test:security": "node tests/run.mjs",
     "verify:isolation": "node scripts/verify-isolation.mjs"
   },
   "dependencies": {

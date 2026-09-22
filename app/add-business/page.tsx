@@ -67,7 +67,15 @@ export default function AddBusinessPage() {
             if (ins) throw new Error(ins.message);
             router.push("/dashboard");
           } catch (err) {
-            setError(err instanceof Error ? err.message : "Submission failed");
+            const msg = err instanceof Error ? err.message : "Submission failed";
+            // The slug has a UNIQUE constraint as the final safety net. A
+            // collision surfaces as a raw constraint message, so translate it
+            // instead of leaking database internals to the user.
+            if (/duplicate key|unique constraint|already exists/i.test(msg)) {
+              setError("A business with a very similar name was just listed. Please tweak the name and try again.");
+            } else {
+              setError(msg);
+            }
           } finally {
             setLoading(false);
           }

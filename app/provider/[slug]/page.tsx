@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProviderBySlug } from "@/lib/providers";
 import { directionsUrl, whatsappUrl } from "@/lib/search";
+import { stringifyJsonLd } from "@/lib/validation";
 import { WEEKDAYS } from "@/types/database";
 import { VerifiedBadge } from "@/components/ProviderCard";
 import ReportButton from "@/components/ReportButton";
@@ -169,7 +170,7 @@ export default async function ProviderPage({ params }: { params: { slug: string 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: stringifyJsonLd({
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             name: p.business_name,

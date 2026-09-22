@@ -11,6 +11,12 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   const db = supabasePublic();
   if (!db) return NextResponse.json({ error: "DB not configured" }, { status: 503 });
+  // Existence pre-check with an identical response to a database failure, so
+  // the endpoint cannot be used to probe whether a provider ID exists (the
+  // old code returned 500 here vs 400 for malformed input). Reports against
+  // listings of any status are accepted; moderation happens in /admin.
+  const { data: target } = await db.from("providers").select("id").eq("id", parsed.data.provider_id).single();
+  if (!target) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   const { error } = await db.from("reports").insert({
     provider_id: parsed.data.provider_id,
     reason: parsed.data.reason,
