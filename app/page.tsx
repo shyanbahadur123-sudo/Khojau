@@ -67,7 +67,7 @@ export default async function HomePage() {
       </section>
 
       {latest.length > 0 && (
-        <section aria-labelledby="latest">
+        <section aria-labelledby="latest" className="scroll-mt-20">
           <h2 id="latest" className="mb-1 text-xl font-bold tracking-tight">Recent</h2>
           <p className="mb-4 text-sm text-[#6B7280]">Newly approved listings, newest first.</p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

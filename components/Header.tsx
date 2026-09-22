@@ -27,6 +27,9 @@ export default function Header() {
           <Link href="/services" className="rounded-md px-2 py-2 hover:bg-black/5 sm:px-3">
             Services
           </Link>
+          <Link href="/#latest" className="rounded-md px-2 py-2 hover:bg-black/5 sm:px-3">
+            Recent
+          </Link>
           <Link href="/locations" className="hidden rounded-md px-3 py-2 hover:bg-black/5 sm:inline">
             Locations
           </Link>
@@ -60,6 +63,7 @@ export default function Header() {
               <ul className="space-y-1 text-sm font-medium">
                 <li><Link onClick={() => setMobileOpen(false)} href="/search" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Search</Link></li>
                 <li><Link onClick={() => setMobileOpen(false)} href="/services" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Services</Link></li>
+                <li><Link onClick={() => setMobileOpen(false)} href="/#latest" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Recent</Link></li>
                 <li><Link onClick={() => setMobileOpen(false)} href="/locations" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Locations</Link></li>
                 <li><Link onClick={() => setMobileOpen(false)} href="/how-it-works" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">How it works</Link></li>
                 <AuthMenuItems onNavigate={() => setMobileOpen(false)} />
