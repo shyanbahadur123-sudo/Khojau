@@ -9,6 +9,7 @@ import ProviderCard from "@/components/ProviderCard";
 import { CATEGORIES } from "@/lib/categories";
 import { LOCATIONS } from "@/lib/locations";
 import { getApprovedProviders } from "@/lib/providers";
+import { getTrendingProviders, getUrgentNeeds } from "@/lib/discovery";
 import { stringifyJsonLd } from "@/lib/validation";
 
 export const metadata: Metadata = {
@@ -20,9 +21,22 @@ export const metadata: Metadata = {
 
 const EXAMPLE_SEARCHES = ["Plumber", "Electrician", "AC repair", "Photographer", "Tutor", "Home cleaning"];
 
+function timeAgo(iso: string): string {
+  const mins = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+  if (!Number.isFinite(mins)) return "recently";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.round(hours / 24);
+  return days === 1 ? "yesterday" : `${days}d ago`;
+}
+
 export default async function HomePage() {
   // Single bounded fetch; sections derive from it (no duplicate queries).
+  // Discovery sections are independently fail-safe: no key, no events, or no
+  // open requests each yield [] and the section hides — never fake content.
   const all = await getApprovedProviders({ limit: 12 });
+  const [trending, urgent] = await Promise.all([getTrendingProviders(6), getUrgentNeeds(6)]);
   const featured = all.filter((p) => p.plan === "featured" || p.plan === "premium");
   const latest = all.filter((p) => p.plan !== "featured" && p.plan !== "premium").slice(0, 6);
 
@@ -74,10 +88,44 @@ export default async function HomePage() {
 
       {featured.length > 0 && (
         <section aria-labelledby="featured">
-          <h2 id="featured" className="mb-4 text-xl font-bold">Featured providers</h2>
+          <h2 id="featured" className="mb-4 text-xl font-bold tracking-tight">Featured providers</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((p) => <ProviderCard key={p.id} provider={p} />)}
           </div>
+        </section>
+      )}
+
+      {trending.length > 0 && (
+        <section aria-labelledby="trending">
+          <div className="mb-1 flex items-center justify-between">
+            <h2 id="trending" className="text-xl font-bold tracking-tight">Trending this week</h2>
+            <Link href="/search" className="text-sm font-semibold text-[#0A0A0A] hover:underline">Search all</Link>
+          </div>
+          <p className="mb-4 text-sm text-[#6B7280]">Ranked by real visits and contact taps in the last 14 days.</p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {trending.map((p) => <ProviderCard key={p.id} provider={p} />)}
+          </div>
+        </section>
+      )}
+
+      {urgent.length > 0 && (
+        <section aria-labelledby="urgent">
+          <div className="mb-1 flex items-center justify-between">
+            <h2 id="urgent" className="text-xl font-bold tracking-tight">Needs help now</h2>
+            <Link href="/add-business" className="text-sm font-semibold text-[#0A0A0A] hover:underline">Offer a service</Link>
+          </div>
+          <p className="mb-4 text-sm text-[#6B7280]">Open customer requests. Contact details stay private.</p>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {urgent.map((u) => (
+              <li key={u.id} className="rounded-xl border border-black/10 bg-[#FFFFFF] p-4 shadow-sm">
+                <p className="font-semibold leading-snug">{u.service}</p>
+                <p className="mt-1 text-sm text-[#6B7280]">{u.location} · {timeAgo(u.created_at)}</p>
+                <Link href="/add-business" className="mt-3 inline-block rounded-lg bg-[#C9A227] px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#B8941F]">
+                  I offer this service
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 

@@ -14,6 +14,7 @@ import {
 import { validateImageFile } from "../lib/image-validation.js";
 import { rateLimit } from "../lib/rate-limit.js";
 import { REQUEST_STATUS_LABEL, REQUEST_NEXT_ACTIONS, formatRequestStatus } from "../lib/request-status.js";
+import { tallyTrendScores } from "../lib/search.js";
 
 describe("F-01 JSON-LD escaping", () => {
   it("neutralizes a script breakout payload", () => {
@@ -131,6 +132,23 @@ describe("publicOrigin (proxy-aware auth redirects)", () => {
       "x-forwarded-host": "evil.example/x y",
     });
     assert.equal(publicOrigin(evil2), "http://localhost:3000");
+  });
+});
+
+describe("trend scoring (honest popularity)", () => {
+  it("weights contact taps above passive views and ignores junk", () => {
+    const scores = tallyTrendScores([
+      { event: "provider_view", meta: { providerId: "a" } },
+      { event: "provider_view", meta: { providerId: "a" } },
+      { event: "phone_click", meta: { providerId: "b" } },
+      { event: "unknown_event", meta: { providerId: "c" } },
+      { event: "provider_view", meta: {} },
+      { event: "provider_view", meta: { providerId: 42 } },
+    ]);
+    assert.equal(scores.get("a"), 2);
+    assert.equal(scores.get("b"), 3);
+    assert.ok(!scores.has("c"), "unknown events never score");
+    assert.equal(scores.size, 2);
   });
 });
 

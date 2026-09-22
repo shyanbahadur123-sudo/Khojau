@@ -63,3 +63,29 @@ export function whatsappUrl(phone: string | null, text = "Hello! I found you on 
   const digits = phone.replace(/\D/g, "");
   return `https://wa.me/${digits}?text=${encodeURIComponent(text)}`;
 }
+
+export interface TrendEvent {
+  event: string;
+  meta?: { providerId?: unknown } | null;
+}
+
+// Weight real engagement for "trending" ranking: passive views count less
+// than contact taps. Pure and unit-tested; callers decide display thresholds
+// so a handful of views never masquerades as a crowd.
+const TREND_WEIGHTS: Record<string, number> = {
+  provider_view: 1,
+  phone_click: 3,
+  message_click: 3,
+  directions_click: 3,
+};
+
+export function tallyTrendScores(rows: TrendEvent[]): Map<string, number> {
+  const scores = new Map<string, number>();
+  for (const r of rows ?? []) {
+    const w = TREND_WEIGHTS[r.event];
+    const id = typeof r.meta?.providerId === "string" ? r.meta.providerId : "";
+    if (!w || !id || id.length > 100) continue;
+    scores.set(id, (scores.get(id) ?? 0) + w);
+  }
+  return scores;
+}
