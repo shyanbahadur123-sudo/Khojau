@@ -69,7 +69,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
   return (
     <div className="space-y-6 pt-6">
       <h1 className="text-2xl font-bold">Search services</h1>
-      <Suspense fallback={<SearchBarSkeleton />}><SearchBar /></Suspense>
+      <div className="sticky top-14 z-20 -mx-1 bg-[#FAFAFA]/95 px-1 py-2 backdrop-blur-md dark:bg-[#0A0A0A]/95">
+        <Suspense fallback={<SearchBarSkeleton />}><SearchBar /></Suspense>
+      </div>
       <form method="get" className="flex flex-wrap gap-2 text-sm" aria-label="Filters">
         <input type="hidden" name="q" value={query} />
         <input type="hidden" name="location" value={location} />

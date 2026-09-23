@@ -1,9 +1,38 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { CloseIcon } from "@/components/UiIcon";
 import ThemeToggle from "@/components/ThemeToggle";
 import { AuthMenuItems, AuthNavLink } from "@/components/AuthButton";
+
+function NavLink({ href, children, mobile, onNavigate }: { href: string; children: React.ReactNode; mobile?: boolean; onNavigate?: () => void }) {
+  const path = usePathname();
+  const active = path === href;
+  if (mobile) {
+    return (
+      <li>
+        <Link
+          onClick={onNavigate}
+          href={href}
+          aria-current={active ? "page" : undefined}
+          className={`block rounded-lg px-3 py-2.5 transition-colors hover:bg-black/5 active:bg-black/10 ${active ? "bg-black/5 font-semibold" : ""}`}
+        >
+          {children}
+        </Link>
+      </li>
+    );
+  }
+  return (
+    <Link
+      href={href}
+      aria-current={active ? "page" : undefined}
+      className={`rounded-md px-2 py-2 transition-colors hover:bg-black/5 active:bg-black/10 sm:px-3 ${active ? "bg-black/5 font-semibold" : ""}`}
+    >
+      {children}
+    </Link>
+  );
+}
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -30,13 +59,9 @@ export default function Header() {
           />
         </Link>
         <nav aria-label="Primary" className="hidden items-center gap-1 text-sm sm:flex sm:gap-2">
-          <Link href="/services" className="rounded-md px-2 py-2 hover:bg-black/5 sm:px-3">
-            Services
-          </Link>
-          <Link href="/recent" className="rounded-md px-2 py-2 hover:bg-black/5 sm:px-3">
-            Recent
-          </Link>
-          <Link href="/locations" className="hidden rounded-md px-3 py-2 hover:bg-black/5 sm:inline">
+          <NavLink href="/services">Services</NavLink>
+          <NavLink href="/recent">Recent</NavLink>
+          <Link href="/locations" className="hidden rounded-md px-3 py-2 transition-colors hover:bg-black/5 active:bg-black/10 sm:inline">
             Locations
           </Link>
           <AuthNavLink />
@@ -67,11 +92,11 @@ export default function Header() {
             <div onClick={() => setMobileOpen(false)} className="fixed inset-0 z-50 bg-black/20 sm:hidden" aria-hidden="true" />
             <nav aria-label="Mobile" className="absolute right-0 z-50 mt-2 w-56 rounded-xl border border-black/10 bg-[#FFFFFF] p-2 shadow-2xl sm:hidden">
               <ul className="space-y-1 text-sm font-medium">
-                <li><Link onClick={() => setMobileOpen(false)} href="/search" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Search</Link></li>
-                <li><Link onClick={() => setMobileOpen(false)} href="/services" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Services</Link></li>
-                <li><Link onClick={() => setMobileOpen(false)} href="/recent" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Recent</Link></li>
-                <li><Link onClick={() => setMobileOpen(false)} href="/locations" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">Locations</Link></li>
-                <li><Link onClick={() => setMobileOpen(false)} href="/how-it-works" className="block rounded-lg px-3 py-2.5 hover:bg-black/5">How it works</Link></li>
+                <NavLink mobile onNavigate={() => setMobileOpen(false)} href="/search">Search</NavLink>
+                <NavLink mobile onNavigate={() => setMobileOpen(false)} href="/services">Services</NavLink>
+                <NavLink mobile onNavigate={() => setMobileOpen(false)} href="/recent">Recent</NavLink>
+                <NavLink mobile onNavigate={() => setMobileOpen(false)} href="/locations">Locations</NavLink>
+                <NavLink mobile onNavigate={() => setMobileOpen(false)} href="/how-it-works">How it works</NavLink>
                 <AuthMenuItems onNavigate={() => setMobileOpen(false)} />
                 <li><Link onClick={() => setMobileOpen(false)} href="/add-business" className="block rounded-lg bg-[#C9A227] px-3 py-2.5 font-semibold text-black">Add Business — it&apos;s free</Link></li>
                 <li><button onClick={() => setMobileOpen(false)} className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left hover:bg-black/5" aria-label="Close menu"><CloseIcon className="h-4 w-4" /> Close</button></li>

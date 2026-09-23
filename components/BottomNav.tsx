@@ -28,7 +28,7 @@ export default function BottomNav() {
               <Link
                 href={href}
                 aria-current={active ? "page" : undefined}
-                className={`flex min-h-[56px] flex-col items-center justify-center gap-0.5 text-[11px] font-semibold transition-colors ${
+                className={`flex min-h-[56px] flex-col items-center justify-center gap-0.5 text-[11px] font-semibold transition-colors active:bg-black/5 ${
                   active ? "text-[#0A0A0A]" : "text-[#6B7280]"
                 }`}
               >

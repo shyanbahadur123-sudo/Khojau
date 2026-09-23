@@ -4,11 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
 import { HeartIcon } from "@/components/UiIcon";
+import Toast from "@/components/Toast";
 
 // Save/unsave toggle persisted in saved_providers (owner RLS).
 // Guests get a login link that returns them to the provider page.
 export default function SaveButton({ providerId, returnTo }: { providerId: string; returnTo: string }) {
   const [state, setState] = useState<"loading" | "in" | "out" | "saved" | "unsaved">("loading");
+  const [note, setNote] = useState<string | null>(null);
   const inFlight = useRef(false);
 
   useEffect(() => {
@@ -55,10 +57,12 @@ export default function SaveButton({ providerId, returnTo }: { providerId: strin
         const { error } = await sb.from("saved_providers").delete().eq("user_id", user.id).eq("provider_id", providerId);
         if (error) throw error;
         setState("unsaved");
+        setNote("Removed from saved providers.");
       } else {
         const { error } = await sb.from("saved_providers").insert({ user_id: user.id, provider_id: providerId });
         if (error) throw error;
         setState("saved");
+        setNote("Saved — find it anytime under Saved.");
       }
     } catch {
       setState(was);
@@ -89,17 +93,20 @@ export default function SaveButton({ providerId, returnTo }: { providerId: strin
 
   const saved = state === "saved";
   return (
-    <button
-      type="button"
-      onClick={() => void toggle()}
-      aria-pressed={saved}
-      aria-label={saved ? "Remove from saved providers" : "Save this provider"}
-      title={saved ? "Saved" : "Save"}
-      className={`grid h-10 w-10 place-items-center rounded-lg border transition-colors hover:bg-black/5 ${
-        saved ? "border-[#7A5C00]/50 text-[#7A5C00]" : "border-black/15"
-      }`}
-    >
-      <HeartIcon className="h-5 w-5" filled={saved} />
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={() => void toggle()}
+        aria-pressed={saved}
+        aria-label={saved ? "Remove from saved providers" : "Save this provider"}
+        title={saved ? "Saved" : "Save"}
+        className={`grid h-10 w-10 place-items-center rounded-lg border transition-all active:scale-95 ${
+          saved ? "border-[#7A5C00]/50 text-[#7A5C00]" : "border-black/15 hover:bg-black/5"
+        }`}
+      >
+        <HeartIcon className="h-5 w-5" filled={saved} />
+      </button>
+      {note && <Toast message={note} type="success" onClose={() => setNote(null)} />}
+    </>
   );
 }
