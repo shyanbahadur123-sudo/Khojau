@@ -21,8 +21,10 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image", title: "Khojau", description: "Find trusted local services near you." },
   robots: { index: true, follow: true },
+  manifest: "/manifest.webmanifest",
   icons: {
-    icon: "/logo.svg",
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
 };
 
@@ -31,12 +33,18 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: light)", color: "#FAFAFA" },
     { media: "(prefers-color-scheme: dark)", color: "#0A0A0A" },
   ],
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen antialiased">
+        {/* iOS standalone web-app mode (Next 14 viewport API lacks appleWebApp) */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <Script
           id="khojau-theme"
           strategy="beforeInteractive"
