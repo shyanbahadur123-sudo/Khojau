@@ -99,3 +99,8 @@ export interface ServiceRequestRow {
   created_at: string;
   providers?: { business_name: string; slug: string } | null;
 }
+
+export interface SavedProviderRow {
+  provider_id: string;
+  created_at: string;
+}

@@ -40,7 +40,7 @@ async function main() {
   }
 
   // Protected pages redirect guests to login
-  for (const path of ["/dashboard", "/admin", "/add-business"]) {
+  for (const path of ["/dashboard", "/admin", "/add-business", "/saved", "/account", "/requests"]) {
     const r = await get(path);
     const loc = r.headers.get("location") ?? "";
     if ((r.status === 307 || r.status === 308) && loc.includes("/login")) ok(`guard:${path}`, `${r.status}`);
@@ -52,6 +52,13 @@ async function main() {
     const r = await get("/provider/definitely-not-a-real-slug-123");
     if (r.status === 404) ok("missing-provider-404", "");
     else fail("missing-provider-404", `got ${r.status}`);
+  }
+
+  // Missing request → 404 (never reveals whether the id exists)
+  {
+    const r = await get("/requests/00000000-0000-0000-0000-000000000000");
+    if (r.status === 404 || r.status === 307 || r.status === 308) ok("missing-request-safe", `${r.status}`);
+    else fail("missing-request-safe", `got ${r.status}`);
   }
 
   // Admin API denies anonymous

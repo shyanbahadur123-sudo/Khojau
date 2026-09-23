@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { supabaseServer } from "@/lib/supabase-server";
 import { isAdminEmail } from "@/lib/supabase";
+import { profileCompleteness } from "@/lib/completeness";
 import ImageManager from "@/components/ImageManager";
 import ProviderEditor, { type EditableProvider } from "@/components/ProviderEditor";
 import ServiceManager from "@/components/ServiceManager";
@@ -186,6 +187,37 @@ export default async function DashboardPage() {
                 {STATUS_HELP[p.status] && (
                   <p className="mt-2 rounded-lg bg-black/5 p-2 text-xs text-[#6B7280]">{STATUS_HELP[p.status]}</p>
                 )}
+                {(() => {
+                  const comp = profileCompleteness({
+                    business_name: p.business_name,
+                    phone: p.phone,
+                    category_slug: p.categories?.slug ?? null,
+                    description: p.description,
+                    city: p.city,
+                    area: p.area,
+                    has_hours: (p.provider_hours ?? []).length > 0,
+                    photo_count: photoCount,
+                    service_count: svcCount,
+                    has_whatsapp: Boolean(p.whatsapp),
+                  });
+                  const missing = comp.items.filter((i) => !i.done);
+                  return (
+                    <div className="mt-2 rounded-lg border border-black/10 p-3" aria-label={`Profile completeness ${comp.percent} percent`}>
+                      <div className="flex items-center justify-between gap-2 text-xs font-semibold">
+                        <span>Profile completeness</span>
+                        <span>{comp.percent}%</span>
+                      </div>
+                      <div role="presentation" aria-hidden="true" className="mt-2 h-2 overflow-hidden rounded-full bg-black/10">
+                        <div className="h-full rounded-full bg-[#C9A227] transition-all" style={{ width: `${comp.percent}%` }} />
+                      </div>
+                      {missing.length > 0 && (
+                        <p className="mt-2 text-xs text-[#6B7280]">
+                          Missing: {missing.map((i) => i.label).join(" · ")}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })()}
                 <ProviderEditor provider={editable} />
                 <details open={idx === 0} className="mt-3 rounded-xl border border-black/10">
                   <summary className="cursor-pointer px-4 py-3 text-sm font-semibold">Services ({svcCount})</summary>

@@ -15,6 +15,8 @@ import { validateImageFile } from "../lib/image-validation.js";
 import { rateLimit } from "../lib/rate-limit.js";
 import { REQUEST_STATUS_LABEL, REQUEST_NEXT_ACTIONS, formatRequestStatus } from "../lib/request-status.js";
 import { tallyTrendScores } from "../lib/search.js";
+import { adminEmails, isAdminEmailAddr } from "../lib/admin-emails.js";
+import { profileCompleteness } from "../lib/completeness.js";
 
 describe("F-01 JSON-LD escaping", () => {
   it("neutralizes a script breakout payload", () => {
@@ -213,5 +215,59 @@ describe("request status labels", () => {
     assert.deepEqual(REQUEST_NEXT_ACTIONS.completed, []);
     assert.deepEqual(REQUEST_NEXT_ACTIONS.cancelled, []);
     assert.equal(Object.keys(REQUEST_STATUS_LABEL).length, 4);
+  });
+});
+
+describe("admin email gate (server allowlist)", () => {
+  it("matches case-insensitively, trims, and ignores blanks", () => {
+    assert.deepEqual(adminEmails("Admin@X.com, user@y.com ,, "), ["admin@x.com", "user@y.com"]);
+    assert.deepEqual(adminEmails(undefined), []);
+    assert.deepEqual(adminEmails(""), []);
+    assert.ok(isAdminEmailAddr("ADMIN@x.com", "admin@x.com"));
+    assert.ok(!isAdminEmailAddr("other@x.com", "admin@x.com"));
+    assert.ok(!isAdminEmailAddr(null, "admin@x.com"));
+    assert.ok(!isAdminEmailAddr("admin@x.com", undefined));
+  });
+});
+
+describe("profile completeness (honest progress)", () => {
+  const base = {
+    business_name: "Sharma Electricals",
+    phone: "9841234567",
+    category_slug: "electrician",
+    description: "Wiring and repair work across Kathmandu valley.",
+    city: "Kathmandu",
+    area: "Baneshwor",
+    has_hours: true,
+    photo_count: 2,
+    service_count: 3,
+    has_whatsapp: true,
+  };
+  it("scores a complete profile at 100%", () => {
+    const r = profileCompleteness(base);
+    assert.equal(r.percent, 100);
+    assert.ok(r.items.every((i) => i.done));
+  });
+  it("scores an empty profile at 0% with actionable items", () => {
+    const r = profileCompleteness({
+      business_name: "",
+      phone: null,
+      category_slug: null,
+      description: "short",
+      city: "",
+      area: null,
+      has_hours: false,
+      photo_count: 0,
+      service_count: 0,
+      has_whatsapp: false,
+    });
+    assert.equal(r.percent, 0);
+    assert.equal(r.items.length, 8);
+    assert.ok(r.items.some((i) => !i.done));
+  });
+  it("is monotonic: each completed field raises the score", () => {
+    const a = profileCompleteness({ ...base, has_hours: false, photo_count: 0 });
+    const b = profileCompleteness(base);
+    assert.ok(a.percent < b.percent);
   });
 });

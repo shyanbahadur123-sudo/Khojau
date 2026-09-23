@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Provider } from "@/types/database";
 import { sizedImageUrl } from "@/lib/storage";
 import { CheckIcon } from "@/components/UiIcon";
+import SaveButton from "@/components/SaveButton";
 
 export function VerifiedBadge() {
   return (
@@ -54,6 +55,7 @@ export default function ProviderCard({ provider }: { provider: Provider }) {
           <Link href={`/provider/${provider.slug}`} className="inline-flex min-h-[40px] items-center rounded-lg border border-black/15 px-3 py-2 font-medium">
             View
           </Link>
+          <SaveButton providerId={provider.id} returnTo={`/provider/${provider.slug}`} />
           {provider.price_min != null && (
             <span className="ml-auto text-xs text-[#6B7280]">
               Rs.{provider.price_min}{provider.price_max ? `–${provider.price_max}` : "+"}

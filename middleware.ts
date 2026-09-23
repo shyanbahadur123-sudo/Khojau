@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { isAdminEmailAddr } from "@/lib/admin-emails";
 
-const PROTECTED_PREFIXES = ["/dashboard", "/admin", "/add-business"];
+const PROTECTED_PREFIXES = ["/dashboard", "/admin", "/add-business", "/saved", "/account", "/requests"];
 const AUTH_PAGES = new Set(["/login", "/register"]);
 
 export async function middleware(req: NextRequest) {

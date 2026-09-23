@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BottomNav from "@/components/BottomNav";
 import AuthCodeHandler from "@/components/AuthCodeHandler";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -59,10 +60,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Suspense>
           <AuthCodeHandler />
         </Suspense>
-        <main id="main" className="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6">
+        <main id="main" className="mx-auto w-full max-w-6xl px-4 pb-24 sm:px-6 sm:pb-16">
           {children}
         </main>
         <Footer />
+        <BottomNav />
       </body>
     </html>
   );
