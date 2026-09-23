@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Khojau 🇳🇵 — Find Trusted Local Services Near You
 
 Standalone Next.js + Supabase directory for Nepal. This folder is the entire project: no cross-project imports, no shared env, no shared DB.
@@ -41,3 +42,7 @@ Standalone Next.js + Supabase directory for Nepal. This folder is the entire pro
 - No fake providers, reviews, or stats anywhere.
 - Analytics are first-party only (`events` table).
 - Monetization is manual for MVP: admin sets `plan` to `featured`/`premium`.
+=======
+# Khojau
+this is my Website
+>>>>>>> 5f26289e590a8c011cec53d69812ac2c117e15ac

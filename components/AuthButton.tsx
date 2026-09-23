@@ -13,9 +13,20 @@ function useSession(): boolean | null {
       return;
     }
     const sb = supabaseBrowser();
-    sb.auth.getUser().then(({ data }) => setSignedIn(Boolean(data.user)));
-    const { data: sub } = sb.auth.onAuthStateChange((_event, session) => setSignedIn(Boolean(session)));
-    return () => sub.subscription.unsubscribe();
+    let live = true;
+    // Never derive "logged out" from a cold getUser() miss: a fresh client
+    // can report no user before storage hydrates, flashing the wrong action.
+    // Only the live subscription may set false; a local session may set true.
+    sb.auth.getSession().then(({ data }) => {
+      if (live && data.session) setSignedIn(true);
+    });
+    const { data: sub } = sb.auth.onAuthStateChange((_event, session) => {
+      if (live) setSignedIn(Boolean(session));
+    });
+    return () => {
+      live = false;
+      sub.subscription.unsubscribe();
+    };
   }, []);
   return signedIn;
 }
