@@ -152,6 +152,29 @@ describe("trend scoring (honest popularity)", () => {
   });
 });
 
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
+
+describe("CSP origin pinning (F-01 regression: never serve a dead Supabase host)", () => {
+  const RETIRED = "ipnywyozktrzlvsxsyzh.supabase.co";
+  const LIVE = "ilcdfjsquftqxhhdlvve.supabase.co";
+
+  it("next.config contains no retired host and derives the origin from env", () => {
+    const cfg = readFileSync(join(process.cwd(), "next.config.mjs"), "utf8");
+    assert.ok(!cfg.includes(RETIRED), "retired Supabase host must never return to CSP");
+    assert.ok(cfg.includes("NEXT_PUBLIC_SUPABASE_URL"), "CSP origin must derive from env");
+    assert.ok(cfg.includes(LIVE), "current project must be the fallback default");
+  });
+
+  it("no hardcoded Supabase host anywhere under lib/", () => {
+    for (const f of readdirSync(join(process.cwd(), "lib"))) {
+      if (!f.endsWith(".ts")) continue;
+      const src = readFileSync(join(process.cwd(), "lib", f), "utf8");
+      assert.ok(!src.includes(".supabase.co"), `hardcoded Supabase host in lib/${f}`);
+    }
+  });
+});
+
 describe("image validation", () => {
   it("rejects executables/text/svg and oversize, accepts images", () => {
     assert.ok(validateImageFile({ name: "x.exe", type: "application/x-msdownload", size: 10 }) !== null);

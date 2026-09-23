@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CloseIcon } from "@/components/UiIcon";
 import ThemeToggle from "@/components/ThemeToggle";
-import LogoMark from "@/components/Logo";
 import { AuthMenuItems, AuthNavLink } from "@/components/AuthButton";
 
 export default function Header() {
@@ -19,9 +18,16 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-[#FFFFFF]/95 backdrop-blur-md">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2.5 font-bold text-[#0A0A0A]" aria-label="Khojau home">
-          <LogoMark className="h-9 w-9" />
-          <span className="text-lg tracking-tight">Khojau<span aria-hidden="true" className="text-[#C9A227]">.</span></span>
+        <Link href="/" className="flex items-center" aria-label="Khojau home">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.png"
+            alt=""
+            aria-hidden="true"
+            width={37}
+            height={36}
+            className="h-9 w-auto mix-blend-multiply dark:rounded-[10px] dark:bg-white dark:p-1 dark:mix-blend-normal"
+          />
         </Link>
         <nav aria-label="Primary" className="hidden items-center gap-1 text-sm sm:flex sm:gap-2">
           <Link href="/services" className="rounded-md px-2 py-2 hover:bg-black/5 sm:px-3">

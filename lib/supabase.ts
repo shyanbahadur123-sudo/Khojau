@@ -1,5 +1,6 @@
 import { createBrowserClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
+import { adminEmails as parseAdminEmails, isAdminEmailAddr } from "@/lib/admin-emails";
 
 export function supabaseBrowser() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -30,13 +31,9 @@ export function supabaseAdmin() {
 }
 
 export function adminEmails(): string[] {
-  return (process.env.ADMIN_EMAILS ?? "")
-    .split(",")
-    .map((s) => s.trim().toLowerCase())
-    .filter(Boolean);
+  return parseAdminEmails(process.env.ADMIN_EMAILS);
 }
 
 export function isAdminEmail(email: string | null | undefined) {
-  if (!email) return false;
-  return adminEmails().includes(email.toLowerCase());
+  return isAdminEmailAddr(email, process.env.ADMIN_EMAILS);
 }

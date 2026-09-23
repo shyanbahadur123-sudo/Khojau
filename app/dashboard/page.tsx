@@ -113,14 +113,14 @@ export default async function DashboardPage() {
         <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">My listings</h1>
         <p className="mt-1 text-sm text-[#6B7280]">Signed in as {user.email}{isAdminEmail(user.email) ? " · Admin" : ""}</p>
       </div>
-      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4" aria-label="Account summary">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4" role="group" aria-label="Account summary">
         {stats.map((s) => (
           <a key={s.label} href={s.href} className="rounded-xl border border-black/10 bg-[#FFFFFF] p-4 transition-colors hover:border-black/25">
-            <dd className="text-3xl font-bold tracking-tight">{s.value}</dd>
-            <dt className="mt-0.5 text-xs font-semibold uppercase tracking-wide text-[#6B7280]">{s.label}</dt>
+            <span className="block text-3xl font-bold tracking-tight">{s.value}</span>
+            <span className="mt-0.5 block text-xs font-semibold uppercase tracking-wide text-[#6B7280]">{s.label}</span>
           </a>
         ))}
-      </dl>
+      </div>
       <div className="flex flex-wrap gap-2">
         <a href="/add-business" className="rounded-lg bg-[#C9A227] px-4 py-2 font-semibold text-black transition-colors hover:bg-[#B8941F]">Add business</a>
         {isAdminEmail(user.email) && <a href="/admin" className="rounded-lg border border-black/15 px-4 py-2 font-semibold transition-colors hover:bg-black/5">Admin dashboard</a>}

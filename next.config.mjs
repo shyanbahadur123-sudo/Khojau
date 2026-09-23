@@ -8,17 +8,26 @@ const nextConfig = {
   // If next/image is ever adopted, restrict remotePatterns to the exact
   // Supabase storage hostname instead of a wildcard.
   async headers() {
-    // Single-project CSP (this deployment only serves ipnywyozktrzlvsxsyzh).
-    // 'unsafe-inline' scripts/styles are required by Next.js hydration — the
-    // policy still blocks objects, frames, and off-origin media/API calls.
-    // If Khojau ever deploys per-environment, build this string from env.
+    // Supabase origin: single source of truth is NEXT_PUBLIC_SUPABASE_URL
+    // (§37 — F-01 happened because a dead host was hardcoded here).
+    // Falls back to the current project, never to the retired one.
+    // No wildcards: the exact project origin only.
+    const supabaseOrigin = (() => {
+      try {
+        const u = new URL((process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").trim());
+        if (u.protocol !== "https:") throw new Error("non-https");
+        return u.origin;
+      } catch {
+        return "https://ilcdfjsquftqxhhdlvve.supabase.co";
+      }
+    })();
     const csp = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' https://accounts.google.com",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: https://ipnywyozktrzlvsxsyzh.supabase.co",
+      `img-src 'self' data: ${supabaseOrigin}`,
       "font-src 'self' data:",
-      "connect-src 'self' https://ipnywyozktrzlvsxsyzh.supabase.co https://accounts.google.com",
+      `connect-src 'self' ${supabaseOrigin} https://accounts.google.com`,
       "frame-src https://accounts.google.com",
       "form-action 'self' https://accounts.google.com",
       "object-src 'none'",

@@ -15,7 +15,7 @@ export default function ServicesPage() {
         <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">All services</h1>
         <p className="mt-1 text-sm text-[#6B7280]">{CATEGORIES.length} categories across {LOCATIONS.length} cities in Nepal.</p>
       </div>
-      <Suspense fallback={<SearchBarSkeleton />}><SearchBar compact /></Suspense>
+      <Suspense fallback={<SearchBarSkeleton />}><SearchBar /></Suspense>
       <CategoryGrid />
     </div>
   );

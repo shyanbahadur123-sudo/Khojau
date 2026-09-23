@@ -42,7 +42,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
             : `${providers.length} approved provider${providers.length === 1 ? "" : "s"} · sorted by relevance`}
         </p>
       </div>
-      <Suspense fallback={<SearchBarSkeleton />}><SearchBar compact /></Suspense>
+      <Suspense fallback={<SearchBarSkeleton />}><SearchBar /></Suspense>
       {providers.length === 0 ? (
         <div className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-8 text-center shadow-sm">
           <p className="text-lg font-bold tracking-tight">No {c.name.toLowerCase()} listings yet</p>

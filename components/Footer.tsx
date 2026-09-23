@@ -1,14 +1,22 @@
 import Link from "next/link";
-import LogoMark from "@/components/Logo";
 
 export default function Footer() {
   return (
     <footer className="border-t border-black/10 bg-[#FFFFFF]">
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-10 sm:grid-cols-4 sm:px-6">
         <div>
-          <p className="flex items-center gap-2 font-bold text-[#0A0A0A]">
-            <LogoMark className="h-7 w-7" />
-            <span>Khojau<span aria-hidden="true" className="text-[#C9A227]">.</span></span>
+          <p>
+            <Link href="/" aria-label="Khojau home">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.png"
+                alt=""
+                aria-hidden="true"
+                width={74}
+                height={72}
+                className="h-[72px] w-auto mix-blend-multiply dark:rounded-2xl dark:bg-white dark:p-1.5 dark:mix-blend-normal"
+              />
+            </Link>
           </p>
           <p className="mt-2 text-sm text-[#6B7280]">Find trusted local services near you, across Nepal.</p>
         </div>

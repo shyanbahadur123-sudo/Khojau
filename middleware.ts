@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isAdminEmailAddr } from "@/lib/admin-emails";
 
 const PROTECTED_PREFIXES = ["/dashboard", "/admin", "/add-business"];
 const AUTH_PAGES = new Set(["/login", "/register"]);
@@ -41,8 +42,7 @@ export async function middleware(req: NextRequest) {
   if (user && AUTH_PAGES.has(path)) {
     // Role-aware landing: admins start in the moderation hub, everyone
     // else on their personal dashboard. Emails come from server env only.
-    const admins = (process.env.ADMIN_EMAILS ?? "").split(",").map((s) => s.trim().toLowerCase());
-    const isAdmin = Boolean(user.email) && admins.includes((user.email ?? "").toLowerCase());
+    const isAdmin = isAdminEmailAddr(user.email, process.env.ADMIN_EMAILS);
     return NextResponse.redirect(new URL(isAdmin ? "/admin" : "/dashboard", base));
   }
   return res;

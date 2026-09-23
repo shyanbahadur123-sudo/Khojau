@@ -17,7 +17,7 @@ export function SearchBarSkeleton() {
   );
 }
 
-export default function SearchBar({ compact = false }: { compact?: boolean }) {
+export default function SearchBar() {
   const router = useRouter();
   const params = useSearchParams();
   const [service, setService] = useState(params.get("q") ?? params.get("service") ?? "");
