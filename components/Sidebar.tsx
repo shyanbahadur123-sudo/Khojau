@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
-import { ClockIcon, GridIcon, HeartIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, PinIcon, PlusIcon, SearchIcon, UserIcon } from "@/components/UiIcon";
+import { ClockIcon, GridIcon, HeartIcon, HomeIcon, LogoutIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, PinIcon, PlusIcon, SearchIcon, UserIcon } from "@/components/UiIcon";
 import ThemeToggle from "@/components/ThemeToggle";
 
 // Khojau dark-luxury sidebar. The rail is intentionally always dark
@@ -102,6 +102,7 @@ function useSavedCount(signedIn: boolean | null): number | null {
 // Every entry maps to a real route. There is intentionally no "Nearby":
 // Khojau has no geolocation feature, and a dead link would be fake functionality.
 const NAV = [
+  { href: "/dashboard", label: "Dashboard", Icon: HomeIcon, kbd: null },
   { href: "/search", label: "Search", Icon: SearchIcon, kbd: "⌘K" },
   { href: "/services", label: "Services", Icon: GridIcon, kbd: null },
   { href: "/locations", label: "Locations", Icon: PinIcon, kbd: null },
@@ -148,9 +149,23 @@ function RowShell({ active, collapsed, href, label, onNavigate, children }: {
 // One source of truth for sidebar navigation.
 export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boolean; onToggle?: () => void; onNavigate?: () => void }) {
   const path = usePathname();
+  const router = useRouter();
   const signedIn = useSession();
   const email = useSessionEmail();
   const savedCount = useSavedCount(signedIn);
+  const [leaving, setLeaving] = useState(false);
+
+  async function signOut() {
+    if (leaving) return;
+    setLeaving(true);
+    try {
+      await fetch("/api/auth/signout", { method: "POST" });
+    } finally {
+      onNavigate?.();
+      router.push("/");
+      router.refresh();
+    }
+  }
   return (
     <div className="flex h-full flex-col overflow-hidden text-zinc-300">
       <div className={`flex items-center gap-3 pb-4 pt-1 ${collapsed ? "flex-col justify-center px-0" : "px-1"}`}>
@@ -177,20 +192,6 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
           </button>
         )}
       </div>
-      <Link
-        onClick={onNavigate}
-        href="/search"
-        aria-label="New search"
-        title={collapsed ? "New search" : undefined}
-        className={
-          collapsed
-            ? "mx-auto grid h-11 w-11 place-items-center rounded-xl border border-[#D4AF37]/40 text-[#D4AF37] transition-all duration-200 hover:bg-[#D4AF37]/10"
-            : "flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-xl border border-[#D4AF37]/30 px-3 text-sm font-semibold text-[#D4AF37] transition-all duration-200 hover:bg-[#D4AF37]/10"
-        }
-      >
-        <PlusIcon className="h-5 w-5 shrink-0" />
-        {!collapsed && "New Search"}
-      </Link>
       <ul className="mt-2 space-y-0.5">
         {NAV.map(({ href, label, Icon, kbd }) => {
           const active = path === href || path.startsWith(href + "/");
@@ -237,42 +238,63 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
         )}
         <div className="pt-1">
           {signedIn === null ? (
-            <span aria-hidden="true" className={`block animate-pulse rounded-xl bg-white/[0.06] ${collapsed ? "mx-auto h-10 w-10" : "h-[44px]"}`} />
-          ) : collapsed ? (
-            <Link
-              onClick={onNavigate}
-              href={signedIn ? "/dashboard" : "/login"}
-              aria-label={signedIn ? "Dashboard" : "Log in"}
-              title={signedIn ? "Dashboard" : "Log in"}
-              aria-current={path === (signedIn ? "/dashboard" : "/login") ? "page" : undefined}
-              className="mx-auto grid h-11 w-11 place-items-center rounded-xl text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
-            >
-              {signedIn && email ? (
-                <span aria-hidden="true" className="relative grid h-6 w-6 place-items-center rounded-full bg-[#D4AF37]/20 text-xs font-bold text-[#D4AF37]">
-                  {email.charAt(0).toUpperCase()}
-                  <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-[#0B0D10] bg-emerald-400" />
-                </span>
-              ) : (
+            <span aria-hidden="true" className={`block animate-pulse rounded-xl bg-white/[0.06] ${collapsed ? "mx-auto h-11 w-11" : "h-[44px]"}`} />
+          ) : !signedIn ? (
+            collapsed ? (
+              <Link
+                onClick={onNavigate}
+                href="/login"
+                aria-label="Log in"
+                title="Log in"
+                className="mx-auto grid h-11 w-11 place-items-center rounded-xl text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
+              >
                 <UserIcon className="h-5 w-5" />
-              )}
-            </Link>
-          ) : (
-            <Link
-              onClick={onNavigate}
-              href={signedIn ? "/dashboard" : "/login"}
-              aria-current={path === (signedIn ? "/dashboard" : "/login") ? "page" : undefined}
-              className="flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-xl px-3 text-sm font-medium text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
+              </Link>
+            ) : (
+              <Link
+                onClick={onNavigate}
+                href="/login"
+                className="flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-xl px-3 text-sm font-medium text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
+              >
+                <UserIcon className="h-5 w-5 shrink-0" />
+                Log in
+              </Link>
+            )
+          ) : collapsed ? (
+            <button
+              type="button"
+              onClick={() => void signOut()}
+              disabled={leaving}
+              aria-label="Sign out"
+              title="Sign out"
+              className="mx-auto grid h-11 w-11 place-items-center rounded-xl text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white disabled:opacity-60"
             >
-              {signedIn && email ? (
+              <LogoutIcon className="h-5 w-5" />
+            </button>
+          ) : (
+            <>
+              <Link
+                onClick={onNavigate}
+                href="/account"
+                aria-label={email ?? "Account"}
+                className="flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-xl px-3 text-sm font-medium text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
+              >
                 <span aria-hidden="true" className="relative grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#D4AF37]/20 text-xs font-bold text-[#D4AF37]">
-                  {email.charAt(0).toUpperCase()}
+                  {(email ?? "?").charAt(0).toUpperCase()}
                   <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-[#0B0D10] bg-emerald-400" />
                 </span>
-              ) : (
-                <UserIcon className="h-5 w-5 shrink-0" />
-              )}
-              {signedIn ? "Dashboard" : "Log in"}
-            </Link>
+                <span className="min-w-0 flex-1 truncate">{email}</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => void signOut()}
+                disabled={leaving}
+                className="mt-0.5 flex min-h-[44px] w-full items-center gap-3 whitespace-nowrap rounded-xl px-3 text-sm font-medium text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white disabled:opacity-60"
+              >
+                <LogoutIcon className="h-5 w-5 shrink-0" />
+                {leaving ? "Signing out…" : "Sign out"}
+              </button>
+            </>
           )}
         </div>
         {!collapsed && signedIn === false && (
