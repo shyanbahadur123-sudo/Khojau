@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { SavedProviderBatch } from "@/components/SavedProviderBatch";
 import ProviderCard from "@/components/ProviderCard";
-import { getApprovedProviders } from "@/lib/providers";
+import { getApprovedProvidersResult } from "@/lib/providers";
 import { supabaseServer } from "@/lib/supabase-server";
 
 export const metadata: Metadata = {
@@ -27,17 +28,24 @@ export default async function RecentPage() {
     if (e instanceof Error && e.message.includes("NEXT_REDIRECT")) throw e;
     redirect("/login?next=/recent");
   }
-  const all = await getApprovedProviders({ limit: 60 });
+  const { providers: all, error: fetchFailed } = await getApprovedProvidersResult({ limit: 60 });
   return (
     <div className="space-y-6 pt-6">
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Fresh</p>
         <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">Recent</h1>
-        <p className="mt-1 text-sm text-[#6B7280]" role="status">
-          {all.length === 0
-            ? "No approved listings yet."
-            : `${all.length} approved listing${all.length === 1 ? "" : "s"}, newest first.`}
-        </p>
+        {fetchFailed ? (
+          <div role="alert" className="mt-2 rounded-xl bg-red-500/10 p-4 text-sm text-[#6B7280]">
+            <span className="font-semibold text-red-700">Couldn’t load recent listings.</span>{" "}
+            Try again shortly.
+          </div>
+        ) : (
+          <p className="mt-1 text-sm text-[#6B7280]" role="status">
+            {all.length === 0
+              ? "No approved listings yet."
+              : `${all.length} approved listing${all.length === 1 ? "" : "s"}, newest first.`}
+          </p>
+        )}
       </div>
       {all.length === 0 ? (
         <div className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-8 text-center shadow-sm">
@@ -53,7 +61,9 @@ export default async function RecentPage() {
         </div>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {all.map((p) => <ProviderCard key={p.id} provider={p} />)}
+          <SavedProviderBatch>
+            {all.map((p) => <ProviderCard key={p.id} provider={p} />)}
+          </SavedProviderBatch>
         </div>
       )}
     </div>

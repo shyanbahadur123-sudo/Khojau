@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { SavedProviderBatch } from "@/components/SavedProviderBatch";
 import ProviderCard from "@/components/ProviderCard";
 import { LOCATIONS, locationBySlug } from "@/lib/locations";
-import { getApprovedProviders } from "@/lib/providers";
+import { getApprovedProvidersResult } from "@/lib/providers";
 import { rankProviders } from "@/lib/search";
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -21,7 +22,9 @@ export const revalidate = 60;
 export default async function LocationDetailPage({ params }: { params: { slug: string } }) {
   const l = locationBySlug(params.slug);
   if (!l) notFound();
-  const providers = rankProviders(await getApprovedProviders({ location: l.city, limit: 48 }), "", l.city);
+  const fetched = await getApprovedProvidersResult({ location: l.city, limit: 48 });
+  const providers = rankProviders(fetched.providers, "", l.city);
+  const fetchFailed = fetched.error;
   const related = LOCATIONS.filter((x) => x.slug !== l.slug).slice(0, 8);
   return (
     <div className="space-y-6 pt-6">
@@ -30,11 +33,18 @@ export default async function LocationDetailPage({ params }: { params: { slug: s
       </nav>
       <div>
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Local services in {l.city}</h1>
-        <p className="mt-2 text-sm text-[#6B7280]" role="status">
-          {providers.length === 0
-            ? `No approved listings in ${l.city} yet — pick an area below or be the first to list.`
-            : `${providers.length} approved provider${providers.length === 1 ? "" : "s"} · sorted by relevance`}
-        </p>
+        {fetchFailed ? (
+          <div role="alert" className="mt-2 rounded-xl bg-red-500/10 p-4 text-sm text-[#6B7280]">
+            <span className="font-semibold text-red-700">Couldn’t load listings.</span>{" "}
+            Try again shortly, or <a className="underline" href="/request-service">request help directly</a>.
+          </div>
+        ) : (
+          <p className="mt-2 text-sm text-[#6B7280]" role="status">
+            {providers.length === 0
+              ? `No approved listings in ${l.city} yet — pick an area below or be the first to list.`
+              : `${providers.length} approved provider${providers.length === 1 ? "" : "s"} · sorted by relevance`}
+          </p>
+        )}
       </div>
       <div>
         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#6B7280]">Areas in {l.city}</p>
@@ -57,7 +67,9 @@ export default async function LocationDetailPage({ params }: { params: { slug: s
         </div>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {providers.map((p) => <ProviderCard key={p.id} provider={p} />)}
+          <SavedProviderBatch>
+            {providers.map((p) => <ProviderCard key={p.id} provider={p} />)}
+          </SavedProviderBatch>
         </div>
       )}
       <section aria-labelledby="nearby">

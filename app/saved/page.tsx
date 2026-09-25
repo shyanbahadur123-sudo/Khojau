@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { SavedProviderBatch } from "@/components/SavedProviderBatch";
 import { supabaseServer } from "@/lib/supabase-server";
 import ProviderCard from "@/components/ProviderCard";
 import type { Provider } from "@/types/database";
@@ -50,7 +51,9 @@ export default async function SavedPage() {
         </div>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {providers.map((p) => <ProviderCard key={p.id} provider={p} />)}
+          <SavedProviderBatch>
+            {providers.map((p) => <ProviderCard key={p.id} provider={p} />)}
+          </SavedProviderBatch>
         </div>
       )}
     </div>

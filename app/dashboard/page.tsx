@@ -73,7 +73,8 @@ export default async function DashboardPage() {
     .eq("owner_id", user.id)
     .order("updated_at", { ascending: false })
     .order("sort", { referencedTable: "provider_images", ascending: true })
-    .order("weekday", { referencedTable: "provider_hours", ascending: true });
+    .order("weekday", { referencedTable: "provider_hours", ascending: true })
+    .limit(50);
   const rows = (data ?? []) as unknown as OwnedProvider[];
 
   // Customer view: requests I submitted while signed in.

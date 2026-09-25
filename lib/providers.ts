@@ -15,6 +15,25 @@ function cleanLike(input: string): string {
   return input.replace(/[%_,;()\\]/g, "").trim().slice(0, 100);
 }
 
+export type ProvidersResult = { providers: Provider[]; error: boolean };
+
+// Error-aware variant: list pages need to distinguish "database failed"
+// from "genuinely no providers" so the UI doesn't lie with an empty state.
+export async function getApprovedProvidersResult(opts: {
+  search?: string;
+  categorySlug?: string;
+  location?: string;
+  limit?: number;
+}): Promise<ProvidersResult> {
+  const db = supabasePublic();
+  if (!db) return { providers: [], error: true };
+  try {
+    return { providers: await getApprovedProviders(opts), error: false };
+  } catch {
+    return { providers: [], error: true };
+  }
+}
+
 export async function getApprovedProviders(opts: {
   search?: string;
   categorySlug?: string;
@@ -75,10 +94,7 @@ export async function getApprovedProviders(opts: {
     }
   } else {
     const { data, error } = await baseSelect().order("updated_at", { ascending: false });
-    if (error) {
-      console.error("Supabase providers error:", error.message);
-      return [];
-    }
+    if (error) throw error;
     for (const p of (data ?? []) as unknown as Provider[]) byId.set(p.id, p);
   }
 

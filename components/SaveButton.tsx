@@ -1,21 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
 import { HeartIcon } from "@/components/UiIcon";
 import Toast from "@/components/Toast";
+import { SavedContext } from "@/components/SavedProviderBatch";
 
-// Save/unsave toggle persisted in saved_providers (owner RLS).
-// Guests get a login link that returns them to the provider page.
+// Save/unsave heart. When wrapped by <SavedProviderBatch>, state comes from
+// one shared fetch per grid instead of one getUser+select per card.
 export default function SaveButton({ providerId, returnTo }: { providerId: string; returnTo: string }) {
-  const [state, setState] = useState<"loading" | "in" | "out" | "saved" | "unsaved">("loading");
   const [note, setNote] = useState<string | null>(null);
   const inFlight = useRef(false);
+  const batch = useContext(SavedContext);
+  const [fallback, setFallback] = useState<"loading" | "out" | "saved" | "unsaved">("loading");
+  const saved = batch ? batch.saved.has(providerId) : fallback === "saved";
 
   useEffect(() => {
-    if (!isSupabaseConfigured()) {
-      setState("out");
+    if (batch || !isSupabaseConfigured()) {
+      if (!isSupabaseConfigured()) setFallback("out");
       return;
     }
     let live = true;
@@ -24,7 +27,7 @@ export default function SaveButton({ providerId, returnTo }: { providerId: strin
       .then(async ({ data }) => {
         if (!live) return;
         if (!data.user) {
-          setState("out");
+          setFallback("out");
           return;
         }
         const { data: row } = await supabaseBrowser()
@@ -33,82 +36,67 @@ export default function SaveButton({ providerId, returnTo }: { providerId: strin
           .eq("user_id", data.user.id)
           .eq("provider_id", providerId)
           .maybeSingle();
-        if (live) setState(row ? "saved" : "unsaved");
+        if (live) setFallback(row ? "saved" : "unsaved");
       });
     return () => {
       live = false;
     };
-  }, [providerId]);
+  }, [batch, providerId]);
 
   async function toggle() {
-    if (inFlight.current || (state !== "saved" && state !== "unsaved")) return;
+    if (inFlight.current) return;
+    if (batch) {
+      await batch.toggle(providerId);
+      return;
+    }
     inFlight.current = true;
-    const was = state;
     try {
       const sb = supabaseBrowser();
-      const {
-        data: { user },
-      } = await sb.auth.getUser();
+      const user = (await sb.auth.getUser()).data.user;
       if (!user) {
-        setState("out");
+        setFallback("out");
         return;
       }
-      if (was === "saved") {
+      if (saved) {
         const { error } = await sb.from("saved_providers").delete().eq("user_id", user.id).eq("provider_id", providerId);
         if (error) throw error;
-        setState("unsaved");
+        setFallback("unsaved");
         setNote("Removed from saved providers.");
       } else {
         const { error } = await sb.from("saved_providers").insert({ user_id: user.id, provider_id: providerId });
         if (error) throw error;
-        setState("saved");
+        setFallback("saved");
         setNote("Saved — find it anytime under Saved.");
       }
     } catch {
-      setState(was);
+      setNote("Couldn’t update saved providers. Try again.");
     } finally {
       inFlight.current = false;
     }
   }
 
-  if (state === "loading") {
+  const guest = batch ? batch.signedOut : fallback === "out";
+  if (guest) {
     return (
-      <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-lg border border-black/15">
-        <HeartIcon className="h-5 w-5 opacity-30" />
-      </span>
-    );
-  }
-
-  if (state === "out") {
-    return (
-      <Link
-        href={`/login?next=${encodeURIComponent(returnTo)}`}
-        aria-label="Log in to save this provider"
-        className="grid h-11 w-11 place-items-center rounded-lg border border-black/15 transition-colors hover:bg-black/5"
-      >
+      <Link href={`/login?next=${encodeURIComponent(returnTo)}`} aria-label="Log in to save this provider" className="grid h-11 w-11 place-items-center rounded-lg border border-black/15 transition-colors hover:bg-black/5">
         <HeartIcon className="h-5 w-5" />
       </Link>
     );
   }
-
-  const saved = state === "saved";
-  const toggling = state !== "saved" && state !== "unsaved";
   return (
     <>
       <button
         type="button"
         onClick={() => void toggle()}
-        disabled={toggling}
+        disabled={fallback === "loading"}
         aria-pressed={saved}
         aria-label={saved ? "Remove from saved providers" : "Save this provider"}
         title={saved ? "Saved" : "Save"}
-        className={`grid h-11 w-11 place-items-center rounded-lg border transition-all active:scale-95 disabled:opacity-70 ${
-          saved ? "border-[#7A5C00]/50 text-[#7A5C00]" : "border-black/15 hover:bg-black/5"
-        }`}
+        className={`grid h-11 w-11 place-items-center rounded-lg border transition-all active:scale-95 disabled:opacity-70 ${saved ? "border-[#7A5C00]/50 text-[#7A5C00]" : "border-black/15 hover:bg-black/5"}`}
       >
         <HeartIcon className="h-5 w-5" filled={saved} />
       </button>
-      {note && <Toast message={note} type="success" onClose={() => setNote(null)} />}
+      {note && <Toast message={note} type={note.startsWith("Couldn’t") ? "error" : "success"} onClose={() => setNote(null)} />}
     </>
   );
 }

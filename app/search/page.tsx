@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import SearchBar, { SearchBarSkeleton } from "@/components/SearchBar";
 import ProviderCard from "@/components/ProviderCard";
-import { getApprovedProviders } from "@/lib/providers";
+import { SavedProviderBatch } from "@/components/SavedProviderBatch";
+import { getApprovedProvidersResult } from "@/lib/providers";
 import { filterProviders, rankProviders } from "@/lib/search";
 import { CATEGORIES, categoryBySlug } from "@/lib/categories";
 
@@ -47,7 +48,27 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
   const verifiedParam = verifiedOnly ? "1" : "";
   const hasActiveFilter = Boolean(query || location || categorySlug || plan || verifiedOnly || minPrice != null || maxPrice != null);
 
-  let providers = await getApprovedProviders({ search: query, location, categorySlug: categorySlug || undefined, limit: 60 });
+  const { providers: found, error: fetchFailed } = await getApprovedProvidersResult({
+    search: query,
+    location,
+    categorySlug: categorySlug || undefined,
+    limit: 60,
+  });
+  if (fetchFailed) {
+    return (
+      <div className="space-y-6 pt-6">
+        <h1 className="text-2xl font-bold">Search services</h1>
+        <div role="alert" className="rounded-xl bg-red-500/10 p-6 text-sm">
+          <p className="font-semibold text-red-700">Search is temporarily unavailable.</p>
+          <p className="mt-1 text-[#6B7280]">
+            This is on our side — your search is safe. <a href="/search" className="underline underline-offset-2">Try again</a> or
+            <a className="underline" href="/request-service"> request the service directly</a>.
+          </p>
+        </div>
+      </div>
+    );
+  }
+  let providers = found;
   providers = filterProviders(providers, { verifiedOnly, plan: plan || undefined, minPrice, maxPrice });
   providers = rankProviders(providers, query, location);
   // Explicit sort overrides relevance ranking. Unknown values fall back to relevance (validated above).
@@ -117,9 +138,11 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
         {location && <> in <strong>{location}</strong></>}
       </p>
       <h2 className="sr-only">Results</h2>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {paged.map((p) => <ProviderCard key={p.id} provider={p} />)}
-      </div>
+      <SavedProviderBatch>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {paged.map((p) => <ProviderCard key={p.id} provider={p} />)}
+        </div>
+      </SavedProviderBatch>
       {total === 0 && (
         <div className="rounded-xl bg-[#FFFFFF] p-6 text-sm">
           <p className="font-semibold">Nothing matched your search.</p>

@@ -250,7 +250,7 @@ export default function ImageManager({ providerId, businessName, status, initial
                   aria-label={`Caption for photo ${i + 1}`}
                   defaultValue={img.caption ?? ""}
                   placeholder="Caption (optional)"
-                  className="mt-1 w-full rounded border border-black/15 px-2 py-1 text-xs"
+                  className="mt-1 min-h-[44px] w-full rounded border border-black/15 px-2 py-1 text-xs"
                   onBlur={(e) => {
                     if (e.target.value !== (img.caption ?? "")) void saveCaption(img.id, e.target.value);
                   }}

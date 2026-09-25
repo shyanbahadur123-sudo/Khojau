@@ -3,12 +3,13 @@ import { Suspense } from "react";
 import Link from "next/link";
 import SearchBar, { SearchBarSkeleton } from "@/components/SearchBar";
 import CategoryGrid from "@/components/CategoryGrid";
+import { SavedProviderBatch } from "@/components/SavedProviderBatch";
 import CategoryIcon from "@/components/CategoryIcon";
 import { CheckIcon, SearchIcon, UserIcon } from "@/components/UiIcon";
 import ProviderCard from "@/components/ProviderCard";
 import { CATEGORIES } from "@/lib/categories";
 import { LOCATIONS } from "@/lib/locations";
-import { getApprovedProviders } from "@/lib/providers";
+import { getApprovedProvidersResult } from "@/lib/providers";
 import { getTrendingProviders, getUrgentNeeds } from "@/lib/discovery";
 import { stringifyJsonLd } from "@/lib/validation";
 import { supabaseServer } from "@/lib/supabase-server";
@@ -60,7 +61,7 @@ export default async function HomePage() {
   // Single bounded fetch; sections derive from it (no duplicate queries).
   // Discovery sections are independently fail-safe: no key, no events, or no
   // open requests each yield [] and the section hides — never fake content.
-  const all = await getApprovedProviders({ limit: 12 });
+  const { providers: all, error: listingsFailed } = await getApprovedProvidersResult({ limit: 12 });
   const [trending, urgent] = await Promise.all([getTrendingProviders(6), getUrgentNeeds(6)]);
   const featured = all.filter((p) => p.plan === "featured" || p.plan === "premium");
   const latest = all.filter((p) => p.plan !== "featured" && p.plan !== "premium").slice(0, 6);
@@ -122,7 +123,17 @@ export default async function HomePage() {
       </section>
 
       {loggedIn ? (
-        latest.length > 0 && (
+        listingsFailed ? (
+          <section aria-labelledby="latest" className="scroll-mt-20 rounded-2xl border border-red-300/60 bg-red-500/10 p-6 text-center">
+            <h2 id="latest" className="text-xl font-bold tracking-tight">Recent listings</h2>
+            <p className="mx-auto mt-2 max-w-md text-sm text-[#6B7280]">
+              We couldn’t load recent listings right now. Your account is fine — try again shortly.
+            </p>
+            <div className="mt-4 flex flex-wrap justify-center gap-3">
+              <Link href="/" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Refresh</Link>
+            </div>
+          </section>
+        ) : latest.length > 0 && (
           <section aria-labelledby="latest" className="scroll-mt-20">
             <div className="mb-1 flex items-center justify-between">
               <h2 id="latest" className="text-xl font-bold tracking-tight">Recent</h2>
@@ -130,7 +141,9 @@ export default async function HomePage() {
             </div>
             <p className="mb-4 text-sm text-[#6B7280]">Newly approved listings, newest first.</p>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {latest.map((p) => <ProviderCard key={p.id} provider={p} />)}
+              <SavedProviderBatch>
+                {latest.map((p) => <ProviderCard key={p.id} provider={p} />)}
+              </SavedProviderBatch>
             </div>
           </section>
         )
@@ -175,7 +188,9 @@ export default async function HomePage() {
         <section aria-labelledby="featured">
           <h2 id="featured" className="mb-4 text-xl font-bold tracking-tight">Featured providers</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((p) => <ProviderCard key={p.id} provider={p} />)}
+            <SavedProviderBatch>
+              {featured.map((p) => <ProviderCard key={p.id} provider={p} />)}
+            </SavedProviderBatch>
           </div>
         </section>
       )}
@@ -188,7 +203,9 @@ export default async function HomePage() {
           </div>
           <p className="mb-4 text-sm text-[#6B7280]">Ranked by real visits and contact taps in the last 14 days.</p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {trending.map((p) => <ProviderCard key={p.id} provider={p} />)}
+            <SavedProviderBatch>
+              {trending.map((p) => <ProviderCard key={p.id} provider={p} />)}
+            </SavedProviderBatch>
           </div>
         </section>
       )}

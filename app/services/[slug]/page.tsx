@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { SavedProviderBatch } from "@/components/SavedProviderBatch";
 import ProviderCard from "@/components/ProviderCard";
 import SearchBar, { SearchBarSkeleton } from "@/components/SearchBar";
 import CategoryIcon from "@/components/CategoryIcon";
 import { CATEGORIES, categoryBySlug } from "@/lib/categories";
-import { getApprovedProviders } from "@/lib/providers";
+import { getApprovedProvidersResult } from "@/lib/providers";
 import { rankProviders } from "@/lib/search";
 import { stringifyJsonLd } from "@/lib/validation";
 
@@ -25,7 +26,8 @@ export const revalidate = 60;
 export default async function ServiceDetailPage({ params }: { params: { slug: string } }) {
   const c = categoryBySlug(params.slug);
   if (!c) notFound();
-  const providers = rankProviders(await getApprovedProviders({ categorySlug: c.slug, limit: 48 }), c.name, "");
+  const fetched = await getApprovedProvidersResult({ categorySlug: c.slug, limit: 48 });
+  const providers = rankProviders(fetched.providers, c.name, "");
   const related = CATEGORIES.filter((x) => x.slug !== c.slug).slice(0, 8);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   return (
@@ -36,11 +38,18 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
       <div>
         <h1 className="flex items-center gap-3 text-2xl font-bold tracking-tight sm:text-3xl"><span className="grid h-11 w-11 place-items-center rounded-xl bg-[#C9A227]/15 text-[#7A5C00]"><CategoryIcon slug={c.slug} className="h-5 w-5" /></span>{c.name} in Nepal</h1>
         {c.description && <p className="mt-2 max-w-2xl text-[#6B7280]">{c.description}</p>}
-        <p className="mt-2 text-sm text-[#6B7280]" role="status">
-          {providers.length === 0
-            ? "No approved listings yet — be the first, or request this service below."
-            : `${providers.length} approved provider${providers.length === 1 ? "" : "s"} · sorted by relevance`}
-        </p>
+        {fetched.error ? (
+          <div role="alert" className="mt-2 rounded-xl bg-red-500/10 p-4 text-sm text-[#6B7280]">
+            <span className="font-semibold text-red-700">Couldn’t load listings.</span>{" "}
+            Try again shortly, or <a className="underline" href="/request-service">request the service</a>.
+          </div>
+        ) : (
+          <p className="mt-2 text-sm text-[#6B7280]" role="status">
+            {providers.length === 0
+              ? "No approved listings yet — be the first, or request this service below."
+              : `${providers.length} approved provider${providers.length === 1 ? "" : "s"} · sorted by relevance`}
+          </p>
+        )}
       </div>
       <Suspense fallback={<SearchBarSkeleton />}><SearchBar /></Suspense>
       {providers.length === 0 ? (
@@ -54,7 +63,9 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
         </div>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {providers.map((p) => <ProviderCard key={p.id} provider={p} />)}
+          <SavedProviderBatch>
+            {providers.map((p) => <ProviderCard key={p.id} provider={p} />)}
+          </SavedProviderBatch>
         </div>
       )}
       <section aria-labelledby="related">
