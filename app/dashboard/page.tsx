@@ -63,10 +63,11 @@ export default async function DashboardPage() {
     );
   }
   const { data: { user } } = await sb.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/login?next=/dashboard");
 
   // Cookie-authenticated query: RLS "owners read own" applies to this session.
-  const { data } = await sb
+  // Errors are surfaced (never mistaken for "no listings").
+  const { data, error: listingsError } = await sb
     .from("providers")
     .select("id,business_name,slug,status,verification_status,plan,phone,whatsapp,email,website,facebook,instagram,city,area,address,description,price_min,price_max,logo_url,cover_image_url,categories(slug),provider_images(id,url,caption,sort),services(id,name,price_min,price_max),provider_hours(weekday,open_time,close_time,is_closed)")
     .eq("owner_id", user.id)
@@ -76,7 +77,7 @@ export default async function DashboardPage() {
   const rows = (data ?? []) as unknown as OwnedProvider[];
 
   // Customer view: requests I submitted while signed in.
-  const { data: myRequests } = await sb
+  const { data: myRequests, error: myRequestsError } = await sb
     .from("service_requests")
     .select("id,service,location,description,preferred_time,phone,status,provider_id,service_id,customer_id,created_at,providers(business_name,slug)")
     .eq("customer_id", user.id)
@@ -85,17 +86,33 @@ export default async function DashboardPage() {
 
   // Provider view: requests addressed to my listings.
   const myIds = rows.map((p) => p.id);
-  const { data: incoming } = myIds.length
+  const { data: incoming, error: incomingError } = myIds.length
     ? await sb
         .from("service_requests")
         .select("id,service,location,description,preferred_time,phone,status,provider_id,service_id,customer_id,created_at,providers(business_name,slug)")
         .in("provider_id", myIds)
         .order("created_at", { ascending: false })
         .limit(100)
-    : { data: [] as ServiceRequestRow[] | null };
+    : { data: [] as ServiceRequestRow[] | null, error: null };
 
   const incomingRows = (incoming ?? []) as unknown as ServiceRequestRow[];
   const myRequestRows = (myRequests ?? []) as unknown as ServiceRequestRow[];
+  const requestsError = myRequestsError ?? incomingError;
+  if (listingsError) {
+    return (
+      <div className="space-y-6 pt-6">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Dashboard</p>
+          <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">My listings</h1>
+        </div>
+        <div role="alert" className="rounded-2xl border border-red-300 bg-red-500/10 p-6 text-center">
+          <p className="font-semibold text-red-700">Couldn’t load your listings.</p>
+          <p className="mt-1 text-sm text-[#6B7280]">Check your connection and try again — your data is safe.</p>
+          <a href="/dashboard" className="mt-4 inline-block rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Try again</a>
+        </div>
+      </div>
+    );
+  }
   const pendingCount = rows.filter((p) => p.status === "pending").length;
   const liveCount = rows.filter((p) => p.status === "approved").length;
   const openIncoming = incomingRows.filter((r) => r.status === "open").length;
@@ -128,6 +145,11 @@ export default async function DashboardPage() {
         <form action="/api/auth/signout" method="post"><button className="rounded-lg border border-black/15 px-4 py-2 font-medium transition-colors hover:bg-black/5">Sign out</button></form>
       </div>
       <div id="requests" className="scroll-mt-20">
+        {requestsError && (
+          <p role="alert" className="mb-3 rounded-lg bg-red-500/10 p-3 text-sm text-red-700">
+            Couldn’t load service requests. <a href="/dashboard" className="underline underline-offset-2">Try again</a>
+          </p>
+        )}
         <RequestManager incoming={incomingRows} mine={myRequestRows} />
       </div>
       <section id="listings" aria-label="Your listings" className="scroll-mt-20">
