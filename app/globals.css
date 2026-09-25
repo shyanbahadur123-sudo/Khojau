@@ -138,3 +138,18 @@ textarea:focus-visible {
   transition: transform 0.15s ease;
 }
 .skip-link:focus { transform: translateY(0); }
+
+/* Mobile slide-over drawer entrance. */
+@keyframes khojau-slide-in {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.animate-slide-in {
+  animation: khojau-slide-in 0.2s ease-out;
+}
+
+/* Gold focus ring inside the dark sidebar (global rule uses dark ink). */
+#khojau-sidebar :focus-visible,
+nav[aria-label="Mobile"] :focus-visible {
+  outline-color: #D4AF37;
+}

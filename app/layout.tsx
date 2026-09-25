@@ -2,9 +2,8 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Suspense } from "react";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
+import AppShell from "@/components/AppShell";
 import AuthCodeHandler from "@/components/AuthCodeHandler";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -41,7 +40,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen overflow-x-clip antialiased">
         {/* iOS standalone web-app mode (Next 14 viewport API lacks appleWebApp) */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -56,14 +55,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <Header />
         <Suspense>
           <AuthCodeHandler />
         </Suspense>
-        <main id="main" className="mx-auto w-full max-w-6xl px-4 pb-24 sm:px-6 sm:pb-16">
+        <AppShell>
           {children}
-        </main>
-        <Footer />
+        </AppShell>
         <BottomNav />
       </body>
     </html>

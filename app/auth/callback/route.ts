@@ -16,7 +16,7 @@ export async function GET(req: Request) {
     return NextResponse.redirect(new URL(`/login?error=${kind}`, base));
   }
 
-  const next = safeRedirectPath(url.searchParams.get("next"));
+  const next = safeRedirectPath(url.searchParams.get("next"), "/");
   const fail = () => NextResponse.redirect(new URL("/login?error=oauth_failed", base));
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;

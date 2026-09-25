@@ -33,7 +33,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
       // exact strings, so the registered value must be exactly
       // `<origin>/auth/callback` with no query (?next= would break the match
       // and Supabase would fall back to Site URL). Post-login landing is
-      // /dashboard; email/password logins keep deep-link `next` support.
+      // the app home; email/password logins keep deep-link `next` support.
       const { error: oauthErr } = await sb.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo: `${window.location.origin}/auth/callback` },
@@ -79,11 +79,12 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
               const { error } = await sb.auth.signInWithPassword({ email, password });
               if (error) throw error;
             }
-            // Role-aware landing: admins start in the moderation hub.
-            let dest = safeRedirectPath(params.get("next"));
+            // Role-aware landing: members land on the app home, admins
+            // start in the moderation hub. Deep-link `next` still wins.
+            let dest = safeRedirectPath(params.get("next"), "/");
             try {
               const role = await fetch("/api/auth/role", { cache: "no-store" }).then((r) => r.json());
-              if (role?.admin && dest === "/dashboard") dest = "/admin";
+              if (role?.admin && dest === "/") dest = "/admin";
             } catch {
               // Role check is a nicety; login already succeeded.
             }

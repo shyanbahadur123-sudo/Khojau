@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getProviderBySlug } from "@/lib/providers";
 import { directionsUrl, whatsappUrl } from "@/lib/search";
 import { stringifyJsonLd } from "@/lib/validation";
@@ -9,8 +9,30 @@ import { WEEKDAYS } from "@/types/database";
 import { VerifiedBadge } from "@/components/ProviderCard";
 import ReportButton from "@/components/ReportButton";
 import ContactTracker from "@/components/ContactTracker";
+import { supabaseServer } from "@/lib/supabase-server";
+
+async function requireMember(slug: string) {
+  try {
+    const sb = supabaseServer();
+    if (!sb) redirect(`/login?next=/provider/${encodeURIComponent(slug)}`);
+    const { data: { user } } = await sb.auth.getUser();
+    if (!user) redirect(`/login?next=/provider/${encodeURIComponent(slug)}`);
+  } catch (e) {
+    if (e instanceof Error && e.message.includes("NEXT_REDIRECT")) throw e;
+    redirect(`/login?next=/provider/${encodeURIComponent(slug)}`);
+  }
+}
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  // Don't leak business names / descriptions to guests via metadata.
+  try {
+    const sb = supabaseServer();
+    if (!sb) return { title: "Log in required", robots: { index: false, follow: false } };
+    const { data: { user } } = await sb.auth.getUser();
+    if (!user) return { title: "Log in required", robots: { index: false, follow: false } };
+  } catch {
+    return { title: "Log in required", robots: { index: false, follow: false } };
+  }
   const p = await getProviderBySlug(params.slug);
   if (!p) return { title: "Provider not found" };
   return {
@@ -24,6 +46,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 export const revalidate = 60;
 
 export default async function ProviderPage({ params }: { params: { slug: string } }) {
+  // Members-only (defense in depth: middleware already redirects guests).
+  await requireMember(params.slug);
   const p = await getProviderBySlug(params.slug);
   if (!p) notFound();
   const wa = whatsappUrl(p.whatsapp ?? p.phone);

@@ -40,17 +40,19 @@ async function main() {
   }
 
   // Protected pages redirect guests to login
-  for (const path of ["/dashboard", "/admin", "/add-business", "/saved", "/account", "/requests"]) {
+  for (const path of ["/dashboard", "/admin", "/add-business", "/saved", "/account", "/requests", "/recent", "/provider/test-slug"]) {
     const r = await get(path);
     const loc = r.headers.get("location") ?? "";
     if ((r.status === 307 || r.status === 308) && loc.includes("/login")) ok(`guard:${path}`, `${r.status}`);
     else fail(`guard:${path}`, `${r.status} loc=${loc.slice(0, 60)}`);
   }
 
-  // Missing provider → 404 (not 500, not leak)
+  // Missing provider → login gate for guests (307/308), 404 when logged in
   {
     const r = await get("/provider/definitely-not-a-real-slug-123");
+    const loc = r.headers.get("location") ?? "";
     if (r.status === 404) ok("missing-provider-404", "");
+    else if ((r.status === 307 || r.status === 308) && loc.includes("/login")) ok("missing-provider-404", `gated ${r.status}`);
     else fail("missing-provider-404", `got ${r.status}`);
   }
 

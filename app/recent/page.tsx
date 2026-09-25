@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import ProviderCard from "@/components/ProviderCard";
 import { getApprovedProviders } from "@/lib/providers";
+import { supabaseServer } from "@/lib/supabase-server";
 
 export const metadata: Metadata = {
   title: "Recent listings",
@@ -12,6 +14,19 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function RecentPage() {
+  // Members-only (defense in depth: middleware already redirects guests).
+  try {
+    const sb = supabaseServer();
+    if (sb) {
+      const { data: { user } } = await sb.auth.getUser();
+      if (!user) redirect("/login?next=/recent");
+    } else {
+      redirect("/login?next=/recent");
+    }
+  } catch (e) {
+    if (e instanceof Error && e.message.includes("NEXT_REDIRECT")) throw e;
+    redirect("/login?next=/recent");
+  }
   const all = await getApprovedProviders({ limit: 60 });
   return (
     <div className="space-y-6 pt-6">

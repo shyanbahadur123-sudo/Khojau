@@ -21,9 +21,16 @@ const nextConfig = {
         return "https://ilcdfjsquftqxhhdlvve.supabase.co";
       }
     })();
+    // Next.js dev needs 'unsafe-eval' for React Refresh / HMR. Without it,
+    // the dev runtime throws EvalError and ALL client interactivity breaks
+    // (ThemeToggle, Show password, menus). Production never needs eval, so
+    // keep it strict there.
+    const isDev = process.env.NODE_ENV !== "production";
+    const scriptSrc = ["script-src 'self' 'unsafe-inline' https://accounts.google.com"];
+    if (isDev) scriptSrc.push("'unsafe-eval'");
     const csp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://accounts.google.com",
+      scriptSrc.join(" "),
       "style-src 'self' 'unsafe-inline'",
       `img-src 'self' data: ${supabaseOrigin}`,
       "font-src 'self' data:",
