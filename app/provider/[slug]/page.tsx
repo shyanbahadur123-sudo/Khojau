@@ -120,8 +120,8 @@ export default async function ProviderPage({ params }: { params: { slug: string 
               <ul className="mt-2 divide-y divide-black/10 text-sm">
                 {(p.services ?? []).map((s) => (
                   <li key={s.id} className="flex items-center justify-between gap-2 py-2">
-                    <span>{s.name}</span>
-                    <span className="flex items-center gap-2">
+                    <span className="min-w-0 flex-1 break-words">{s.name}</span>
+                    <span className="flex shrink-0 items-center gap-2">
                       {(s.price_min != null || s.price_max != null) && (
                         <span className="text-[#6B7280]">Rs.{s.price_min ?? "?"}–{s.price_max ?? "?"}</span>
                       )}
@@ -154,7 +154,7 @@ export default async function ProviderPage({ params }: { params: { slug: string 
         <section aria-label={`Photos of ${p.business_name}`} className="overflow-hidden rounded-2xl bg-[#FFFFFF] shadow-sm">
           {p.cover_image_url && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={sizedImageUrl(p.cover_image_url, 1200)} alt={`${p.business_name} cover photo`} className="aspect-[16/9] w-full object-cover sm:aspect-[21/9]" loading="lazy" />
+            <img src={sizedImageUrl(p.cover_image_url, 1200)} srcSet={`${sizedImageUrl(p.cover_image_url, 400)} 400w, ${sizedImageUrl(p.cover_image_url, 800)} 800w, ${sizedImageUrl(p.cover_image_url, 1200)} 1200w`} sizes="(max-width: 640px) 100vw, 1024px" alt={`${p.business_name} cover photo`} className="aspect-[16/9] w-full object-cover sm:aspect-[21/9]" loading="eager" fetchPriority="high" decoding="async" />
           )}
           <div className="flex flex-wrap items-center gap-4 p-6">
             {p.logo_url && (
@@ -181,9 +181,9 @@ export default async function ProviderPage({ params }: { params: { slug: string 
           <h2 id="contact" className="font-bold">Contact & address</h2>
           <dl className="mt-2 space-y-1 text-sm">
             <div><dt className="inline font-semibold">Phone: </dt><dd className="inline"><a href={`tel:${p.phone}`} className="text-[#111111] hover:underline">{p.phone}</a></dd></div>
-            {p.address && <div><dt className="inline font-semibold">Address: </dt><dd className="inline">{p.address}{p.area ? `, ${p.area}` : ""}, {p.city}</dd></div>}
-            {p.email && <div><dt className="inline font-semibold">Email: </dt><dd className="inline">{p.email}</dd></div>}
-            {p.website && <div><dt className="inline font-semibold">Website: </dt><dd className="inline"><a href={p.website} target="_blank" rel="noopener" className="text-[#111111] hover:underline">{p.website}</a></dd></div>}
+            {p.address && <div><dt className="inline font-semibold">Address: </dt><dd className="inline break-words">{p.address}{p.area ? `, ${p.area}` : ""}, {p.city}</dd></div>}
+            {p.email && <div><dt className="inline font-semibold">Email: </dt><dd className="inline"><a href={`mailto:${p.email}`} className="break-all text-[#111111] hover:underline">{p.email}</a></dd></div>}
+            {p.website && <div><dt className="inline font-semibold">Website: </dt><dd className="inline"><a href={p.website} target="_blank" rel="noopener" className="break-all text-[#111111] hover:underline">{p.website}</a></dd></div>}
             {(p.facebook || p.instagram) && (
               <div className="flex gap-3 pt-1">
                 {p.facebook && <a href={p.facebook} target="_blank" rel="noopener" className="text-[#111111] hover:underline">Facebook</a>}

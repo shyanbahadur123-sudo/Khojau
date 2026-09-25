@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { audit, getAdminContext } from "@/lib/admin";
+import { isSameOriginRequest } from "@/lib/validation";
 import { z } from "zod";
 
 const schema = z.object({
@@ -10,6 +11,7 @@ const schema = z.object({
 export async function POST(req: Request) {
   const ctx = await getAdminContext();
   if (!ctx) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!isSameOriginRequest(req)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const parsed = schema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
@@ -23,12 +25,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Operation failed. Please try again." }, { status: 500 });
   }
 
-  await audit(ctx.admin, {
+  const auditLogged = await audit(ctx.admin, {
     actor_id: ctx.userId,
     action: `report.${parsed.data.action}`,
     target_type: "report",
     target_id: parsed.data.id,
     metadata: {},
   });
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, auditLogged });
 }

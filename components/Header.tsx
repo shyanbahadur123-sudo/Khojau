@@ -20,8 +20,9 @@ export default function Header({ mobileOpen, onMenu }: HeaderProps) {
         <button
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
+          aria-controls="mobile-nav"
           onClick={onMenu}
-          className="grid h-10 w-10 cursor-pointer place-items-center rounded-lg border border-black/15 hover:bg-black/5"
+          className="grid h-11 w-11 cursor-pointer place-items-center rounded-lg border border-black/15 hover:bg-black/5"
         >
           <span aria-hidden="true" className="flex flex-col gap-[5px]">
             <span className="block h-[2px] w-5 rounded bg-current" />

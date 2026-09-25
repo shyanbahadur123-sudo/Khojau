@@ -79,9 +79,10 @@ export default function AdminProviderActions({ rows }: { rows: Row[] }) {
             <button disabled={busy !== null} onClick={() => act(p.id, "unverify")} className="rounded-lg border px-3 py-1.5">Unverify</button>
             <select
               defaultValue={p.plan}
+              disabled={busy !== null}
               aria-label={`Plan for ${p.business_name}`}
               onChange={(e) => act(p.id, "plan", { plan: e.target.value })}
-              className="rounded-lg border px-2 py-1.5"
+              className="rounded-lg border px-2 py-1.5 disabled:opacity-60"
             >
               <option value="free">free</option>
               <option value="featured">featured (Rs.299/mo)</option>

@@ -28,8 +28,8 @@ export async function GET(req: Request) {
   const sb = createServerClient(supabaseUrl, supabaseAnon, {
     cookies: {
       get: (n: string) => cookies().get(n)?.value,
-      set: (n: string, v: string, o?: object) => res.cookies.set(n, v, o as never),
-      remove: (n: string, o?: object) => res.cookies.set(n, "", o as never),
+      set: (n: string, v: string, o?: object) => res.cookies.set(n, v, { ...(o as object), path: "/", httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production" } as never),
+      remove: (n: string, o?: object) => res.cookies.set(n, "", { ...(o as object), path: "/", httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production" } as never),
     },
   });
   const { error } = await sb.auth.exchangeCodeForSession(code);

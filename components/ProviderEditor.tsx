@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase";
 import { providerSchema } from "@/lib/validation";
 import { CATEGORIES } from "@/lib/categories";
@@ -27,6 +27,7 @@ export default function ProviderEditor({ provider }: { provider: EditableProvide
   const [saved, setSaved] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const inFlight = useRef(false);
 
   return (
     <form
@@ -34,6 +35,8 @@ export default function ProviderEditor({ provider }: { provider: EditableProvide
       className="mt-3 space-y-3 rounded-xl border border-black/10 bg-white/60 p-4"
       onSubmit={async (e) => {
         e.preventDefault();
+        if (inFlight.current) return;
+        inFlight.current = true;
         setError(null);
         setSaved(null);
         setLoading(true);
@@ -71,11 +74,12 @@ export default function ProviderEditor({ provider }: { provider: EditableProvide
         } catch (err) {
           setError(err instanceof Error ? err.message : "Save failed.");
         } finally {
+          inFlight.current = false;
           setLoading(false);
         }
       }}
     >
-      <h3 className="text-sm font-bold">Business information</h3>
+      <h4 className="text-sm font-bold">Business information</h4>
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
           <label className="text-sm font-semibold" htmlFor={`bn-${provider.id}`}>Business name *</label>
@@ -146,3 +150,4 @@ export default function ProviderEditor({ provider }: { provider: EditableProvide
     </form>
   );
 }
+

@@ -125,7 +125,7 @@ function RowShell({ active, collapsed, href, label, onNavigate, children }: {
         aria-label={label}
         title={label}
         aria-current={active ? "page" : undefined}
-        className={`relative mx-auto grid h-10 w-10 place-items-center rounded-xl transition-all duration-200 hover:bg-white/[0.06] hover:text-white active:bg-white/10 ${active ? "bg-white/[0.08] text-[#D4AF37] shadow-[0_0_16px_-4px_rgba(212,175,55,0.5)]" : "text-zinc-400"}`}
+        className={`relative mx-auto grid h-11 w-11 place-items-center rounded-xl transition-all duration-200 hover:bg-white/[0.06] hover:text-white active:bg-white/10 ${active ? "bg-white/[0.08] text-[#D4AF37] shadow-[0_0_16px_-4px_rgba(212,175,55,0.5)]" : "text-zinc-400"}`}
       >
         {active && <span aria-hidden="true" className="absolute left-[-12px] h-5 w-1 rounded-full bg-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.8)]" />}
         {children}
@@ -171,7 +171,7 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
             aria-expanded={!collapsed}
             aria-controls="khojau-sidebar"
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl text-zinc-500 transition-colors hover:bg-white/[0.06] hover:text-white"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-zinc-500 transition-colors hover:bg-white/[0.06] hover:text-white"
           >
             {collapsed ? <PanelLeftOpenIcon className="h-5 w-5" /> : <PanelLeftCloseIcon className="h-5 w-5" />}
           </button>
@@ -184,7 +184,7 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
         title={collapsed ? "New search" : undefined}
         className={
           collapsed
-            ? "mx-auto grid h-10 w-10 place-items-center rounded-xl border border-[#D4AF37]/40 text-[#D4AF37] transition-all duration-200 hover:bg-[#D4AF37]/10"
+            ? "mx-auto grid h-11 w-11 place-items-center rounded-xl border border-[#D4AF37]/40 text-[#D4AF37] transition-all duration-200 hover:bg-[#D4AF37]/10"
             : "flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-xl border border-[#D4AF37]/30 px-3 text-sm font-semibold text-[#D4AF37] transition-all duration-200 hover:bg-[#D4AF37]/10"
         }
       >
@@ -220,7 +220,7 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
         title={collapsed ? "Add your business" : undefined}
         className={
           collapsed
-            ? "mx-auto grid h-10 w-10 place-items-center rounded-xl bg-[#D4AF37] text-[#0B0D10] shadow-[0_4px_20px_-6px_rgba(212,175,55,0.7)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
+            ? "mx-auto grid h-11 w-11 place-items-center rounded-xl bg-[#D4AF37] text-[#0B0D10] shadow-[0_4px_20px_-6px_rgba(212,175,55,0.7)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
             : "flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-xl bg-[#D4AF37] px-3 text-sm font-semibold text-[#0B0D10] shadow-[0_4px_24px_-8px_rgba(212,175,55,0.8)] transition-all duration-200 hover:brightness-110 active:scale-[0.99]"
         }
       >
@@ -245,7 +245,7 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
               aria-label={signedIn ? "Dashboard" : "Log in"}
               title={signedIn ? "Dashboard" : "Log in"}
               aria-current={path === (signedIn ? "/dashboard" : "/login") ? "page" : undefined}
-              className="mx-auto grid h-10 w-10 place-items-center rounded-xl text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
+              className="mx-auto grid h-11 w-11 place-items-center rounded-xl text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
             >
               {signedIn && email ? (
                 <span aria-hidden="true" className="relative grid h-6 w-6 place-items-center rounded-full bg-[#D4AF37]/20 text-xs font-bold text-[#D4AF37]">

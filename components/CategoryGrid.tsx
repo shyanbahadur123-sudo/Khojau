@@ -5,7 +5,7 @@ import CategoryIcon from "@/components/CategoryIcon";
 export default function CategoryGrid({ limit }: { limit?: number }) {
   const list = limit ? CATEGORIES.slice(0, limit) : CATEGORIES;
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" aria-label="Service categories">
+    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
       {list.map((c) => (
         <li key={c.slug}>
           <Link

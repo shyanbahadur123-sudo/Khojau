@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase";
 import { REQUEST_NEXT_ACTIONS, formatRequestStatus, type RequestStatus } from "@/lib/request-status";
 import type { ServiceRequestRow } from "@/types/database";
@@ -12,8 +12,8 @@ function RequestCard({ r, children }: { r: ServiceRequestRow; children?: React.R
         <p className="font-semibold">{r.service}</p>
         <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs font-semibold">{formatRequestStatus(r.status)}</span>
       </div>
-      <p className="mt-1 text-[#6B7280]">{r.location}{r.preferred_time ? ` · ${r.preferred_time}` : ""}</p>
-      <p className="mt-1 whitespace-pre-line">{r.description}</p>
+      <p className="mt-1 break-words text-[#6B7280]">{r.location}{r.preferred_time ? ` · ${r.preferred_time}` : ""}</p>
+      <p className="mt-1 break-words whitespace-pre-line">{r.description}</p>
       <p className="mt-1">Phone: <a href={`tel:${r.phone}`} className="text-[#111111] hover:underline">{r.phone}</a></p>
       {r.providers && <p className="mt-1 text-xs text-[#6B7280]">Provider: {r.providers.business_name}</p>}
       {children}
@@ -25,10 +25,13 @@ export default function RequestManager({ incoming, mine }: { incoming: ServiceRe
   const [rows, setRows] = useState(incoming);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const inFlight = useRef(false);
 
   async function setStatus(id: string, to: RequestStatus) {
+    if (inFlight.current) return;
     setError(null);
     setBusy(`${id}-${to}`);
+    inFlight.current = true;
     try {
       const sb = supabaseBrowser();
       // RLS + the status-flow trigger authorize this; anything else is rejected.
@@ -38,6 +41,7 @@ export default function RequestManager({ incoming, mine }: { incoming: ServiceRe
     } catch (err) {
       setError(err instanceof Error ? err.message : "Status update failed.");
     } finally {
+      inFlight.current = false;
       setBusy(null);
     }
   }
@@ -60,7 +64,7 @@ export default function RequestManager({ incoming, mine }: { incoming: ServiceRe
                         key={a.to}
                         disabled={busy !== null}
                         onClick={() => void setStatus(r.id, a.to)}
-                        className="rounded-lg bg-[#C9A227] px-3 py-1.5 text-xs font-semibold text-black disabled:opacity-60"
+                        className="min-h-[44px] rounded-lg bg-[#C9A227] px-3 py-1.5 text-xs font-semibold text-black disabled:opacity-60"
                       >
                         {busy === `${r.id}-${a.to}` ? "…" : a.label}
                       </button>

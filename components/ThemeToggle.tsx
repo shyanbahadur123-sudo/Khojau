@@ -55,7 +55,7 @@ export default function ThemeToggle({ variant = "icon" }: { variant?: "icon" | "
       onClick={toggle}
       aria-label={label}
       title={label}
-      className="grid h-10 w-10 place-items-center rounded-xl border border-white/15 text-zinc-300 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
+      className="grid h-11 w-11 place-items-center rounded-xl border border-white/15 text-zinc-300 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
     >
       {/* Render neutrally until mounted to avoid a flash of the wrong glyph. */}
       {ready && (dark ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />)}

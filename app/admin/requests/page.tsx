@@ -40,8 +40,8 @@ export default async function AdminRequestsPage({ searchParams }: { searchParams
                 <p className="font-semibold">{r.service} · {r.location}</p>
                 <span className="rounded-full bg-black/5 px-2 py-0.5 text-xs font-semibold">{r.status.replace("_", " ")}</span>
               </div>
-              <p className="mt-1">{r.description}</p>
-              <p className="mt-1 text-[#6B7280]">
+              <p className="mt-1 break-words">{r.description}</p>
+              <p className="mt-1 break-words text-[#6B7280]">
                 <a href={`tel:${r.phone}`} className="text-[#111111] hover:underline">{r.phone}</a>
                 {r.preferred_time ? ` · ${r.preferred_time}` : ""}
                 {(Array.isArray(r.providers) ? r.providers[0] : r.providers) ? ` · ${(Array.isArray(r.providers) ? r.providers[0] : r.providers)?.business_name}` : " · unmatched"}

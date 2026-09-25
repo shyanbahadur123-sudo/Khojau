@@ -13,8 +13,12 @@ export async function middleware(req: NextRequest) {
   const sb = createServerClient(url, anon, {
     cookies: {
       get: (n: string) => req.cookies.get(n)?.value,
-      set: (n: string, v: string, o?: object) => res.cookies.set(n, v, o as never),
-      remove: (n: string, o?: object) => res.cookies.set(n, "", o as never),
+      // Pin session-cookie attributes explicitly instead of inheriting
+      // library defaults silently. Library options (expiry) are preserved.
+      set: (n: string, v: string, o?: object) =>
+        res.cookies.set(n, v, { ...(o as object), path: "/", httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production" } as never),
+      remove: (n: string, o?: object) =>
+        res.cookies.set(n, "", { ...(o as object), path: "/", httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production" } as never),
     },
   });
   // Refreshes expired tokens and sets renewed cookies on the response.
@@ -38,6 +42,13 @@ export async function middleware(req: NextRequest) {
     const login = new URL("/login", base);
     login.searchParams.set("next", path);
     return NextResponse.redirect(login);
+  }
+  // Edge-layer admin gate (fail closed in production, graceful in dev):
+  // a signed-in non-admin never reaches /admin UI. Page-level
+  // getAdminStatus() remains the authoritative check.
+  const isAdminPath = path === "/admin" || path.startsWith("/admin/");
+  if (user && isAdminPath && process.env.ADMIN_EMAILS && !isAdminEmailAddr(user.email, process.env.ADMIN_EMAILS)) {
+    return NextResponse.redirect(new URL("/", base));
   }
   if (user && AUTH_PAGES.has(path)) {
     // Role-aware landing: admins start in the moderation hub, everyone

@@ -148,8 +148,8 @@ textarea:focus-visible {
   animation: khojau-slide-in 0.2s ease-out;
 }
 
-/* Gold focus ring inside the dark sidebar (global rule uses dark ink). */
+/* Gold focus ring inside the dark sidebar + mobile drawer. */
 #khojau-sidebar :focus-visible,
-nav[aria-label="Mobile"] :focus-visible {
+#mobile-nav :focus-visible {
   outline-color: #D4AF37;
 }

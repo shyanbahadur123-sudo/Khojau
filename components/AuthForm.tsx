@@ -40,7 +40,8 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
       });
       if (oauthErr) throw oauthErr;
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Google sign-in failed.");
+      if (err instanceof Error) console.warn("google sign-in failed:", err.message);
+      setError("Google sign-in failed. Please try again.");
       setOauthLoading(false);
     }
   }
@@ -91,7 +92,11 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
             router.push(dest);
             router.refresh();
           } catch (err) {
-            setError(err instanceof Error ? err.message : "Authentication failed");
+            // Generic messages only: raw Supabase errors distinguish
+            // "already registered" from "invalid credentials", which lets
+            // attackers enumerate accounts. Log the detail to console.
+            if (err instanceof Error) console.warn("auth failed:", err.message);
+            setError(mode === "register" ? "Could not create the account. Try a different email or log in." : "Invalid email or password.");
           } finally {
             inFlight.current = false;
             setLoading(false);
@@ -109,7 +114,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
         </div>
         <button
           type="button"
-          disabled={oauthLoading}
+          disabled={oauthLoading || loading}
           onClick={() => void signInWithGoogle()}
           className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-black/15 bg-transparent font-semibold transition-colors hover:bg-black/5 disabled:opacity-60"
         >
@@ -138,7 +143,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
               onClick={() => setShowPw((v) => !v)}
               aria-label={showPw ? "Hide password" : "Show password"}
               aria-pressed={showPw}
-              className="rounded px-1 text-xs font-semibold text-[#6B7280] hover:underline"
+              className="min-h-[44px] min-w-[44px] rounded px-3 text-xs font-semibold text-[#6B7280] hover:underline"
             >
               {showPw ? "Hide" : "Show"}
             </button>
@@ -148,7 +153,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
         </div>
         {(error || oauthError) && <p role="alert" className="rounded-lg bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-400">{error ?? oauthError}</p>}
         {notice && <p role="status" className="rounded-lg bg-[#C9A227]/15 p-3 text-sm text-[#7A5C00]">{notice}</p>}
-        <button disabled={loading} className="h-12 w-full rounded-lg bg-[#C9A227] font-semibold text-black transition-colors hover:bg-[#B8941F] disabled:opacity-60">
+        <button disabled={loading || oauthLoading} className="h-12 w-full rounded-lg bg-[#C9A227] font-semibold text-black transition-colors hover:bg-[#B8941F] disabled:opacity-60">
           {loading ? "Please wait…" : mode === "register" ? "Create account" : "Log in"}
         </button>
         <div className="flex items-center justify-between text-sm">

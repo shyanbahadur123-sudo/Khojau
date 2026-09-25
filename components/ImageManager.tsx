@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase";
 import { validateImageFile } from "@/lib/image-validation";
 import {
   deleteProviderImage,
+  sizedImageUrl,
   storagePathFromPublicUrl,
   uploadProviderImage,
   type ImageKind,
@@ -26,8 +27,10 @@ export default function ImageManager({ providerId, businessName, status, initial
   const [images, setImages] = useState<ProviderImage[]>([...initialImages].sort((a, b) => a.sort - b.sort));
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const inFlight = useRef(false);
 
   async function uploadSingle(kind: "logo" | "cover", file: File) {
+    if (inFlight.current) return;
     const problem = validateImageFile(file);
     if (problem) {
       setError(problem);
@@ -35,6 +38,7 @@ export default function ImageManager({ providerId, businessName, status, initial
     }
     setError(null);
     setBusy(kind);
+    inFlight.current = true;
     try {
       const sb = supabaseBrowser();
       const { publicUrl } = await uploadProviderImage(sb, providerId, kind, file, file.type);
@@ -56,14 +60,16 @@ export default function ImageManager({ providerId, businessName, status, initial
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed.");
     } finally {
+      inFlight.current = false;
       setBusy(null);
     }
   }
 
   async function uploadGallery(files: FileList | null) {
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0 || inFlight.current) return;
     setError(null);
     setBusy("gallery");
+    inFlight.current = true;
     try {
       const sb = supabaseBrowser();
       let nextSort = images.length === 0 ? 0 : Math.max(...images.map((i) => i.sort)) + 1;
@@ -89,14 +95,17 @@ export default function ImageManager({ providerId, businessName, status, initial
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gallery upload failed.");
     } finally {
+      inFlight.current = false;
       setBusy(null);
     }
   }
 
   async function deleteGallery(image: ProviderImage) {
+    if (inFlight.current) return;
     if (!confirm(`Delete this photo from ${businessName}?`)) return;
     setError(null);
     setBusy(`del-${image.id}`);
+    inFlight.current = true;
     try {
       const sb = supabaseBrowser();
       const path = storagePathFromPublicUrl(image.url);
@@ -107,17 +116,20 @@ export default function ImageManager({ providerId, businessName, status, initial
     } catch (err) {
       setError(err instanceof Error ? err.message : "Delete failed.");
     } finally {
+      inFlight.current = false;
       setBusy(null);
     }
   }
 
   async function moveGallery(id: string, dir: -1 | 1) {
+    if (inFlight.current) return;
     const ordered = [...images].sort((a, b) => a.sort - b.sort);
     const idx = ordered.findIndex((i) => i.id === id);
     const other = ordered[idx + dir];
     if (!other) return;
     setError(null);
     setBusy(`move-${id}`);
+    inFlight.current = true;
     try {
       const sb = supabaseBrowser();
       const a = ordered[idx];
@@ -134,13 +146,16 @@ export default function ImageManager({ providerId, businessName, status, initial
     } catch (err) {
       setError(err instanceof Error ? err.message : "Reorder failed.");
     } finally {
+      inFlight.current = false;
       setBusy(null);
     }
   }
 
   async function saveCaption(id: string, caption: string) {
+    if (inFlight.current) return;
     setError(null);
     setBusy(`cap-${id}`);
+    inFlight.current = true;
     try {
       const sb = supabaseBrowser();
       const { error } = await sb.from("provider_images").update({ caption: caption || null }).eq("id", id);
@@ -149,6 +164,7 @@ export default function ImageManager({ providerId, businessName, status, initial
     } catch (err) {
       setError(err instanceof Error ? err.message : "Caption save failed.");
     } finally {
+      inFlight.current = false;
       setBusy(null);
     }
   }
@@ -160,7 +176,7 @@ export default function ImageManager({ providerId, businessName, status, initial
 
   return (
     <section aria-label={`Photos for ${businessName}`} className="mt-3 rounded-xl border border-black/10 bg-white/60 p-4">
-      <h3 className="text-sm font-bold">Photos — visible publicly once the listing is approved</h3>
+      <h4 className="text-sm font-bold">Photos — visible publicly once the listing is approved</h4>
       {!canUpload && (
         <p className="mt-2 text-sm text-[#6B7280]">
           Photos can be added after this listing is approved. Current status: <strong>{status}</strong>.
@@ -179,15 +195,16 @@ export default function ImageManager({ providerId, businessName, status, initial
               <p className="text-sm font-semibold capitalize">{kind}</p>
               {current ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={current} alt={`${businessName} ${kind}`} className="mt-1 h-24 w-full rounded-lg border object-cover" loading="lazy" />
+                <img src={sizedImageUrl(current, 400)} alt={`${businessName} ${kind}`} className="mt-1 h-24 w-full rounded-lg border object-cover" loading="lazy" />
               ) : (
                 <p className="mt-1 rounded-lg border border-dashed p-4 text-xs text-[#6B7280]">No {kind} yet.</p>
               )}
-              <label className="mt-2 inline-block cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-medium">
+              <label className="mt-2 inline-block min-h-[44px] cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-medium focus-within:outline focus-within:outline-[3px] focus-within:outline-offset-2 focus-within:outline-[#111111]">
                 {busy === kind ? "Uploading…" : current ? `Replace ${kind}` : `Upload ${kind}`}
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
+                  aria-label={`Upload ${kind} image`}
                   className="sr-only"
                   disabled={disabled || !canUpload}
                   onChange={(e) => {
@@ -204,12 +221,13 @@ export default function ImageManager({ providerId, businessName, status, initial
       <div className="mt-4">
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold">Gallery ({images.length})</p>
-          <label className="cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-medium">
+          <label className="min-h-[44px] cursor-pointer rounded-lg border px-3 py-1.5 text-sm font-medium focus-within:outline focus-within:outline-[3px] focus-within:outline-offset-2 focus-within:outline-[#111111]">
             {busy === "gallery" ? "Uploading…" : "Add photos"}
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp"
               multiple
+              aria-label="Upload gallery photos"
               className="sr-only"
               disabled={disabled || !canUpload}
               onChange={(e) => {
@@ -227,7 +245,7 @@ export default function ImageManager({ providerId, businessName, status, initial
             {images.map((img, i) => (
               <li key={img.id} className="rounded-lg border p-2">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img.url} alt={img.caption || `${businessName} photo ${i + 1}`} className="h-24 w-full rounded object-cover" loading="lazy" />
+                <img src={sizedImageUrl(img.url, 400)} alt={img.caption || `${businessName} photo ${i + 1}`} className="h-24 w-full rounded object-cover" loading="lazy" />
                 <input
                   aria-label={`Caption for photo ${i + 1}`}
                   defaultValue={img.caption ?? ""}
@@ -237,10 +255,10 @@ export default function ImageManager({ providerId, businessName, status, initial
                     if (e.target.value !== (img.caption ?? "")) void saveCaption(img.id, e.target.value);
                   }}
                 />
-                <div className="mt-1 flex gap-1 text-xs">
-                  <button disabled={disabled || i === 0} onClick={() => void moveGallery(img.id, -1)} className="rounded border px-2 py-1 disabled:opacity-40" aria-label={`Move photo ${i + 1} earlier`}>←</button>
-                  <button disabled={disabled || i === images.length - 1} onClick={() => void moveGallery(img.id, 1)} className="rounded border px-2 py-1 disabled:opacity-40" aria-label={`Move photo ${i + 1} later`}>→</button>
-                  <button disabled={disabled} onClick={() => void deleteGallery(img)} className="ml-auto rounded border border-red-300 px-2 py-1 text-red-700" aria-label={`Delete photo ${i + 1}`}>
+                <div className="mt-1 flex gap-2 text-xs">
+                  <button disabled={disabled || i === 0} onClick={() => void moveGallery(img.id, -1)} className="min-h-[44px] rounded border px-3 py-1 disabled:opacity-40" aria-label={`Move photo ${i + 1} earlier`}>←</button>
+                  <button disabled={disabled || i === images.length - 1} onClick={() => void moveGallery(img.id, 1)} className="min-h-[44px] rounded border px-3 py-1 disabled:opacity-40" aria-label={`Move photo ${i + 1} later`}>→</button>
+                  <button disabled={disabled} onClick={() => void deleteGallery(img)} className="ml-auto min-h-[44px] rounded border border-red-300 px-3 py-1 text-red-700" aria-label={`Delete photo ${i + 1}`}>
                     {busy === `del-${img.id}` ? "…" : "Delete"}
                   </button>
                 </div>

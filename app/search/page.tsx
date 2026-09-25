@@ -9,7 +9,8 @@ import { CATEGORIES, categoryBySlug } from "@/lib/categories";
 export const metadata: Metadata = { title: "Search services", alternates: { canonical: "/search" } };
 
 const PAGE_SIZE = 12;
-const MAX_PAGE = 50;
+// Source rows are capped at 60, so pages past 5 would always be empty.
+const MAX_PAGE = 5;
 
 // Directory freshness: search results revalidate with the data cache.
 export const revalidate = 60;
@@ -69,16 +70,16 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
   return (
     <div className="space-y-6 pt-6">
       <h1 className="text-2xl font-bold">Search services</h1>
-      <div className="sticky top-14 z-20 -mx-1 bg-[#FAFAFA]/95 px-1 py-2 backdrop-blur-md dark:bg-[#0A0A0A]/95">
+      <div className="sticky top-14 z-20 -mx-1 bg-[#FAFAFA]/95 px-1 py-2 backdrop-blur-md dark:bg-[#0A0A0A]/95 lg:top-4">
         <Suspense fallback={<SearchBarSkeleton />}><SearchBar /></Suspense>
       </div>
       <form method="get" className="flex flex-wrap gap-2 text-sm" aria-label="Filters">
         <input type="hidden" name="q" value={query} />
         <input type="hidden" name="location" value={location} />
-        <label className="flex items-center gap-1 rounded-full bg-black/5 px-3 py-2">
+        <label className="flex min-h-[44px] items-center gap-1 rounded-full bg-black/5 px-3 py-2">
           <input type="checkbox" name="verified" value="1" defaultChecked={verifiedOnly} /> Verified only
         </label>
-        <select name="plan" defaultValue={plan} className="rounded-full bg-black/5 px-3 py-2" aria-label="Plan filter">
+        <select name="plan" defaultValue={plan} className="min-h-[44px] rounded-full bg-black/5 px-3 py-2" aria-label="Plan filter">
           <option value="">All plans</option>
           <option value="free">Free</option>
           <option value="featured">Featured</option>
@@ -91,7 +92,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
           defaultValue={minPrice ?? ""}
           placeholder="Min Rs."
           aria-label="Minimum price"
-          className="w-28 rounded-full bg-black/5 px-3 py-2"
+          className="h-11 w-28 rounded-full bg-black/5 px-3 py-2"
         />
         <input
           type="number"
@@ -100,21 +101,22 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
           defaultValue={maxPrice ?? ""}
           placeholder="Max Rs."
           aria-label="Maximum price"
-          className="w-28 rounded-full bg-black/5 px-3 py-2"
+          className="h-11 w-28 rounded-full bg-black/5 px-3 py-2"
         />
-        <select name="sort" defaultValue={sort} className="rounded-full bg-black/5 px-3 py-2" aria-label="Sort results">
+        <select name="sort" defaultValue={sort} className="min-h-[44px] rounded-full bg-black/5 px-3 py-2" aria-label="Sort results">
           <option value="relevance">Best match</option>
           <option value="price_asc">Price: low to high</option>
           <option value="price_desc">Price: high to low</option>
         </select>
-        <button type="submit" className="rounded-full bg-[#C9A227] px-4 py-2 font-semibold text-black">Apply</button>
-        {hasActiveFilter && <a href="/search" className="rounded-full bg-black/5 px-4 py-2 transition-colors hover:bg-black/10">Clear</a>}
+        <button type="submit" className="min-h-[44px] rounded-full bg-[#C9A227] px-4 py-2 font-semibold text-black">Apply</button>
+        {hasActiveFilter && <a href="/search" className="inline-flex min-h-[44px] items-center rounded-full bg-black/5 px-4 py-2 transition-colors hover:bg-black/10">Clear</a>}
       </form>
       <p className="text-sm text-[#6B7280]" role="status">
         {total === 0 ? "No providers found." : `${total} provider${total === 1 ? "" : "s"} found`}
         {query && <> for <strong>{query}</strong></>}
         {location && <> in <strong>{location}</strong></>}
       </p>
+      <h2 className="sr-only">Results</h2>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {paged.map((p) => <ProviderCard key={p.id} provider={p} />)}
       </div>
@@ -125,9 +127,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
         </div>
       )}
       {total > PAGE_SIZE && (
-        <nav className="flex gap-2" aria-label="Pagination">
-          {page > 1 && <a href={buildHref({ page: String(page - 1) })} className="rounded-lg border px-4 py-2">Previous</a>}
-          {(page * PAGE_SIZE < total) && <a href={buildHref({ page: String(page + 1) })} className="rounded-lg border px-4 py-2">Next</a>}
+        <nav className="flex gap-2" aria-label={`Search results pages, page ${page}`}>
+          {page > 1 && <a href={buildHref({ page: String(page - 1) })} aria-label="Go to previous results page" className="inline-flex min-h-[44px] items-center rounded-lg border px-4 py-2">Previous</a>}
+          {(page * PAGE_SIZE < total) && <a href={buildHref({ page: String(page + 1) })} aria-label="Go to next results page" className="inline-flex min-h-[44px] items-center rounded-lg border px-4 py-2">Next</a>}
         </nav>
       )}
     </div>

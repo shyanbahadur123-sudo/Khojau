@@ -34,7 +34,7 @@ export default async function AccountPage() {
         <dl className="mt-3 space-y-2 text-sm">
           <div className="flex items-center justify-between gap-2">
             <dt className="text-[#6B7280]">Email</dt>
-            <dd className="font-semibold">{user.email}</dd>
+            <dd className="min-w-0 truncate font-semibold">{user.email}</dd>
           </div>
           {memberSince && (
             <div className="flex items-center justify-between gap-2">

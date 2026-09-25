@@ -9,7 +9,10 @@ const PUBLIC_COLUMNS =
 const MAX_ROWS = 60;
 
 function cleanLike(input: string): string {
-  return input.replace(/[%_,]/g, "").trim().slice(0, 100);
+  // Strip LIKE wildcards AND PostgREST `or()` syntax characters (`,` `(` `)`
+  // `;` `\`) so user input cannot reshape the filter expression. The query
+  // stays ANDed to status='approved' regardless.
+  return input.replace(/[%_,;()\\]/g, "").trim().slice(0, 100);
 }
 
 export async function getApprovedProviders(opts: {

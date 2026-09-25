@@ -69,7 +69,7 @@ export default async function RequestDetailPage({ params }: { params: { id: stri
 
       <section aria-labelledby="details" className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-6 shadow-sm">
         <h2 id="details" className="font-bold">Details</h2>
-        <p className="mt-2 whitespace-pre-line text-[15px] leading-relaxed">{r.description}</p>
+        <p className="mt-2 break-words whitespace-pre-line text-[15px] leading-relaxed">{r.description}</p>
       </section>
 
       {r.providers && (

@@ -9,10 +9,11 @@ import {
   safeExternalUrl,
   externalUrlField,
   safeRedirectPath,
+  isSameOriginRequest,
   publicOrigin,
 } from "../lib/validation.js";
 import { validateImageFile } from "../lib/image-validation.js";
-import { rateLimit } from "../lib/rate-limit.js";
+import { clientIp, rateLimit } from "../lib/rate-limit.js";
 import { REQUEST_STATUS_LABEL, REQUEST_NEXT_ACTIONS, formatRequestStatus } from "../lib/request-status.js";
 import { tallyTrendScores } from "../lib/search.js";
 import { adminEmails, isAdminEmailAddr } from "../lib/admin-emails.js";
@@ -97,6 +98,48 @@ describe("safeRedirectPath", () => {
     assert.equal(safeRedirectPath("//evil.example"), "/dashboard");
     assert.equal(safeRedirectPath("/\\evil"), "/dashboard");
     assert.equal(safeRedirectPath(null), "/dashboard");
+  });
+
+  it("supports an explicit fallback for login landing", () => {
+    assert.equal(safeRedirectPath(null, "/"), "/");
+    assert.equal(safeRedirectPath("https://evil.example", "/"), "/");
+    assert.equal(safeRedirectPath("/requests", "/"), "/requests");
+  });
+});
+
+describe("isSameOriginRequest (CSRF guard for cookie POSTs)", () => {
+  const req = (url: string, headers: Record<string, string> = {}) => new Request(url, { headers, method: "POST" });
+
+  it("accepts same-origin browser POSTs", () => {
+    const r = req("https://khojau-seven.vercel.app/api/admin/providers", { origin: "https://khojau-seven.vercel.app" });
+    assert.equal(isSameOriginRequest(r), true);
+  });
+
+  it("rejects cross-site forged POSTs", () => {
+    const r = req("https://khojau-seven.vercel.app/api/admin/providers", { origin: "https://evil.example" });
+    assert.equal(isSameOriginRequest(r), false);
+  });
+
+  it("allows requests without an Origin header (non-browser clients)", () => {
+    assert.equal(isSameOriginRequest(req("https://khojau-seven.vercel.app/api/health")), true);
+  });
+});
+
+describe("clientIp (verified platform IP first)", () => {
+  const req = (headers: Record<string, string> = {}) => new Request("https://khojau-seven.vercel.app/api/x", { headers });
+
+  it("prefers x-real-ip over x-forwarded-for", () => {
+    const r = req({ "x-real-ip": "1.2.3.4", "x-forwarded-for": "9.9.9.9, 1.2.3.4" });
+    assert.equal(clientIp(r), "1.2.3.4");
+  });
+
+  it("falls back to the leftmost forwarded entry", () => {
+    const r = req({ "x-forwarded-for": "9.9.9.9, 1.2.3.4" });
+    assert.equal(clientIp(r), "9.9.9.9");
+  });
+
+  it("returns unknown with no IP headers", () => {
+    assert.equal(clientIp(req()), "unknown");
   });
 });
 

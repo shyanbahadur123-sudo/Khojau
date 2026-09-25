@@ -139,7 +139,11 @@ function RequestForm() {
         <button disabled={loading} className="h-12 w-full rounded-lg bg-[#C9A227] font-semibold text-black disabled:opacity-60">
           {loading ? "Sending…" : "Submit request"}
         </button>
-        {status && !done && <p role="status" className="text-sm text-[#6B7280]">{status}</p>}
+        {status && !done && (
+          <p role={status === "Sending…" ? "status" : "alert"} className="text-sm text-[#6B7280]">
+            {status}
+          </p>
+        )}
       </form>
     </div>
   );

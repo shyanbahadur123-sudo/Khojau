@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase";
+import { supabasePublic } from "@/lib/supabase";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
 
-const schema = z.object({ event: z.string().min(1).max(60), meta: z.record(z.union([z.string(), z.number(), z.boolean()])).optional().default({}), path: z.string().max(200).optional() });
+// Allowlisted product events only: the insert runs over RLS (no service
+// role on this anonymous path), and trending tallies only these names, so
+// junk event names can never influence rankings or bloat privileged writes.
+const KNOWN_EVENTS = ["provider_view", "phone_click", "message_click", "directions_click"] as const;
+const schema = z.object({
+  event: z.enum(KNOWN_EVENTS),
+  meta: z.record(z.string().max(64), z.union([z.string().max(200), z.number(), z.boolean()])).optional().default({}),
+  path: z.string().max(200).optional(),
+});
 
 export async function POST(req: Request) {
   if (!rateLimit(`events:${clientIp(req)}`, 120, 60 * 1000)) {
@@ -11,10 +19,10 @@ export async function POST(req: Request) {
   }
   try {
     const body = schema.parse(await req.json());
-    const admin = supabaseAdmin();
-    if (admin) {
-      await admin.from("events").insert({ event: body.event, meta: body.meta ?? {}, path: body.path ?? null });
-    }
+    const db = supabasePublic();
+    if (!db) return NextResponse.json({ ok: false }, { status: 503 });
+    const { error } = await db.from("events").insert({ event: body.event, meta: body.meta ?? {}, path: body.path ?? null });
+    if (error) return NextResponse.json({ ok: false }, { status: 400 });
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ ok: false }, { status: 400 });

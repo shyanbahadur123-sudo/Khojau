@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
 
 // Handles Supabase email links that land on the site root with ?code=... or
@@ -10,18 +10,30 @@ import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
 // users stranded on a silent homepage.
 export default function AuthCodeHandler() {
   const params = useSearchParams();
+  const router = useRouter();
   const [status, setStatus] = useState<"idle" | "working" | "done" | "error">("idle");
 
   useEffect(() => {
     const code = params.get("code");
     const err = params.get("error");
     if (!code && !err) return;
+    // Single-use codes must not linger in history, synced tabs, or URL logs:
+    // strip ?code= / ?error= once settled.
+    const scrubQuery = () => {
+      try {
+        router.replace(window.location.pathname, { scroll: false });
+      } catch {
+        // Non-critical hygiene; the exchange result stands regardless.
+      }
+    };
     if (!isSupabaseConfigured()) {
       setStatus("error");
+      scrubQuery();
       return;
     }
     if (err) {
       setStatus("error");
+      scrubQuery();
       return;
     }
     setStatus("working");
@@ -37,15 +49,18 @@ export default function AuthCodeHandler() {
         const { error } = await sb.auth.exchangeCodeForSession(code as string);
         if (!error) {
           setStatus("done");
+          scrubQuery();
           return;
         }
         const { data } = await sb.auth.getUser();
         setStatus(data.user ? "done" : "error");
       } catch {
         setStatus("error");
+      } finally {
+        scrubQuery();
       }
     })();
-  }, [params]);
+  }, [params, router]);
 
   if (status === "idle") return null;
   return (
@@ -55,7 +70,7 @@ export default function AuthCodeHandler() {
         {status === "done" && (
           <p>
             <strong>Link accepted — you are now signed in.</strong>{" "}
-            <a href="/dashboard" className="font-semibold text-[#7A5C00] hover:underline">Go to your dashboard →</a>
+            <a href="/" className="font-semibold text-[#7A5C00] hover:underline">Back to Khojau home →</a>
             <br />
             <span className="text-[#6B7280]">
               Resetting your password instead?{" "}

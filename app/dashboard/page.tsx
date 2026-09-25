@@ -166,7 +166,7 @@ export default async function DashboardPage() {
             return (
               <li key={p.slug} className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-5 shadow-sm">
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="text-base font-bold tracking-tight">{p.business_name}</p>
+                  <h3 className="text-base font-bold tracking-tight">{p.business_name}</h3>
                   <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${STATUS_CHIP[p.status] ?? STATUS_CHIP.suspended}`}>{p.status}</span>
                   {openHere > 0 && (
                     <a href="#requests" className="rounded-full bg-[#C9A227]/15 px-2 py-0.5 text-xs font-semibold text-[#7A5C00]">
@@ -202,12 +202,12 @@ export default async function DashboardPage() {
                   });
                   const missing = comp.items.filter((i) => !i.done);
                   return (
-                    <div className="mt-2 rounded-lg border border-black/10 p-3" aria-label={`Profile completeness ${comp.percent} percent`}>
+                    <div className="mt-2 rounded-lg border border-black/10 p-3">
                       <div className="flex items-center justify-between gap-2 text-xs font-semibold">
                         <span>Profile completeness</span>
                         <span>{comp.percent}%</span>
                       </div>
-                      <div role="presentation" aria-hidden="true" className="mt-2 h-2 overflow-hidden rounded-full bg-black/10">
+                      <div role="progressbar" aria-valuenow={comp.percent} aria-valuemin={0} aria-valuemax={100} aria-label="Profile completeness" className="mt-2 h-2 overflow-hidden rounded-full bg-black/10">
                         <div className="h-full rounded-full bg-[#C9A227] transition-all" style={{ width: `${comp.percent}%` }} />
                       </div>
                       {missing.length > 0 && (

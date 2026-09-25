@@ -73,7 +73,7 @@ export default function SaveButton({ providerId, returnTo }: { providerId: strin
 
   if (state === "loading") {
     return (
-      <span aria-hidden="true" className="grid h-10 w-10 place-items-center rounded-lg border border-black/15">
+      <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-lg border border-black/15">
         <HeartIcon className="h-5 w-5 opacity-30" />
       </span>
     );
@@ -84,7 +84,7 @@ export default function SaveButton({ providerId, returnTo }: { providerId: strin
       <Link
         href={`/login?next=${encodeURIComponent(returnTo)}`}
         aria-label="Log in to save this provider"
-        className="grid h-10 w-10 place-items-center rounded-lg border border-black/15 transition-colors hover:bg-black/5"
+        className="grid h-11 w-11 place-items-center rounded-lg border border-black/15 transition-colors hover:bg-black/5"
       >
         <HeartIcon className="h-5 w-5" />
       </Link>
@@ -92,15 +92,17 @@ export default function SaveButton({ providerId, returnTo }: { providerId: strin
   }
 
   const saved = state === "saved";
+  const toggling = state !== "saved" && state !== "unsaved";
   return (
     <>
       <button
         type="button"
         onClick={() => void toggle()}
+        disabled={toggling}
         aria-pressed={saved}
         aria-label={saved ? "Remove from saved providers" : "Save this provider"}
         title={saved ? "Saved" : "Save"}
-        className={`grid h-10 w-10 place-items-center rounded-lg border transition-all active:scale-95 ${
+        className={`grid h-11 w-11 place-items-center rounded-lg border transition-all active:scale-95 disabled:opacity-70 ${
           saved ? "border-[#7A5C00]/50 text-[#7A5C00]" : "border-black/15 hover:bg-black/5"
         }`}
       >

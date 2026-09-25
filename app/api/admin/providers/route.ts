@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { audit, getAdminContext } from "@/lib/admin";
+import { isSameOriginRequest } from "@/lib/validation";
 import { z } from "zod";
 
 // Generic failure message: never leak constraint/DB internals to the browser.
@@ -14,6 +15,7 @@ const schema = z.object({
 export async function POST(req: Request) {
   const ctx = await getAdminContext();
   if (!ctx) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!isSameOriginRequest(req)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const parsed = schema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
@@ -54,12 +56,12 @@ export async function POST(req: Request) {
     }
   }
 
-  await audit(ctx.admin, {
+  const auditLogged = await audit(ctx.admin, {
     actor_id: ctx.userId,
     action: `provider.${action}`,
     target_type: "provider",
     target_id: id,
     metadata: { plan: plan ?? null },
   });
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, auditLogged });
 }

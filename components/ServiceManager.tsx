@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase";
 import { serviceItemSchema } from "@/lib/validation";
 import type { ServiceItem } from "@/types/database";
@@ -14,8 +14,10 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
+  const inFlight = useRef(false);
 
   async function add() {
+    if (inFlight.current) return;
     const parsed = serviceItemSchema.safeParse({ name, price_min: min === "" ? undefined : min, price_max: max === "" ? undefined : max });
     if (!parsed.success) {
       setError(parsed.error.errors[0]?.message ?? "Invalid service.");
@@ -24,6 +26,7 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
     setError(null);
     setSaved(null);
     setBusy("add");
+    inFlight.current = true;
     try {
       const sb = supabaseBrowser();
       const { data, error: insErr } = await sb
@@ -45,12 +48,13 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
     } catch (err) {
       setError(err instanceof Error ? err.message : "Add failed.");
     } finally {
+      inFlight.current = false;
       setBusy(null);
     }
   }
 
   async function saveEdit() {
-    if (!editing) return;
+    if (!editing || inFlight.current) return;
     const parsed = serviceItemSchema.safeParse({ name: editing.name, price_min: editing.price_min ?? undefined, price_max: editing.price_max ?? undefined });
     if (!parsed.success) {
       setError(parsed.error.errors[0]?.message ?? "Invalid service.");
@@ -59,6 +63,7 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
     setError(null);
     setSaved(null);
     setBusy(`edit-${editing.id}`);
+    inFlight.current = true;
     try {
       const sb = supabaseBrowser();
       const { error: upErr } = await sb
@@ -72,15 +77,18 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
     } catch (err) {
       setError(err instanceof Error ? err.message : "Update failed.");
     } finally {
+      inFlight.current = false;
       setBusy(null);
     }
   }
 
   async function remove(id: string, label: string) {
+    if (inFlight.current) return;
     if (!confirm(`Delete service "${label}"?`)) return;
     setError(null);
     setSaved(null);
     setBusy(`del-${id}`);
+    inFlight.current = true;
     try {
       const sb = supabaseBrowser();
       const { error: delErr } = await sb.from("services").delete().eq("id", id);
@@ -90,6 +98,7 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
     } catch (err) {
       setError(err instanceof Error ? err.message : "Delete failed.");
     } finally {
+      inFlight.current = false;
       setBusy(null);
     }
   }
@@ -98,7 +107,7 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
 
   return (
     <section aria-label="Manage services" className="mt-3 rounded-xl border border-black/10 bg-white/60 p-4">
-      <h3 className="text-sm font-bold">Services</h3>
+      <h4 className="text-sm font-bold">Services</h4>
       {error && <p role="alert" className="mt-2 text-sm text-red-700">{error}</p>}
       {saved && <p role="status" className="mt-2 text-sm font-medium text-[#111111]">{saved}</p>}
       {items.length === 0 ? (
@@ -110,11 +119,11 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
               {editing?.id === s.id ? (
                 <div className="grid gap-2 sm:grid-cols-4">
                   <input aria-label="Service name" value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className="h-10 rounded-lg border border-black/15 px-2 sm:col-span-2" />
-                  <input aria-label="Minimum price" type="number" min={0} value={editing.price_min ?? ""} onChange={(e) => setEditing({ ...editing, price_min: e.target.value === "" ? null : Number(e.target.value) })} className="h-10 rounded-lg border border-black/15 px-2" />
-                  <input aria-label="Maximum price" type="number" min={0} value={editing.price_max ?? ""} onChange={(e) => setEditing({ ...editing, price_max: e.target.value === "" ? null : Number(e.target.value) })} className="h-10 rounded-lg border border-black/15 px-2" />
+                  <input aria-label="Minimum price" type="number" min={0} value={editing.price_min ?? ""} onChange={(e) => setEditing({ ...editing, price_min: e.target.value === "" ? null : Number(e.target.value) })} className="h-11 rounded-lg border border-black/15 px-2" />
+                  <input aria-label="Maximum price" type="number" min={0} value={editing.price_max ?? ""} onChange={(e) => setEditing({ ...editing, price_max: e.target.value === "" ? null : Number(e.target.value) })} className="h-11 rounded-lg border border-black/15 px-2" />
                   <div className="flex gap-2 sm:col-span-4">
-                    <button disabled={disabled} onClick={() => void saveEdit()} className="rounded-lg bg-[#C9A227] px-3 py-1.5 font-semibold text-black">Save</button>
-                    <button disabled={disabled} onClick={() => setEditing(null)} className="rounded-lg border px-3 py-1.5">Cancel</button>
+                    <button disabled={disabled} onClick={() => void saveEdit()} className="min-h-[44px] rounded-lg bg-[#C9A227] px-3 py-1.5 font-semibold text-black">Save</button>
+                    <button disabled={disabled} onClick={() => setEditing(null)} className="min-h-[44px] rounded-lg border px-3 py-1.5">Cancel</button>
                   </div>
                 </div>
               ) : (
@@ -123,9 +132,9 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
                   {(s.price_min != null || s.price_max != null) && (
                     <span className="text-xs text-[#6B7280]">Rs.{s.price_min ?? "?"}–{s.price_max ?? "?"}</span>
                   )}
-                  <span className="ml-auto flex gap-1">
-                    <button disabled={disabled} onClick={() => setEditing(s)} className="rounded border px-2 py-1 text-xs">Edit</button>
-                    <button disabled={disabled} onClick={() => void remove(s.id, s.name)} className="rounded border border-red-300 px-2 py-1 text-xs text-red-700">
+                  <span className="ml-auto flex gap-2">
+                    <button disabled={disabled} onClick={() => setEditing(s)} className="min-h-[44px] rounded border px-3 py-1 text-xs">Edit</button>
+                    <button disabled={disabled} onClick={() => void remove(s.id, s.name)} className="min-h-[44px] rounded border border-red-300 px-3 py-1 text-xs text-red-700">
                       {busy === `del-${s.id}` ? "…" : "Delete"}
                     </button>
                   </span>
@@ -146,3 +155,4 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
     </section>
   );
 }
+

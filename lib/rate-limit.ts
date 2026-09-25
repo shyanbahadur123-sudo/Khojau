@@ -30,6 +30,12 @@ export function rateLimit(key: string, limit: number, windowMs: number): boolean
 }
 
 export function clientIp(req: Request): string {
+  // Prefer the platform-verified client IP when present (Vercel sets
+  // x-real-ip and it cannot be spoofed through the platform edge).
+  // x-forwarded-for is client-influenced: use only its leftmost entry as
+  // a fallback, never the full chain.
+  const real = req.headers.get("x-real-ip");
+  if (real && real.trim()) return real.trim().slice(0, 64);
   const fwd = req.headers.get("x-forwarded-for");
   if (fwd) return fwd.split(",")[0].trim().slice(0, 64);
   return "unknown";

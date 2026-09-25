@@ -49,10 +49,10 @@ export default function ProviderCard({ provider }: { provider: Provider }) {
           <p className="mt-1 line-clamp-2 text-sm text-[#0A0A0A]/80">{provider.description}</p>
         )}
         <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
-          <a href={`tel:${provider.phone}`} className="inline-flex min-h-[40px] items-center rounded-lg bg-[#C9A227] px-3 py-2 font-semibold text-black">
+          <a href={`tel:${provider.phone}`} className="inline-flex min-h-[44px] items-center rounded-lg bg-[#C9A227] px-3 py-2 font-semibold text-black">
             Call
           </a>
-          <Link href={`/provider/${provider.slug}`} className="inline-flex min-h-[40px] items-center rounded-lg border border-black/15 px-3 py-2 font-medium">
+          <Link href={`/provider/${provider.slug}`} className="inline-flex min-h-[44px] items-center rounded-lg border border-black/15 px-3 py-2 font-medium">
             View
           </Link>
           <SaveButton providerId={provider.id} returnTo={`/provider/${provider.slug}`} />

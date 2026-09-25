@@ -122,6 +122,24 @@ export function safeRedirectPath(raw: string | null | undefined, fallback = "/da
 }
 
 /**
+ * Same-origin check for cookie-authenticated state-changing routes.
+ * Browsers always send Origin on POST; cross-site forged forms carry the
+ * attacker's origin and are rejected. Absent Origin (curl, server-to-server)
+ * passes: CSRF requires a victim browser, and the session cookie is still
+ * mandatory. Pure and unit-testable.
+ */
+export function isSameOriginRequest(req: Request): boolean {
+  const origin = req.headers.get("origin");
+  if (!origin) return true;
+  try {
+    // Full origin (scheme + host + port) comparison: same-origin has a
+    // precise meaning, and anything else is fail-closed.
+    return new URL(origin).origin === new URL(req.url).origin;
+  } catch {
+    return false;
+  }
+}
+/**
  * Public origin of the current request, proxy-aware.
  * Reads X-Forwarded-Proto/Host (set by Vercel, Cloudflare Tunnel, nginx…)
  * so auth redirects land on the address the user actually opened — not the

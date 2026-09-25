@@ -7,9 +7,10 @@ export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  // /recent and /provider/* are members-only (login gate) — never list them
-  // for crawlers. Search / Services / Locations browsing stays public.
-  const staticRoutes = ["/", "/search", "/services", "/locations", "/add-business", "/contact", "/privacy", "/terms", "/request-service", "/how-it-works"];
+  // Only genuinely public routes belong here. Login-gated pages
+  // (/add-business, /dashboard, /recent, /provider/*) are excluded so
+  // crawlers never waste budget on login redirects.
+  const staticRoutes = ["/", "/search", "/services", "/locations", "/contact", "/privacy", "/terms", "/request-service", "/how-it-works"];
   const providerUrls: MetadataRoute.Sitemap = [];
   return [
     ...staticRoutes.map((p) => ({ url: `${base}${p}`, lastModified: new Date() })),
