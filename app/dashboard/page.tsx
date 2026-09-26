@@ -2,6 +2,9 @@ import { redirect } from "next/navigation";
 import { supabaseServer } from "@/lib/supabase-server";
 import { isAdminEmail } from "@/lib/supabase";
 import { profileCompleteness } from "@/lib/completeness";
+import { PageHeader } from "@/components/PageHeader";
+import { InlineAlert } from "@/components/InlineAlert";
+import { EmptyPanel } from "@/components/EmptyPanel";
 import ImageManager from "@/components/ImageManager";
 import ProviderEditor, { type EditableProvider } from "@/components/ProviderEditor";
 import ServiceManager from "@/components/ServiceManager";
@@ -101,16 +104,11 @@ export default async function DashboardPage() {
   const requestsError = myRequestsError ?? incomingError;
   if (listingsError) {
     return (
-      <div className="space-y-6 pt-6">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Dashboard</p>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">My listings</h1>
-        </div>
-        <div role="alert" className="rounded-2xl border border-red-300 bg-red-500/10 p-6 text-center">
-          <p className="font-semibold text-red-700">Couldn’t load your listings.</p>
-          <p className="mt-1 text-sm text-[#6B7280]">Check your connection and try again — your data is safe.</p>
-          <a href="/dashboard" className="mt-4 inline-block rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Try again</a>
-        </div>
+      <div className="space-y-6 pt-4 sm:pt-6">
+        <PageHeader eyebrow="Dashboard" title="My listings" hint="Manage your businesses, requests and profile." />
+        <InlineAlert title="Couldn't load your listings" note="Check your connection and try again — your data is safe.">
+          <a href="/dashboard" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black">Try again</a>
+        </InlineAlert>
       </div>
     );
   }
@@ -126,12 +124,13 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-6 pt-6">
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Dashboard</p>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">My listings</h1>
-        <p className="mt-1 text-sm text-[#6B7280]">Signed in as {user.email}{isAdminEmail(user.email) ? " · Admin" : ""}</p>
-      </div>
+    <div className="space-y-6 pt-4 sm:pt-6">
+      <PageHeader
+        eyebrow="Dashboard"
+        title="My listings"
+        hint={`Signed in as ${user.email}${isAdminEmail(user.email) ? " · Admin" : ""}`}
+        actions={null}
+      />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4" role="group" aria-label="Account summary">
         {stats.map((s) => (
           <a key={s.label} href={s.href} className="rounded-xl border border-black/10 bg-[#FFFFFF] p-4 transition-colors hover:border-black/25">
@@ -141,27 +140,24 @@ export default async function DashboardPage() {
         ))}
       </div>
       <div className="flex flex-wrap gap-2">
-        <a href="/add-business" className="rounded-lg bg-[#C9A227] px-4 py-2 font-semibold text-black transition-colors hover:bg-[#B8941F]">Add business</a>
-        {isAdminEmail(user.email) && <a href="/admin" className="rounded-lg border border-black/15 px-4 py-2 font-semibold transition-colors hover:bg-black/5">Admin dashboard</a>}
-        <form action="/api/auth/signout" method="post"><button className="rounded-lg border border-black/15 px-4 py-2 font-medium transition-colors hover:bg-black/5">Sign out</button></form>
+        <a href="/add-business" className="inline-flex min-h-[44px] items-center rounded-lg bg-[#C9A227] px-4 py-2 font-semibold text-black transition-colors hover:bg-[#B8941F]">Add business</a>
+        {isAdminEmail(user.email) && <a href="/admin" className="inline-flex min-h-[44px] items-center rounded-lg border border-black/15 px-4 py-2 font-semibold transition-colors hover:bg-black/5">Admin dashboard</a>}
+        <form action="/api/auth/signout" method="post"><button className="inline-flex min-h-[44px] items-center rounded-lg border border-black/15 px-4 py-2 font-medium transition-colors hover:bg-black/5">Sign out</button></form>
       </div>
       <div id="requests" className="scroll-mt-20">
         {requestsError && (
-          <p role="alert" className="mb-3 rounded-lg bg-red-500/10 p-3 text-sm text-red-700">
-            Couldn’t load service requests. <a href="/dashboard" className="underline underline-offset-2">Try again</a>
-          </p>
+          <InlineAlert title="Couldn't load service requests" note={<a href="/dashboard" className="underline underline-offset-2">Try again</a>} />
         )}
         <RequestManager incoming={incomingRows} mine={myRequestRows} />
       </div>
       <section id="listings" aria-label="Your listings" className="scroll-mt-20">
         <h2 className="text-lg font-bold tracking-tight">Listings {rows.length > 0 && <span className="text-sm font-semibold text-[#6B7280]">({rows.length})</span>}</h2>
       {rows.length === 0 ? (
-        <div className="mt-3 rounded-2xl border border-black/10 bg-[#FFFFFF] p-8 text-center shadow-sm">
-          <p className="text-sm text-[#6B7280]">No listings yet. Submit your first business — it goes to pending review and appears here.</p>
-          <div className="mt-4 flex flex-wrap justify-center gap-2">
-            <a href="/add-business" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Add your business</a>
-            <a href="/how-it-works" className="rounded-lg border border-black/15 px-5 py-2.5 font-semibold transition-colors hover:bg-black/5">How it works</a>
-          </div>
+        <div className="mt-3">
+          <EmptyPanel title="No listings yet" note="Submit your first business — it goes to pending review and appears here.">
+            <a href="/add-business" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black">Add your business</a>
+            <a href="/how-it-works" className="rounded-lg border border-black/15 px-5 py-2.5 font-semibold">How it works</a>
+          </EmptyPanel>
         </div>
       ) : (
         <ul className="mt-3 grid gap-4 xl:grid-cols-2">
