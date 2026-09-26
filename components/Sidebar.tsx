@@ -178,10 +178,10 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
               aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
               aria-expanded={!collapsed}
               aria-controls="khojau-sidebar"
-              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-              className="absolute -bottom-2 -right-2 grid h-6 w-6 place-items-center rounded-full border border-white/15 bg-black text-zinc-300 transition-colors hover:text-white"
+              title={`${collapsed ? "Expand" : "Collapse"} sidebar  ( [ )`}
+              className="absolute -bottom-2 -right-2 grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-black text-zinc-200 shadow-lg transition-all duration-200 hover:scale-105 hover:text-white active:scale-95"
             >
-              {collapsed ? <PanelLeftOpenIcon className="h-3.5 w-3.5" /> : <PanelLeftCloseIcon className="h-3.5 w-3.5" />}
+              {collapsed ? <PanelLeftOpenIcon className="h-4 w-4" /> : <PanelLeftCloseIcon className="h-4 w-4" />}
             </button>
           )}
         </span>

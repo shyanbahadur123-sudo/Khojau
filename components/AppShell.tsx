@@ -69,11 +69,19 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Global ⌘K / Ctrl+K jumps to search. Never hijacks typing in inputs.
+  // [ toggles the desktop sidebar rail (same typing guard).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== "k") return;
       const t = e.target as HTMLElement | null;
-      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable)) return;
+      const typing = !!t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable);
+      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== "k") {
+        if (!typing && !e.metaKey && !e.ctrlKey && !e.altKey && e.key === "[") {
+          e.preventDefault();
+          toggle();
+        }
+        return;
+      }
+      if (typing) return;
       e.preventDefault();
       router.push("/search");
     };
