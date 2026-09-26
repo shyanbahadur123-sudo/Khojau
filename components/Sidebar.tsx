@@ -204,7 +204,7 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
                   <kbd aria-hidden="true" className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[11px] font-semibold text-zinc-500">⌘K</kbd>
                 )}
                 {!collapsed && href === "/saved" && typeof savedCount === "number" && savedCount > 0 && (
-                  <span aria-label={`${savedCount} saved`} className="rounded-full bg-[#D4AF37]/15 px-2 py-0.5 text-xs font-bold text-[#D4AF37]">{savedCount}</span>
+                  <span className="rounded-full bg-[#D4AF37]/15 px-2 py-0.5 text-xs font-bold text-[#D4AF37]">{savedCount}</span>
                 )}
               </RowShell>
             </li>
