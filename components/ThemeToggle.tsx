@@ -65,7 +65,7 @@ export default function ThemeToggle({ variant = "icon" }: { variant?: "icon" | "
     return (
       <div>
         <p className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">Theme</p>
-        <div role="group" aria-label="Color theme" className="mx-3 flex items-center justify-between rounded-2xl border border-white/10 p-2">
+        <div role="group" aria-label="Color theme" className="mx-3 flex items-center justify-between rounded-2xl border border-black/15 p-2 dark:border-white/10">
           {DOCK.map(({ id, label, Icon }) => {
             const active = ready && theme === id;
             return (
@@ -78,8 +78,8 @@ export default function ThemeToggle({ variant = "icon" }: { variant?: "icon" | "
                 title={label}
                 className={`grid h-10 w-10 place-items-center rounded-full transition-all duration-200 ${
                   active
-                    ? "border border-[#D4AF37] text-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.8)]"
-                    : "bg-white/[0.06] text-zinc-400 hover:bg-white/[0.1] hover:text-white"
+                    ? "border border-[#7A5C00]/50 text-[#7A5C00] shadow-[0_0_8px_rgba(212,175,55,0.5)] dark:border-[#D4AF37] dark:text-[#D4AF37] dark:shadow-[0_0_8px_rgba(212,175,55,0.8)]"
+                    : "bg-black/5 text-[#6B7280] hover:bg-black/10 hover:text-[#0A0A0A] dark:bg-white/[0.06] dark:text-zinc-400 dark:hover:bg-white/[0.1] dark:hover:text-white"
                 }`}
               >
                 <Icon className="h-5 w-5" />
@@ -100,7 +100,7 @@ export default function ThemeToggle({ variant = "icon" }: { variant?: "icon" | "
       onClick={() => choose(next.id)}
       aria-label={`Theme: ${THEMES[idx]?.label ?? "Gold Light"} — switch to ${next.label}`}
       title={`Theme: ${ready ? theme : ""}`}
-      className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-zinc-300 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
+      className="grid h-11 w-11 place-items-center rounded-full border border-black/15 text-[#6B7280] transition-all duration-200 hover:bg-black/5 hover:text-[#0A0A0A] dark:border-white/15 dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:text-white"
     >
       {/* Render neutrally until mounted to avoid a flash of the wrong glyph. */}
       {ready && (dark ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />)}

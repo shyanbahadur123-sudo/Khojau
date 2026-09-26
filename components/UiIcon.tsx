@@ -238,3 +238,11 @@ export function MountainIcon({ className }: { className?: string }) {
     </Base>
   );
 }
+
+export function MenuIcon({ className }: { className?: string }) {
+  return (
+    <Base className={className}>
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </Base>
+  );
+}

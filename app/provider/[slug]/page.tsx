@@ -85,8 +85,8 @@ export default async function ProviderPage({ params }: { params: { slug: string 
       <ContactTracker providerId={p.id} />
 
       {/* Sticky mobile contact bar: stacked Call + side-by-side pair on small screens.
-          Rides above the bottom tab bar (56px + safe area), never under it. */}
-      <div className="sticky bottom-[calc(68px+env(safe-area-inset-bottom))] z-30 flex flex-col gap-2 rounded-2xl border border-black/10 bg-[#FFFFFF] p-2 shadow-lg sm:static sm:grid sm:grid-cols-3 sm:shadow-none">
+          Rides above the floating tab bar, never under it. */}
+      <div className="sticky bottom-[calc(92px+env(safe-area-inset-bottom))] z-30 flex flex-col gap-2 rounded-2xl border border-black/10 bg-[#FFFFFF] p-2 shadow-lg sm:static sm:grid sm:grid-cols-3 sm:shadow-none">
         <a href={`tel:${p.phone}`} className="rounded-full bg-[#C9A227] px-4 py-3 text-center font-semibold text-black" data-track="phone_click">
           Call {p.phone}
         </a>
