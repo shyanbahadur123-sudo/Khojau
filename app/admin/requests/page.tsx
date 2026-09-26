@@ -27,7 +27,7 @@ export default async function AdminRequestsPage({ searchParams }: { searchParams
       <h1 className="text-2xl font-bold">Service requests — {status.replace("_", " ")}</h1>
       <nav className="flex gap-2 text-sm" aria-label="Status filter">
         {[["open", "Open"], ["in_progress", "In progress"], ["completed", "Completed"], ["cancelled", "Cancelled"]].map(([v, l]) => (
-          <a key={v} href={`/admin/requests?status=${v}`} className="rounded-full border px-3 py-1.5">{l}</a>
+          <a key={v} href={`/admin/requests?status=${v}`} className="inline-flex min-h-[44px] items-center rounded-full border px-3 py-1.5">{l}</a>
         ))}
       </nav>
       {(data ?? []).length === 0 ? (

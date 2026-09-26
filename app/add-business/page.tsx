@@ -87,14 +87,16 @@ export default function AddBusinessPage() {
             if (ins) throw new Error(ins.message);
             router.push("/dashboard");
           } catch (err) {
-            const msg = err instanceof Error ? err.message : "Submission failed";
+            const msg = err instanceof Error ? err.message : "";
             // The slug has a UNIQUE constraint as the final safety net. A
             // collision surfaces as a raw constraint message, so translate it
-            // instead of leaking database internals to the user.
+            // instead of leaking schema details to the user. Other raw Supabase
+            // messages (row constraint text, network codes) get a generic
+            // phrase for the same reason.
             if (/duplicate key|unique constraint|already exists/i.test(msg)) {
               setError("A business with a very similar name was just listed. Please tweak the name and try again.");
             } else {
-              setError(msg);
+              setError("Couldn’t submit your listing. Please try again.");
             }
           } finally {
             inFlight.current = false;
