@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
-import { ClockIcon, GridIcon, HeartIcon, HomeIcon, LogoutIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, PinIcon, PlusIcon, SearchIcon, UserIcon, ArrowRightIcon, MountainIcon } from "@/components/UiIcon";
+import { ClockIcon, GridIcon, HeartIcon, HomeIcon, LogoutIcon, PinIcon, PlusIcon, SearchIcon, UserIcon, ArrowRightIcon, MountainIcon, ChevronLeftIcon, ChevronRightIcon } from "@/components/UiIcon";
 import ThemeToggle from "@/components/ThemeToggle";
 
 // Khojau sidebar. The rail follows the active theme via the override
@@ -147,7 +147,7 @@ function RowShell({ active, collapsed, href, label, onNavigate, children }: {
 }
 
 // One source of truth for sidebar navigation.
-export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boolean; onToggle?: () => void; onNavigate?: () => void }) {
+export function SidebarNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate?: () => void }) {
   const path = usePathname();
   const router = useRouter();
   const signedIn = useSession();
@@ -169,21 +169,8 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
   return (
     <div className="flex h-full flex-col overflow-hidden text-zinc-300">
       <div className={`flex items-center gap-3 pb-4 pt-1 ${collapsed ? "flex-col justify-center px-0" : "px-1"}`}>
-        <span className="relative rounded-[14px] bg-white/[0.06] p-1 ring-1 ring-white/10 backdrop-blur-md">
+        <span className="rounded-[14px] bg-white/[0.06] p-1 ring-1 ring-white/10 backdrop-blur-md">
           <BrandLogo compact={collapsed} />
-          {onToggle && (
-            <button
-              type="button"
-              onClick={onToggle}
-              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-              aria-expanded={!collapsed}
-              aria-controls="khojau-sidebar"
-              title={`${collapsed ? "Expand" : "Collapse"} sidebar  ( [ )`}
-              className="absolute -bottom-2 -right-2 grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-black text-zinc-200 shadow-lg transition-all duration-200 hover:scale-105 hover:text-white active:scale-95"
-            >
-              {collapsed ? <PanelLeftOpenIcon className="h-4 w-4" /> : <PanelLeftCloseIcon className="h-4 w-4" />}
-            </button>
-          )}
         </span>
         {!collapsed && (
           <span className="min-w-0 flex-1 whitespace-nowrap leading-tight">
@@ -331,8 +318,21 @@ export default function Sidebar({ collapsed, onToggle }: { collapsed: boolean; o
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_40%_at_50%_0%,rgba(212,175,55,0.08),transparent_70%)]" />
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.05] bg-[url('data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27120%27 height=%27120%27><filter id=%27n%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%272%27/></filter><rect width=%27120%27 height=%27120%27 filter=%27url(%23n)%27 opacity=%270.6%27/></svg>')]" />
       <nav aria-label="Sidebar" className="relative flex h-full flex-col overflow-y-hidden overflow-x-hidden border-r border-white/10 bg-[#0B0D10] p-3">
-        <SidebarNav collapsed={collapsed} onToggle={onToggle} />
+        <SidebarNav collapsed={collapsed} />
       </nav>
+      {onToggle && (
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-expanded={!collapsed}
+          aria-controls="khojau-sidebar"
+          title={`${collapsed ? "Expand" : "Collapse"} sidebar  ( [ )`}
+          className="absolute -right-4 top-24 z-30 grid h-8 w-8 place-items-center rounded-full border border-black/10 bg-[#D4AF37] text-[#0B0D10] shadow-lg transition-all duration-200 hover:scale-105 hover:brightness-110 active:scale-95"
+        >
+          {collapsed ? <ChevronRightIcon className="h-4 w-4" /> : <ChevronLeftIcon className="h-4 w-4" />}
+        </button>
+      )}
     </aside>
   );
 }

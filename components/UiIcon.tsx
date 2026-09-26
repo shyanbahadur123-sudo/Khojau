@@ -197,6 +197,22 @@ export function ChevronDownIcon({ className }: { className?: string }) {
   );
 }
 
+export function ChevronLeftIcon({ className }: { className?: string }) {
+  return (
+    <Base className={className}>
+      <path d="m15 6-6 6 6 6" />
+    </Base>
+  );
+}
+
+export function ChevronRightIcon({ className }: { className?: string }) {
+  return (
+    <Base className={className}>
+      <path d="m9 6 6 6-6 6" />
+    </Base>
+  );
+}
+
 export function BoltIcon({ className }: { className?: string }) {
   return (
     <Base className={className}>
