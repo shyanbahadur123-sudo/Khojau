@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import {
   BoltIcon,
   BookIcon,
-  ChevronDownIcon,
   MoonIcon,
   SunIcon,
 } from "@/components/UiIcon";
@@ -63,32 +62,10 @@ export default function ThemeToggle({ variant = "icon" }: { variant?: "icon" | "
   }
 
   if (variant === "row") {
-    const current = DOCK.find((d) => d.id === theme) ?? DOCK[0];
-    const CurrentIcon = current.Icon;
     return (
       <div>
         <p className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">Theme</p>
-        <div className="relative px-3">
-          <span aria-hidden="true" className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 text-zinc-400">
-            <CurrentIcon className="h-5 w-5" />
-          </span>
-          <select
-            aria-label="Color theme"
-            value={ready ? theme : "gold-light"}
-            onChange={(e) => choose(e.target.value as ThemeId)}
-            className="h-11 w-full appearance-none rounded-xl border border-white/10 bg-transparent pl-11 pr-9 text-sm font-medium text-zinc-200 transition-colors hover:bg-white/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/60"
-          >
-            {THEMES.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.label}
-              </option>
-            ))}
-          </select>
-          <span aria-hidden="true" className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-zinc-500">
-            <ChevronDownIcon className="h-4 w-4" />
-          </span>
-        </div>
-        <div role="group" aria-label="Quick theme" className="mx-3 mt-2 flex items-center justify-between rounded-2xl border border-white/10 p-2">
+        <div role="group" aria-label="Color theme" className="mx-3 flex items-center justify-between rounded-2xl border border-white/10 p-2">
           {DOCK.map(({ id, label, Icon }) => {
             const active = ready && theme === id;
             return (

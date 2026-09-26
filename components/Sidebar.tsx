@@ -128,7 +128,7 @@ function RowShell({ active, collapsed, href, label, onNavigate, children }: {
         aria-current={active ? "page" : undefined}
         className={`khojau-nav-link relative mx-auto grid h-11 w-11 place-items-center rounded-xl transition-all duration-200 hover:bg-white/[0.06] hover:text-white active:bg-white/10 ${active ? "khojau-nav-active bg-white/[0.08] text-[#D4AF37] shadow-[0_0_16px_-4px_rgba(212,175,55,0.5)]" : "text-zinc-400"}`}
       >
-        {active && <span aria-hidden="true" className="absolute left-[-12px] h-5 w-1 rounded-full bg-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.8)]" />}
+        {active && <span aria-hidden="true" className="absolute left-1 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.8)]" />}
         {children}
       </Link>
     );
