@@ -20,7 +20,7 @@ export default async function AdminProvidersPage({ searchParams }: { searchParam
 
   return (
     <div className="space-y-4 pt-6">
-      <h1 className="text-2xl font-bold">Providers {status ? `— ${status}` : ""}</h1>
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Providers {status ? `— ${status}` : ""}</h1>
       <nav className="flex gap-2 text-sm" aria-label="Status filter">
         {[["", "All"], ["pending", "Pending"], ["approved", "Approved"], ["rejected", "Rejected"], ["suspended", "Suspended"]].map(([v, l]) => (
           <a key={v} href={v ? `/admin/providers?status=${v}` : "/admin/providers"} className="inline-flex min-h-[44px] items-center rounded-full border px-3 py-1.5">{l}</a>

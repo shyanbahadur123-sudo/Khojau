@@ -31,7 +31,7 @@ export default async function AdminPage() {
 
   return (
     <div className="space-y-6 pt-6">
-      <h1 className="text-2xl font-bold">Admin dashboard</h1>
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Admin dashboard</h1>
       <p className="text-sm text-[#6B7280]">Signed in as {email}. Every moderation action is audit-logged.</p>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => (
@@ -42,10 +42,10 @@ export default async function AdminPage() {
         ))}
       </div>
       <div className="flex flex-wrap gap-2 text-sm">
-        <Link href="/admin/providers" className="rounded-lg bg-[#C9A227] px-4 py-2 font-semibold text-black">Manage providers</Link>
-        <Link href="/admin/reports" className="rounded-lg border px-4 py-2">Reports</Link>
-        <Link href="/admin/requests" className="rounded-lg border px-4 py-2">Requests</Link>
-        <Link href="/admin/categories" className="rounded-lg border px-4 py-2">Categories</Link>
+        <Link href="/admin/providers" className="rounded-full bg-[#C9A227] px-4 py-2 font-semibold text-black">Manage providers</Link>
+        <Link href="/admin/reports" className="rounded-full border px-4 py-2">Reports</Link>
+        <Link href="/admin/requests" className="rounded-full border px-4 py-2">Requests</Link>
+        <Link href="/admin/categories" className="rounded-full border px-4 py-2">Categories</Link>
       </div>
       <section aria-label="Recent admin activity" className="rounded-xl bg-[#FFFFFF] p-5">
         <h2 className="font-bold">Recent activity</h2>

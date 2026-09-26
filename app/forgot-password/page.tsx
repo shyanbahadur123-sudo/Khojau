@@ -12,7 +12,7 @@ export default function ForgotPasswordPage() {
   if (!isSupabaseConfigured()) {
     return (
       <div className="mx-auto mt-6 max-w-md rounded-2xl bg-[#FFFFFF] p-6">
-        <h1 className="text-2xl font-bold">Reset password</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Reset password</h1>
         <p className="mt-2 text-sm">Authentication is not configured yet.</p>
       </div>
     );
@@ -20,7 +20,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="mx-auto mt-6 max-w-md rounded-2xl bg-[#FFFFFF] p-6">
-      <h1 className="text-2xl font-bold">Reset password</h1>
+      <h1 className="text-3xl font-bold tracking-tight">Reset password</h1>
       <p className="mt-1 text-sm text-[#6B7280]">We&apos;ll email you a link to set a new password.</p>
       <form
         className="mt-4 space-y-3"
@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
           <label htmlFor="email" className="text-sm font-semibold">Email</label>
           <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 h-11 w-full rounded-lg border border-black/15 px-3" />
         </div>
-        <button disabled={loading} className="h-11 w-full rounded-lg bg-[#C9A227] font-semibold text-black disabled:opacity-60">
+        <button disabled={loading} className="h-11 w-full rounded-full bg-[#C9A227] font-semibold text-black disabled:opacity-60">
           {loading ? "Sending…" : "Send reset link"}
         </button>
         {status && <p role="status" className="text-sm text-[#6B7280]">{status}</p>}

@@ -28,10 +28,10 @@ export default function AdminNotice({
               Moderation stays locked rather than failing open. If you run Khojau, add this email to <code>ADMIN_EMAILS</code>.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Link href="/dashboard" className="rounded-lg bg-[#C9A227] px-4 py-2 text-sm font-semibold text-black">
+              <Link href="/dashboard" className="rounded-full bg-[#C9A227] px-4 py-2 text-sm font-semibold text-black">
                 Back to dashboard
               </Link>
-              <Link href="/" className="rounded-lg border border-black/15 px-4 py-2 text-sm font-semibold">
+              <Link href="/" className="rounded-full border border-black/15 px-4 py-2 text-sm font-semibold">
                 Home
               </Link>
             </div>

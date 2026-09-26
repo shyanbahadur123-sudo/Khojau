@@ -2,7 +2,7 @@ export const metadata = { title: "Contact", alternates: { canonical: "/contact" 
 export default function ContactPage() {
   return (
     <div className="max-w-2xl space-y-4 pt-6">
-      <h1 className="text-2xl font-bold">Contact Khojau</h1>
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Contact Khojau</h1>
       <p className="text-[15px] text-[#6B7280]">For listing help, corrections, removals, or advertising (Featured Rs.299/mo, Premium Rs.499–999/mo).</p>
       <div className="rounded-2xl bg-[#FFFFFF] p-6 text-[15px]">
         <p><strong>Email:</strong> hello@khojau.com</p>

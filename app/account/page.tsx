@@ -26,7 +26,7 @@ export default async function AccountPage() {
     <div className="mx-auto max-w-2xl space-y-6 pt-6">
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Account</p>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">Your account</h1>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Your account</h1>
       </div>
 
       <section aria-labelledby="profile" className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-6 shadow-sm">
@@ -71,11 +71,11 @@ export default async function AccountPage() {
       <section aria-labelledby="security" className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-6 shadow-sm">
         <h2 id="security" className="font-bold">Security</h2>
         <div className="mt-3 flex flex-wrap gap-2">
-          <Link href="/forgot-password" className="rounded-lg border border-black/15 px-4 py-2 text-sm font-semibold transition-colors hover:bg-black/5">
+          <Link href="/forgot-password" className="rounded-full border border-black/15 px-4 py-2 text-sm font-semibold transition-colors hover:bg-black/5">
             Reset password
           </Link>
           <form action="/api/auth/signout" method="post">
-            <button className="rounded-lg border border-black/15 px-4 py-2 text-sm font-semibold transition-colors hover:bg-black/5">
+            <button className="rounded-full border border-black/15 px-4 py-2 text-sm font-semibold transition-colors hover:bg-black/5">
               Sign out
             </button>
           </form>

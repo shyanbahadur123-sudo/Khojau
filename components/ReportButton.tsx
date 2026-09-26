@@ -74,7 +74,7 @@ export default function ReportButton({ providerId }: { providerId: string }) {
             placeholder="e.g. Wrong phone number, closed business…"
           />
           <div className="mt-2 flex gap-2">
-            <button type="submit" disabled={busy} className="min-h-[44px] rounded-lg bg-[#0A0A0A] px-4 py-2 font-semibold text-white disabled:opacity-60">
+            <button type="submit" disabled={busy} className="min-h-[44px] rounded-full bg-[#0A0A0A] px-4 py-2 font-semibold text-white disabled:opacity-60">
               {busy ? "Sending…" : "Submit"}
             </button>
             <button type="button" onClick={close} className="min-h-[44px] rounded-lg border px-4 py-2">Cancel</button>

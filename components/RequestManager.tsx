@@ -64,7 +64,7 @@ export default function RequestManager({ incoming, mine }: { incoming: ServiceRe
                         key={a.to}
                         disabled={busy !== null}
                         onClick={() => void setStatus(r.id, a.to)}
-                        className="min-h-[44px] rounded-lg bg-[#C9A227] px-3 py-1.5 text-xs font-semibold text-black disabled:opacity-60"
+                        className="min-h-[44px] rounded-full bg-[#C9A227] px-3 py-1.5 text-xs font-semibold text-black disabled:opacity-60"
                       >
                         {busy === `${r.id}-${a.to}` ? "…" : a.label}
                       </button>

@@ -44,7 +44,7 @@ export default async function RequestsPage() {
     <div className="mx-auto max-w-2xl space-y-6 pt-6">
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Activity</p>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">My requests</h1>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">My requests</h1>
         <p className="mt-1 text-sm text-[#6B7280]" role="status">
           {rows.length === 0 ? "No requests yet." : `${rows.length} request${rows.length === 1 ? "" : "s"}.`}
         </p>
@@ -53,7 +53,7 @@ export default async function RequestsPage() {
         <div className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-8 text-center shadow-sm">
           <p className="text-lg font-bold tracking-tight">No service requests yet</p>
           <p className="mx-auto mt-1 max-w-md text-sm text-[#6B7280]">Tell us what you need and track every reply here.</p>
-          <Link href="/request-service" className="mt-4 inline-block rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">
+          <Link href="/request-service" className="mt-4 inline-block rounded-full bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">
             Find a service
           </Link>
         </div>

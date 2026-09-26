@@ -36,7 +36,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
         <Link href="/" className="hover:underline">Home</Link> / <Link href="/services" className="hover:underline">Services</Link> / <span aria-current="page">{c.name}</span>
       </nav>
       <div>
-        <h1 className="flex items-center gap-3 text-2xl font-bold tracking-tight sm:text-3xl"><span className="grid h-11 w-11 place-items-center rounded-xl bg-[#C9A227]/15 text-[#7A5C00]"><CategoryIcon slug={c.slug} className="h-5 w-5" /></span>{c.name} in Nepal</h1>
+        <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl"><span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#C9A227]/15 text-[#7A5C00]"><CategoryIcon slug={c.slug} className="h-5 w-5" /></span>{c.name} in Nepal</h1>
         {c.description && <p className="mt-2 max-w-2xl text-[#6B7280]">{c.description}</p>}
         {fetched.error ? (
           <div role="alert" className="mt-2 rounded-xl bg-red-500/10 p-4 text-sm text-[#6B7280]">
@@ -57,8 +57,8 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
           <p className="text-lg font-bold tracking-tight">No {c.name.toLowerCase()} listings yet</p>
           <p className="mx-auto mt-1 max-w-md text-sm text-[#6B7280]">List your {c.name.toLowerCase()} business for free, or send a request and we&rsquo;ll help match you.</p>
           <div className="mt-4 flex flex-wrap justify-center gap-2">
-            <Link href="/add-business" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Add your business</Link>
-            <Link href="/request-service" className="rounded-lg border border-black/15 px-5 py-2.5 font-semibold transition-colors hover:bg-black/5">Request this service</Link>
+            <Link href="/add-business" className="rounded-full bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Add your business</Link>
+            <Link href="/request-service" className="rounded-full border border-black/15 px-5 py-2.5 font-semibold transition-colors hover:bg-black/5">Request this service</Link>
           </div>
         </div>
       ) : (

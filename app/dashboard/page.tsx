@@ -60,7 +60,7 @@ export default async function DashboardPage() {
   if (!sb) {
     return (
       <div className="pt-6">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Dashboard</h1>
         <p className="mt-2 text-sm text-[#6B7280]">Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.</p>
       </div>
     );
@@ -107,7 +107,7 @@ export default async function DashboardPage() {
       <div className="space-y-6 pt-4 sm:pt-6">
         <PageHeader eyebrow="Dashboard" title="My listings" hint="Manage your businesses, requests and profile." />
         <InlineAlert title="Couldn't load your listings" note="Check your connection and try again — your data is safe.">
-          <a href="/dashboard" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black">Try again</a>
+          <a href="/dashboard" className="rounded-full bg-[#C9A227] px-5 py-2.5 font-semibold text-black">Try again</a>
         </InlineAlert>
       </div>
     );
@@ -140,9 +140,9 @@ export default async function DashboardPage() {
         ))}
       </div>
       <div className="flex flex-wrap gap-2">
-        <a href="/add-business" className="inline-flex min-h-[44px] items-center rounded-lg bg-[#C9A227] px-4 py-2 font-semibold text-black transition-colors hover:bg-[#B8941F]">Add business</a>
-        {isAdminEmail(user.email) && <a href="/admin" className="inline-flex min-h-[44px] items-center rounded-lg border border-black/15 px-4 py-2 font-semibold transition-colors hover:bg-black/5">Admin dashboard</a>}
-        <form action="/api/auth/signout" method="post"><button className="inline-flex min-h-[44px] items-center rounded-lg border border-black/15 px-4 py-2 font-medium transition-colors hover:bg-black/5">Sign out</button></form>
+        <a href="/add-business" className="inline-flex min-h-[44px] items-center rounded-full bg-[#C9A227] px-4 py-2 font-semibold text-black transition-colors hover:bg-[#B8941F]">Add business</a>
+        {isAdminEmail(user.email) && <a href="/admin" className="inline-flex min-h-[44px] items-center rounded-full border border-black/15 px-4 py-2 font-semibold transition-colors hover:bg-black/5">Admin dashboard</a>}
+        <form action="/api/auth/signout" method="post"><button className="inline-flex min-h-[44px] items-center rounded-full border border-black/15 px-4 py-2 font-medium transition-colors hover:bg-black/5">Sign out</button></form>
       </div>
       <div id="requests" className="scroll-mt-20">
         {requestsError && (
@@ -155,8 +155,8 @@ export default async function DashboardPage() {
       {rows.length === 0 ? (
         <div className="mt-3">
           <EmptyPanel title="No listings yet" note="Submit your first business — it goes to pending review and appears here.">
-            <a href="/add-business" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black">Add your business</a>
-            <a href="/how-it-works" className="rounded-lg border border-black/15 px-5 py-2.5 font-semibold">How it works</a>
+            <a href="/add-business" className="rounded-full bg-[#C9A227] px-5 py-2.5 font-semibold text-black">Add your business</a>
+            <a href="/how-it-works" className="rounded-full border border-black/15 px-5 py-2.5 font-semibold">How it works</a>
           </EmptyPanel>
         </div>
       ) : (

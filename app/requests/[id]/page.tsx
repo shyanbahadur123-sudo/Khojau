@@ -53,7 +53,7 @@ export default async function RequestDetailPage({ params }: { params: { id: stri
 
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Request</p>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">{r.service}</h1>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{r.service}</h1>
         <p className="mt-1 text-sm text-[#6B7280]">
           {r.location} · Requested {timeAgo(r.created_at)}
         </p>
@@ -81,11 +81,11 @@ export default async function RequestDetailPage({ params }: { params: { id: stri
             </Link>
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
-            <a href={`tel:${r.providers.phone}`} className="rounded-lg bg-[#C9A227] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#B8941F]">
+            <a href={`tel:${r.providers.phone}`} className="rounded-full bg-[#C9A227] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#B8941F]">
               Call provider
             </a>
             {wa && (
-              <a href={wa} target="_blank" rel="noopener" className="rounded-lg border border-black/15 px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-black/5">
+              <a href={wa} target="_blank" rel="noopener" className="rounded-full border border-black/15 px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-black/5">
                 Message
               </a>
             )}

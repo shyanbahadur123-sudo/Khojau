@@ -19,7 +19,7 @@ export default async function AdminCategoriesPage() {
 
   return (
     <div className="space-y-4 pt-6">
-      <h1 className="text-2xl font-bold">Categories</h1>
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Categories</h1>
       <p className="text-sm text-[#6B7280]">Canonical list has 22 categories. Run the seed in supabase/migrations/0001_init.sql to sync the DB.</p>
       <ul className="grid gap-2 sm:grid-cols-2">
         {CATEGORIES.map((c) => (

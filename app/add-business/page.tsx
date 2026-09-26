@@ -16,7 +16,7 @@ export default function AddBusinessPage() {
   if (!isSupabaseConfigured()) {
     return (
       <div className="pt-6">
-        <h1 className="text-2xl font-bold">Add your business</h1>
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Add your business</h1>
         <p className="mt-2 text-sm">Supabase is not configured yet. Add credentials to <code>.env.local</code> first.</p>
       </div>
     );
@@ -25,7 +25,7 @@ export default function AddBusinessPage() {
   return (
     <div className="mx-auto max-w-2xl pt-6">
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Free basic listing</p>
-      <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">Add your business</h1>
+      <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Add your business</h1>
       <p className="mt-1 text-sm text-[#6B7280]">Submissions are reviewed before going public. It takes a few minutes.</p>
       <ol aria-label="How listing works" className="mt-4 grid gap-2 sm:grid-cols-3">
         {[
@@ -167,7 +167,7 @@ export default function AddBusinessPage() {
           </div>
         </details>
         {error && <p role="alert" className="rounded-lg bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-400">{error}</p>}
-        <button disabled={loading} className="h-12 w-full rounded-lg bg-[#C9A227] font-semibold text-black transition-colors hover:bg-[#B8941F] disabled:opacity-60">
+        <button disabled={loading} className="h-12 w-full rounded-full bg-[#C9A227] font-semibold text-black transition-colors hover:bg-[#B8941F] disabled:opacity-60">
           {loading ? "Submitting…" : "Submit for review"}
         </button>
         <p className="text-center text-xs text-[#6B7280]">Track approval status in your <a href="/dashboard" className="underline underline-offset-2">dashboard</a>.</p>

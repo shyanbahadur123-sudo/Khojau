@@ -115,23 +115,6 @@ export function ConfirmDialog({
 
   if (!isOpen) return null;
 
-  const confirmButtonClass = `
-    flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-sm
-    transition-all duration-200
-    ${variant === "destructive"
-      ? "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus:ring-2 focus:ring-red-500/50"
-      : "bg-[#C9A227] text-[#0B0D10] hover:bg-[#B8941F] active:bg-[#A8841F] focus:ring-2 focus:ring-[#D4AF37]/50"
-    }
-    disabled:opacity-60 disabled:cursor-not-allowed
-  `;
-
-  const cancelButtonClass = `
-    flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium
-    transition-all duration-200
-    text-zinc-400 hover:bg-white/[0.06] hover:text-white active:bg-white/10
-    focus:outline-none focus-visible:ring-2 focus:ring-[#D4AF37]/50
-  `;
-
   const dialogContent = (
     <div
       ref={dialogRef}
@@ -178,7 +161,7 @@ export function ConfirmDialog({
             type="button"
             onClick={onClose}
             disabled={disabled}
-            className="flex-1 min-h-[44px] items-center justify-center gap-2 rounded-xl border border-black/15 px-4 py-2.5 text-sm font-medium transition-all hover:bg-black/5 active:bg-black/10 disabled:opacity-50"
+            className="flex-1 min-h-[44px] items-center justify-center gap-2 rounded-full border border-black/15 px-4 py-2.5 text-sm font-medium transition-all hover:bg-black/5 active:bg-black/10 disabled:opacity-50"
           >
             {cancelText}
           </button>
@@ -192,7 +175,7 @@ export function ConfirmDialog({
             disabled={pending || disabled}
             data-testid="confirm-button"
             className={`
-              flex-1 min-h-[44px] items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-sm transition-all duration-200
+              flex-1 min-h-[44px] items-center justify-center gap-2 rounded-full px-4 py-2 font-semibold text-sm transition-all duration-200
               ${variant === "destructive"
                 ? "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus:ring-2 focus:ring-red-500/50"
                 : "bg-[#C9A227] text-[#0B0D10] hover:bg-[#B8941F] active:bg-[#A8841F]"

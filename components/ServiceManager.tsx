@@ -125,7 +125,7 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
                   <input aria-label="Minimum price" type="number" min={0} value={editing.price_min ?? ""} onChange={(e) => setEditing({ ...editing, price_min: e.target.value === "" ? null : Number(e.target.value) })} className="h-11 rounded-lg border border-black/15 px-2" />
                   <input aria-label="Maximum price" type="number" min={0} value={editing.price_max ?? ""} onChange={(e) => setEditing({ ...editing, price_max: e.target.value === "" ? null : Number(e.target.value) })} className="h-11 rounded-lg border border-black/15 px-2" />
                   <div className="flex gap-2 sm:col-span-4">
-                    <button disabled={disabled} onClick={() => void saveEdit()} className="min-h-[44px] rounded-lg bg-[#C9A227] px-3 py-1.5 font-semibold text-black">Save</button>
+                    <button disabled={disabled} onClick={() => void saveEdit()} className="min-h-[44px] rounded-full bg-[#C9A227] px-3 py-1.5 font-semibold text-black">Save</button>
                     <button disabled={disabled} onClick={() => setEditing(null)} className="min-h-[44px] rounded-lg border px-3 py-1.5">Cancel</button>
                   </div>
                 </div>
@@ -152,7 +152,7 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
         <input aria-label="New service minimum price" type="number" min={0} placeholder="Min Rs." value={min} onChange={(e) => setMin(e.target.value)} className="h-11 rounded-lg border border-black/15 px-3" />
         <input aria-label="New service maximum price" type="number" min={0} placeholder="Max Rs." value={max} onChange={(e) => setMax(e.target.value)} className="h-11 rounded-lg border border-black/15 px-3" />
       </div>
-      <button disabled={disabled || name.trim() === ""} onClick={() => void add()} className="mt-2 h-11 rounded-lg bg-[#0A0A0A] px-5 font-semibold text-white disabled:opacity-60">
+      <button disabled={disabled || name.trim() === ""} onClick={() => void add()} className="mt-2 h-11 rounded-full bg-[#0A0A0A] px-5 font-semibold text-white disabled:opacity-60">
         {busy === "add" ? "Adding…" : "Add service"}
       </button>
       <ConfirmDialog

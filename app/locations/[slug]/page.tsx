@@ -32,7 +32,7 @@ export default async function LocationDetailPage({ params }: { params: { slug: s
         <Link href="/" className="hover:underline">Home</Link> / <Link href="/locations" className="hover:underline">Locations</Link> / <span aria-current="page">{l.city}</span>
       </nav>
       <div>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Local services in {l.city}</h1>
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Local services in {l.city}</h1>
         {fetchFailed ? (
           <div role="alert" className="mt-2 rounded-xl bg-red-500/10 p-4 text-sm text-[#6B7280]">
             <span className="font-semibold text-red-700">Couldn’t load listings.</span>{" "}
@@ -61,8 +61,8 @@ export default async function LocationDetailPage({ params }: { params: { slug: s
           <p className="text-lg font-bold tracking-tight">No listings in {l.city} yet</p>
           <p className="mx-auto mt-1 max-w-md text-sm text-[#6B7280]">List your {l.city} business for free, or send a request and we&rsquo;ll help match you.</p>
           <div className="mt-4 flex flex-wrap justify-center gap-2">
-            <Link href="/add-business" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Add your business</Link>
-            <Link href="/request-service" className="rounded-lg border border-black/15 px-5 py-2.5 font-semibold transition-colors hover:bg-black/5">Request this service</Link>
+            <Link href="/add-business" className="rounded-full bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Add your business</Link>
+            <Link href="/request-service" className="rounded-full border border-black/15 px-5 py-2.5 font-semibold transition-colors hover:bg-black/5">Request this service</Link>
           </div>
         </div>
       ) : (

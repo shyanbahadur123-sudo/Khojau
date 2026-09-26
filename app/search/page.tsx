@@ -60,7 +60,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
           eyebrow="Search"
           title="Find local services"
           hint="Search trusted providers across Nepal"
-          actions={<a href="/search" className="rounded-lg border border-black/15 px-4 py-2">Retry</a>}
+          actions={<a href="/search" className="rounded-full border border-black/15 px-4 py-2">Retry</a>}
         />
         <InlineAlert
           title="Search is temporarily unavailable"
@@ -159,17 +159,17 @@ export default async function SearchPage({ searchParams }: { searchParams: Recor
           title="Nothing matched that search"
           note={<span>Try a broader service term or a nearby area.</span>}
         >
-          <a href="/search" className="rounded-lg bg-[#C9A227] px-4 py-2 font-semibold text-black">Clear filters</a>
-          <a href="/services" className="rounded-lg border border-black/15 px-4 py-2">Browse categories</a>
+          <a href="/search" className="rounded-full bg-[#C9A227] px-4 py-2 font-semibold text-black">Clear filters</a>
+          <a href="/services" className="rounded-full border border-black/15 px-4 py-2">Browse categories</a>
         </EmptyPanel>
       )}
       {total > PAGE_SIZE && (
         <nav aria-label="Search results pages" className="flex items-center justify-center gap-2 text-sm">
-          {page > 1 && <a href={buildHref({ page: String(page - 1) })} aria-label="Go to previous results page" className="inline-flex min-h-[44px] items-center rounded-lg border px-4 py-2">Previous</a>}
+          {page > 1 && <a href={buildHref({ page: String(page - 1) })} aria-label="Go to previous results page" className="inline-flex min-h-[44px] items-center rounded-full border px-4 py-2">Previous</a>}
           <span className="px-1 text-[13px] font-medium text-[#6B7280]" aria-hidden="true">
             Page {page} of {Math.ceil(total / PAGE_SIZE)}
           </span>
-          {(page * PAGE_SIZE < total) && <a href={buildHref({ page: String(page + 1) })} aria-label="Go to next results page" className="inline-flex min-h-[44px] items-center rounded-lg border px-4 py-2">Next</a>}
+          {(page * PAGE_SIZE < total) && <a href={buildHref({ page: String(page + 1) })} aria-label="Go to next results page" className="inline-flex min-h-[44px] items-center rounded-full border px-4 py-2">Next</a>}
         </nav>
       )}
     </div>

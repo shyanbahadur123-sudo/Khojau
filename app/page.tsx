@@ -67,9 +67,9 @@ export default async function HomePage() {
   const latest = all.filter((p) => p.plan !== "featured" && p.plan !== "premium").slice(0, 6);
 
   return (
-    <div className="space-y-6 pt-4 sm:space-y-8 sm:pt-6">
+    <div className="space-y-8 pt-6 sm:space-y-10 sm:pt-8">
       {/* App console: status + search first, no marketing hero. */}
-      <section aria-labelledby="app-heading" className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-4 shadow-sm sm:p-6">
+      <section aria-labelledby="app-heading" className="rounded-3xl border border-black/10 bg-[#FFFFFF] p-5 shadow-sm sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Khojau app</p>
           {loggedIn ? (
@@ -82,10 +82,10 @@ export default async function HomePage() {
             </span>
           )}
         </div>
-        <h1 id="app-heading" className="mt-2 text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
+        <h1 id="app-heading" className="mt-2 text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl">
           What do you need done today?
         </h1>
-        <p className="mt-1 text-sm text-[#6B7280]">Search verified local providers across Nepal — direct contact, no middlemen.</p>
+        <p className="mt-2 text-[15px] text-[#6B7280]">Search verified local providers across Nepal — direct contact, no middlemen.</p>
         <div className="mt-3"><Suspense fallback={<SearchBarSkeleton />}><SearchBar /></Suspense></div>
         <div className="mt-2.5 flex items-center gap-2 text-[13px]">
           <span className="shrink-0 text-[#6B7280]">Try:</span>
@@ -107,7 +107,7 @@ export default async function HomePage() {
             <li key={href + title}>
               <Link
                 href={href}
-                className="flex h-full min-h-[76px] items-center gap-3 rounded-xl border border-black/10 bg-[#FFFFFF] p-3 shadow-sm transition-all hover:-translate-y-[1px] hover:shadow-md active:translate-y-0"
+                className="flex h-full min-h-[84px] items-center gap-3 rounded-2xl border border-black/10 bg-[#FFFFFF] p-4 shadow-sm transition-all hover:-translate-y-[1px] hover:shadow-md active:translate-y-0"
               >
                 <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#C9A227]/15 text-[#7A5C00]">
                   <Icon className="h-5 w-5" />
@@ -125,18 +125,18 @@ export default async function HomePage() {
       {loggedIn ? (
         listingsFailed ? (
           <section aria-labelledby="latest" className="scroll-mt-20 rounded-2xl border border-red-300/60 bg-red-500/10 p-6 text-center">
-            <h2 id="latest" className="text-xl font-bold tracking-tight">Recent listings</h2>
+            <h2 id="latest" className="text-2xl font-bold tracking-tight">Recent listings</h2>
             <p className="mx-auto mt-2 max-w-md text-sm text-[#6B7280]">
               We couldn’t load recent listings right now. Your account is fine — try again shortly.
             </p>
             <div className="mt-4 flex flex-wrap justify-center gap-3">
-              <Link href="/" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Refresh</Link>
+              <Link href="/" className="rounded-full bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Refresh</Link>
             </div>
           </section>
         ) : latest.length > 0 && (
           <section aria-labelledby="latest" className="scroll-mt-20">
             <div className="mb-1 flex items-center justify-between">
-              <h2 id="latest" className="text-xl font-bold tracking-tight">Recent</h2>
+              <h2 id="latest" className="text-2xl font-bold tracking-tight">Recent</h2>
               <Link href="/recent" className="text-sm font-semibold text-[#0A0A0A] hover:underline">View all</Link>
             </div>
             <p className="mb-4 text-sm text-[#6B7280]">Newly approved listings, newest first.</p>
@@ -149,20 +149,20 @@ export default async function HomePage() {
         )
       ) : (
         <section aria-labelledby="latest" className="scroll-mt-20 rounded-2xl border border-black/10 bg-[#FFFFFF] p-6 text-center shadow-sm sm:p-8">
-          <h2 id="latest" className="text-xl font-bold tracking-tight">Recent listings</h2>
+          <h2 id="latest" className="text-2xl font-bold tracking-tight">Recent listings</h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-[#6B7280]">
             Newly approved listings are visible to members only. Log in to browse recent posts and full provider details.
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
-            <Link href="/login?next=/recent" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Log in to view</Link>
-            <Link href="/register" className="rounded-lg border border-black/15 px-5 py-2.5 font-semibold transition-colors hover:bg-black/5">Create account</Link>
+            <Link href="/login?next=/recent" className="rounded-full bg-[#C9A227] px-5 py-2.5 font-semibold text-black transition-colors hover:bg-[#B8941F]">Log in to view</Link>
+            <Link href="/register" className="rounded-full border border-black/15 px-5 py-2.5 font-semibold transition-colors hover:bg-black/5">Create account</Link>
           </div>
         </section>
       )}
 
       <section aria-labelledby="browse-categories">
         <div className="mb-3 flex items-center justify-between">
-          <h2 id="browse-categories" className="text-xl font-bold tracking-tight">Categories</h2>
+          <h2 id="browse-categories" className="text-2xl font-bold tracking-tight">Categories</h2>
           <Link href="/services" className="inline-flex min-h-[36px] items-center text-sm font-semibold text-[#0A0A0A] hover:underline">View all {CATEGORIES.length}</Link>
         </div>
         <CategoryGrid limit={8} />
@@ -170,7 +170,7 @@ export default async function HomePage() {
 
       <section aria-labelledby="popular-locations">
         <div className="mb-2 flex items-center justify-between">
-          <h2 id="popular-locations" className="text-lg font-bold">Locations</h2>
+          <h2 id="popular-locations" className="text-2xl font-bold tracking-tight">Locations</h2>
           <Link href="/locations" className="inline-flex min-h-[36px] items-center text-sm font-semibold text-[#111111] hover:underline">View all</Link>
         </div>
         <ul className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -198,7 +198,7 @@ export default async function HomePage() {
       {trending.length > 0 && (
         <section aria-labelledby="trending">
           <div className="mb-1 flex items-center justify-between">
-            <h2 id="trending" className="text-xl font-bold tracking-tight">Trending this week</h2>
+            <h2 id="trending" className="text-2xl font-bold tracking-tight">Trending this week</h2>
             <Link href="/search" className="text-sm font-semibold text-[#0A0A0A] hover:underline">Search all</Link>
           </div>
           <p className="mb-4 text-sm text-[#6B7280]">Ranked by real visits and contact taps in the last 14 days.</p>
@@ -213,16 +213,16 @@ export default async function HomePage() {
       {urgent.length > 0 && (
         <section aria-labelledby="urgent">
           <div className="mb-1 flex items-center justify-between">
-            <h2 id="urgent" className="text-xl font-bold tracking-tight">Needs help now</h2>
+            <h2 id="urgent" className="text-2xl font-bold tracking-tight">Needs help now</h2>
             <Link href="/add-business" className="text-sm font-semibold text-[#0A0A0A] hover:underline">Offer a service</Link>
           </div>
           <p className="mb-4 text-sm text-[#6B7280]">Open customer requests. Contact details stay private.</p>
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {urgent.map((u) => (
-              <li key={u.id} className="rounded-xl border border-black/10 bg-[#FFFFFF] p-4 shadow-sm">
+              <li key={u.id} className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-5 shadow-sm">
                 <p className="font-semibold leading-snug">{u.service}</p>
                 <p className="mt-1 text-sm text-[#6B7280]">{u.location} · {timeAgo(u.created_at)}</p>
-                <Link href="/add-business" className="mt-3 inline-block rounded-lg bg-[#C9A227] px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#B8941F]">
+                <Link href="/add-business" className="mt-3 inline-block rounded-full bg-[#C9A227] px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#B8941F]">
                   I offer this service
                 </Link>
               </li>
@@ -241,14 +241,14 @@ export default async function HomePage() {
             Khojau is a new directory for trusted local services in Nepal. List your business for free and get discovered by customers nearby.
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
-            <Link href="/add-business" className="rounded-lg bg-[#C9A227] px-5 py-3 font-semibold text-black">List your business — it&apos;s free</Link>
-            <Link href="/request-service" className="rounded-lg border border-black/15 px-5 py-3 font-semibold">Request a service</Link>
+            <Link href="/add-business" className="rounded-full bg-[#C9A227] px-5 py-3 font-semibold text-black">List your business — it&apos;s free</Link>
+            <Link href="/request-service" className="rounded-full border border-black/15 px-5 py-3 font-semibold">Request a service</Link>
           </div>
         </section>
       )}
 
       {/* App link strip keeps key flows reachable without a footer-sized block. */}
-      <nav aria-label="Learn more" className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 rounded-2xl bg-[#FFFFFF] p-4 text-sm font-semibold shadow-sm">
+      <nav aria-label="Learn more" className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 rounded-3xl bg-[#FFFFFF] p-5 text-sm font-semibold shadow-sm">
         <Link href="/how-it-works" className="hover:underline">How it works</Link>
         <Link href="/add-business" className="hover:underline">Become a provider</Link>
         <Link href="/request-service" className="hover:underline">Request a service</Link>

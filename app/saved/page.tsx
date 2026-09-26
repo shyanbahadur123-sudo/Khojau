@@ -34,7 +34,7 @@ export default async function SavedPage() {
         hint={providers.length === 0 ? "Save providers you plan to contact later." : "Saved businesses stay private to your account."}
         actions={
           providers.length > 0 ? (
-            <Link href="/search" className="rounded-lg border border-black/15 px-4 py-2">
+            <Link href="/search" className="rounded-full border border-black/15 px-4 py-2">
               Discover more
             </Link>
           ) : undefined
@@ -51,7 +51,7 @@ export default async function SavedPage() {
           title="No saved providers yet"
           note="Tap the heart on any provider to keep it here for later."
         >
-          <Link href="/search" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black">Discover providers</Link>
+          <Link href="/search" className="rounded-full bg-[#C9A227] px-5 py-2.5 font-semibold text-black">Discover providers</Link>
         </EmptyPanel>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

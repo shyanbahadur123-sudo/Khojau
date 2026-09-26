@@ -49,7 +49,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
   if (!isSupabaseConfigured()) {
     return (
       <div className="mx-auto mt-6 w-full max-w-md rounded-2xl border border-black/10 bg-[#FFFFFF] p-6 shadow-sm sm:p-8">
-        <h1 className="text-2xl font-bold tracking-tight">{mode === "register" ? "Create account" : "Log in"}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{mode === "register" ? "Create account" : "Log in"}</h1>
         <p className="mt-2 text-sm">Authentication is not configured yet. Add Supabase credentials to <code>.env.local</code>.</p>
       </div>
     );
@@ -107,7 +107,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">
             {mode === "register" ? "Join Khojau" : "Welcome back"}
           </p>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight">{mode === "register" ? "Create account" : "Log in"}</h1>
+          <h1 className="mt-1 text-3xl font-bold tracking-tight">{mode === "register" ? "Create account" : "Log in"}</h1>
           <p className="mt-1 text-sm text-[#6B7280]">
             {mode === "register" ? "One account for requesting services and listing your business." : "Access your listings and requests."}
           </p>
@@ -116,7 +116,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
           type="button"
           disabled={oauthLoading || loading}
           onClick={() => void signInWithGoogle()}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-black/15 bg-transparent font-semibold transition-colors hover:bg-black/5 disabled:opacity-60"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-full border border-black/15 bg-transparent font-semibold transition-colors hover:bg-black/5 disabled:opacity-60"
         >
           <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M23.5 12.3c0-.9-.1-1.5-.3-2.3H12v4.5h6.5c-.1 1.1-.8 2.7-2.4 3.8l-.1.1 3.5 2.7.1.1c2.2-2 3.9-5 3.9-8.9z" />
@@ -153,7 +153,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
         </div>
         {(error || oauthError) && <p role="alert" className="rounded-lg bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-400">{error ?? oauthError}</p>}
         {notice && <p role="status" className="rounded-lg bg-[#C9A227]/15 p-3 text-sm text-[#7A5C00]">{notice}</p>}
-        <button disabled={loading || oauthLoading} className="h-12 w-full rounded-lg bg-[#C9A227] font-semibold text-black transition-colors hover:bg-[#B8941F] disabled:opacity-60">
+        <button disabled={loading || oauthLoading} className="h-12 w-full rounded-full bg-[#C9A227] font-semibold text-black transition-colors hover:bg-[#B8941F] disabled:opacity-60">
           {loading ? "Please wait…" : mode === "register" ? "Create account" : "Log in"}
         </button>
         <div className="flex items-center justify-between text-sm">

@@ -82,7 +82,7 @@ export default function AdminProviderActions({ rows }: { rows: Row[] }) {
             <a href={`/provider/${p.slug}`} target="_blank" className="underline">View</a>
           </div>
           <div className="mt-2 flex flex-wrap gap-2">
-            <button disabled={busy !== null} onClick={() => act(p.id, "approve")} className="rounded-lg bg-[#C9A227] px-3 py-1.5 font-semibold text-black disabled:opacity-60">{busy === p.id + "approve" ? "Working…" : "Approve"}</button>
+            <button disabled={busy !== null} onClick={() => act(p.id, "approve")} className="rounded-full bg-[#C9A227] px-3 py-1.5 font-semibold text-black disabled:opacity-60">{busy === p.id + "approve" ? "Working…" : "Approve"}</button>
             <button disabled={busy !== null} onClick={() => act(p.id, "reject")} className="rounded-lg border px-3 py-1.5">Reject</button>
             <button disabled={busy !== null} onClick={() => act(p.id, "suspend")} className="rounded-lg border px-3 py-1.5">Suspend</button>
             <button disabled={busy !== null} onClick={() => act(p.id, "verify")} className="rounded-lg border px-3 py-1.5">Verify</button>

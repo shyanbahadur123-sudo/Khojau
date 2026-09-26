@@ -61,7 +61,7 @@ export default async function ProviderPage({ params }: { params: { slug: string 
 
       <header className="rounded-2xl bg-[#FFFFFF] p-6 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
-          <h1 className="text-2xl font-bold">{p.business_name}</h1>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{p.business_name}</h1>
           {p.verification_status === "verified" && <VerifiedBadge />}
           {p.plan !== "free" && (
             <span className="rounded-full bg-[#C9A227] px-2 py-0.5 text-xs font-semibold text-black">{p.plan}</span>
@@ -85,21 +85,21 @@ export default async function ProviderPage({ params }: { params: { slug: string 
       <ContactTracker providerId={p.id} />
 
       {/* Sticky mobile contact bar: stacked Call + side-by-side pair on small screens */}
-      <div className="sticky bottom-3 z-30 flex flex-col gap-2 rounded-xl border border-black/10 bg-[#FFFFFF] p-2 shadow-lg sm:static sm:grid sm:grid-cols-3 sm:shadow-none">
-        <a href={`tel:${p.phone}`} className="rounded-lg bg-[#C9A227] px-4 py-3 text-center font-semibold text-black" data-track="phone_click">
+      <div className="sticky bottom-3 z-30 flex flex-col gap-2 rounded-2xl border border-black/10 bg-[#FFFFFF] p-2 shadow-lg sm:static sm:grid sm:grid-cols-3 sm:shadow-none">
+        <a href={`tel:${p.phone}`} className="rounded-full bg-[#C9A227] px-4 py-3 text-center font-semibold text-black" data-track="phone_click">
           Call {p.phone}
         </a>
         <div className="grid grid-cols-2 gap-2 sm:contents">
         {wa ? (
-          <a href={wa} target="_blank" rel="noopener" className="rounded-lg border border-black/25 px-4 py-3 text-center font-semibold" data-track="message_click">
+          <a href={wa} target="_blank" rel="noopener" className="rounded-full border border-black/25 px-4 py-3 text-center font-semibold" data-track="message_click">
             Message
           </a>
         ) : (
-          <a href={`sms:${p.phone}`} className="rounded-lg border border-black/25 px-4 py-3 text-center font-semibold" data-track="message_click">
+          <a href={`sms:${p.phone}`} className="rounded-full border border-black/25 px-4 py-3 text-center font-semibold" data-track="message_click">
             Message
           </a>
         )}
-        <a href={dir} target="_blank" rel="noopener" className="rounded-lg border border-black/15 px-4 py-3 text-center font-semibold" data-track="directions_click">
+        <a href={dir} target="_blank" rel="noopener" className="rounded-full border border-black/15 px-4 py-3 text-center font-semibold" data-track="directions_click">
           Directions
         </a>
         </div>
@@ -201,9 +201,9 @@ export default async function ProviderPage({ params }: { params: { slug: string 
         </section>
       </div>
 
-      <div className="rounded-xl border border-[#C9A227]/40 bg-[#C9A227]/10 p-4 text-sm sm:flex sm:items-center sm:justify-between sm:gap-4">
+      <div className="rounded-2xl border border-[#C9A227]/40 bg-[#C9A227]/10 p-5 text-sm sm:flex sm:items-center sm:justify-between sm:gap-4">
         <p className="font-semibold">Prefer to send details instead of calling? The provider will call you back.</p>
-        <a href={`/request-service?provider=${p.slug}`} className="mt-2 inline-block min-h-[44px] rounded-lg bg-[#C9A227] px-4 py-2 font-semibold text-black sm:mt-0 sm:shrink-0">
+        <a href={`/request-service?provider=${p.slug}`} className="mt-2 inline-block min-h-[44px] rounded-full bg-[#C9A227] px-4 py-2 font-semibold text-black sm:mt-0 sm:shrink-0">
           Request this service
         </a>
       </div>

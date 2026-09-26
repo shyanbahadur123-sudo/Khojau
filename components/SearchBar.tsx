@@ -297,7 +297,7 @@ export default function SearchBar() {
         <button
           type="submit"
           disabled={submitting}
-          className="h-11 min-h-[44px] rounded-lg bg-[#C9A227] px-6 text-base font-semibold text-black hover:bg-[#B8941F] disabled:opacity-60 sm:h-12"
+          className="h-11 min-h-[44px] rounded-full bg-[#C9A227] px-6 text-base font-semibold text-black hover:bg-[#B8941F] disabled:opacity-60 sm:h-12"
         >
           {submitting ? "Searching…" : "Find Services"}
         </button>

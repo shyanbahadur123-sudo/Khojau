@@ -153,3 +153,108 @@ textarea:focus-visible {
 #mobile-nav :focus-visible {
   outline-color: #D4AF37;
 }
+html[data-theme="mono"] #khojau-sidebar :focus-visible,
+html[data-theme="mono"] #mobile-nav :focus-visible {
+  outline-color: #2997ff;
+}
+
+/* ---------- Mono (Apple) theme ----------
+   html[data-theme="mono"] remaps every gold token to Apple blue, light and
+   dark. Same exact-token technique as the .dark layer above, so resting
+   markup never changes: gold light/dark stay default, mono light/dark are
+   pure CSS. Palette: blue #0071e3 (light) / #2997ff (dark surfaces),
+   hover #0077ed, active #0060cc. */
+html[data-theme="mono"] [class~="bg-[#C9A227]"] {
+  background-color: #0071e3;
+  color: #fff;
+}
+html[data-theme="mono"] [class~="hover:bg-[#B8941F]"]:hover {
+  background-color: #0077ed;
+}
+html[data-theme="mono"] [class~="active:bg-[#A8841F]"]:active {
+  background-color: #0060cc;
+}
+html[data-theme="mono"] [class~="bg-[#D4AF37]"] {
+  background-color: #2997ff;
+}
+html[data-theme="mono"] [class~="text-[#7A5C00]"] {
+  color: #0071e3;
+}
+html[data-theme="mono"] [class~="hover:text-[#7A5C00]"]:hover {
+  color: #0071e3;
+}
+html[data-theme="mono"] [class~="text-[#D4AF37]"] {
+  color: #2997ff;
+}
+html[data-theme="mono"] [class~="bg-[#C9A227]/15"] {
+  background-color: rgba(0, 113, 227, 0.1);
+}
+html[data-theme="mono"] [class~="hover:bg-[#C9A227]/25"]:hover,
+html[data-theme="mono"] .group:hover [class~="group-hover:bg-[#C9A227]/25"] {
+  background-color: rgba(0, 113, 227, 0.18);
+}
+html[data-theme="mono"] [class~="bg-[#D4AF37]/15"] {
+  background-color: rgba(41, 151, 255, 0.16);
+}
+html[data-theme="mono"] [class~="bg-[#D4AF37]/20"] {
+  background-color: rgba(41, 151, 255, 0.22);
+}
+html[data-theme="mono"] [class~="bg-[#C9A227]/10"] {
+  background-color: rgba(0, 113, 227, 0.07);
+}
+html[data-theme="mono"] [class~="border-[#C9A227]/40"] {
+  border-color: rgba(0, 113, 227, 0.35);
+}
+html[data-theme="mono"] [class~="border-[#7A5C00]/50"] {
+  border-color: rgba(0, 113, 227, 0.5);
+}
+html[data-theme="mono"] [class~="focus:ring-[#D4AF37]/50"]:focus {
+  --tw-ring-color: rgba(0, 113, 227, 0.55);
+}
+html[data-theme="mono"] [class~="shadow-[0_0_16px_-4px_rgba(212,175,55,0.5)]"] {
+  box-shadow: 0 0 16px -4px rgba(41, 151, 255, 0.5);
+}
+html[data-theme="mono"] [class~="shadow-[0_0_8px_rgba(212,175,55,0.8)]"] {
+  box-shadow: 0 0 8px rgba(41, 151, 255, 0.8);
+}
+html[data-theme="mono"] [class~="shadow-[0_0_20px_-8px_rgba(212,175,55,0.6)]"] {
+  box-shadow: 0 0 20px -8px rgba(41, 151, 255, 0.6);
+}
+html[data-theme="mono"] [class~="shadow-[0_4px_20px_-6px_rgba(212,175,55,0.7)]"] {
+  box-shadow: 0 4px 20px -6px rgba(41, 151, 255, 0.7);
+}
+html[data-theme="mono"] [class~="shadow-[0_4px_24px_-8px_rgba(212,175,55,0.8)]"] {
+  box-shadow: 0 4px 24px -8px rgba(41, 151, 255, 0.8);
+}
+html[data-theme="mono"] [class~="bg-[radial-gradient(120%_40%_at_50%_0%,rgba(212,175,55,0.08),transparent_70%)]"] {
+  background-image: radial-gradient(120% 40% at 50% 0%, rgba(41, 151, 255, 0.1), transparent 70%);
+}
+/* Mono + dark: blue lightens for contrast on dark surfaces. These sit after
+   the .dark layer and win by specificity. */
+html.dark[data-theme="mono"] [class~="bg-[#C9A227]"] {
+  background-color: #2997ff;
+  color: #06121f;
+}
+html.dark[data-theme="mono"] [class~="hover:bg-[#B8941F]"]:hover {
+  background-color: #53a9ff;
+}
+html.dark[data-theme="mono"] [class~="text-[#7A5C00]"],
+html.dark[data-theme="mono"] [class~="hover:text-[#7A5C00]"]:hover {
+  color: #2997ff;
+}
+html.dark[data-theme="mono"] [class~="bg-[#C9A227]/15"] {
+  background-color: rgba(41, 151, 255, 0.14);
+}
+html.dark[data-theme="mono"] [class~="bg-[#C9A227]/10"] {
+  background-color: rgba(41, 151, 255, 0.1);
+}
+html.dark[data-theme="mono"] [class~="border-[#C9A227]/40"] {
+  border-color: rgba(41, 151, 255, 0.4);
+}
+html.dark[data-theme="mono"] [class~="hover:bg-[#C9A227]/25"]:hover,
+html.dark[data-theme="mono"] .group:hover [class~="group-hover:bg-[#C9A227]/25"] {
+  background-color: rgba(41, 151, 255, 0.22);
+}
+html.dark[data-theme="mono"] [class~="focus:ring-[#D4AF37]/50"]:focus {
+  --tw-ring-color: rgba(41, 151, 255, 0.55);
+}

@@ -21,7 +21,7 @@ export default async function AdminReportsPage() {
 
   return (
     <div className="space-y-4 pt-6">
-      <h1 className="text-2xl font-bold">Reports</h1>
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Reports</h1>
       {(reports ?? []).length === 0 ? (
         <p className="rounded-xl bg-[#FFFFFF] p-4 text-sm text-[#6B7280]">No reports.</p>
       ) : (

@@ -49,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           id="khojau-theme"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("khojau-theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark")}}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem("khojau-theme");if(t==="dark")t="gold-dark";else if(t==="light")t="gold-light";var dark=t==="gold-dark"||t==="mono-dark";if(!t&&matchMedia("(prefers-color-scheme: dark)").matches){t="gold-dark";dark=true}if(!t)t="gold-light";document.documentElement.dataset.theme=t.indexOf("mono")===0?"mono":"gold";document.documentElement.classList.toggle("dark",dark);localStorage.setItem("khojau-theme",t);}catch(e){}})();`,
           }}
         />
         <a href="#main" className="skip-link">

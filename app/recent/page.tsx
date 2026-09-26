@@ -39,7 +39,7 @@ export default async function RecentPage() {
         title="Recent listings"
         hint={all.length === 0 ? "Newly approved listings appear here as they publish." : "Newly approved listings, newest first."}
         actions={
-          <Link href="/request-service" className="rounded-lg bg-[#C9A227] px-4 py-2 font-semibold text-black">
+          <Link href="/request-service" className="rounded-full bg-[#C9A227] px-4 py-2 font-semibold text-black">
             Request help
           </Link>
         }
@@ -55,8 +55,8 @@ export default async function RecentPage() {
           title="Nothing published yet"
           note="Be the first to list, or request help and we'll match you."
         >
-          <Link href="/add-business" className="rounded-lg bg-[#C9A227] px-5 py-2.5 font-semibold text-black">Add your business</Link>
-          <Link href="/search" className="rounded-lg border border-black/15 px-5 py-2.5 font-semibold">Search all</Link>
+          <Link href="/add-business" className="rounded-full bg-[#C9A227] px-5 py-2.5 font-semibold text-black">Add your business</Link>
+          <Link href="/search" className="rounded-full border border-black/15 px-5 py-2.5 font-semibold">Search all</Link>
         </EmptyPanel>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
