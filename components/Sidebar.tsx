@@ -7,9 +7,9 @@ import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
 import { ClockIcon, GridIcon, HeartIcon, HomeIcon, LogoutIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, PinIcon, PlusIcon, SearchIcon, UserIcon } from "@/components/UiIcon";
 import ThemeToggle from "@/components/ThemeToggle";
 
-// Khojau dark-luxury sidebar. The rail is intentionally always dark
-// (#0B0D10): it is a persistent app frame, not page content, so it does
-// not follow the page light/dark theme. Content areas keep the theme.
+// Khojau sidebar. The rail follows the active theme via the override
+// layers in app/globals.css: dark-luxury rail in dark mode, light rail in
+// light mode, blue accents under the Mono theme.
 
 export function BrandLogo({ compact = false }: { compact?: boolean }) {
   return (

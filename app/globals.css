@@ -229,6 +229,87 @@ html[data-theme="mono"] [class~="shadow-[0_4px_24px_-8px_rgba(212,175,55,0.8)]"]
 html[data-theme="mono"] [class~="bg-[radial-gradient(120%_40%_at_50%_0%,rgba(212,175,55,0.08),transparent_70%)]"] {
   background-image: radial-gradient(120% 40% at 50% 0%, rgba(41, 151, 255, 0.1), transparent 70%);
 }
+/* ---------- Light sidebar + drawer ----------
+   The rail follows the page theme: dark rail in dark mode (default,
+   untouched above), light rail in light mode. Scoped to #khojau-sidebar
+   and #mobile-nav so page content is unaffected. Gold accents deepen for
+   contrast on white; mono variants turn Apple blue (after these, higher
+   specificity wins). */
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="bg-[#0B0D10]"] {
+  background-color: #ffffff;
+}
+html:not(.dark) #mobile-nav[class~="bg-[#0B0D10]"] {
+  background-color: #ffffff;
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="text-white"] {
+  color: #0a0a0a;
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="text-zinc-300"] {
+  color: #3f3f46;
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="text-zinc-400"] {
+  color: #6b7280;
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="border-white/10"] {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="ring-white/10"] {
+  --tw-ring-color: rgba(0, 0, 0, 0.1);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="border-white/15"] {
+  border-color: rgba(0, 0, 0, 0.14);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="bg-white/[0.08]"] {
+  background-color: rgba(201, 162, 39, 0.15);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="bg-white/[0.06]"] {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="bg-white/[0.04]"] {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="bg-white/90"] {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="hover:bg-white/[0.06]"]:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="hover:text-white"]:hover {
+  color: #0a0a0a;
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="active:bg-white/10"]:active {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="text-[#D4AF37]"] {
+  color: #7a5c00;
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="bg-[#D4AF37]"] {
+  background-color: #c9a227;
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="bg-[#D4AF37]/15"] {
+  background-color: rgba(201, 162, 39, 0.15);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="bg-[#D4AF37]/20"] {
+  background-color: rgba(201, 162, 39, 0.2);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) [class~="border-[#0B0D10]"] {
+  border-color: #ffffff;
+}
+/* Mono + light: rail accents turn Apple blue. */
+html:not(.dark)[data-theme="mono"] :is(#khojau-sidebar, #mobile-nav) [class~="bg-[#D4AF37]"] {
+  background-color: #0071e3;
+  color: #fff;
+}
+html:not(.dark)[data-theme="mono"] :is(#khojau-sidebar, #mobile-nav) [class~="text-[#D4AF37]"] {
+  color: #0071e3;
+}
+html:not(.dark)[data-theme="mono"] :is(#khojau-sidebar, #mobile-nav) [class~="bg-white/[0.08]"] {
+  background-color: rgba(0, 113, 227, 0.1);
+}
+html:not(.dark)[data-theme="mono"] :is(#khojau-sidebar, #mobile-nav) [class~="bg-[#D4AF37]/15"],
+html:not(.dark)[data-theme="mono"] :is(#khojau-sidebar, #mobile-nav) [class~="bg-[#D4AF37]/20"] {
+  background-color: rgba(0, 113, 227, 0.12);
+}
 /* Mono + dark: blue lightens for contrast on dark surfaces. These sit after
    the .dark layer and win by specificity. */
 html.dark[data-theme="mono"] [class~="bg-[#C9A227]"] {
