@@ -168,7 +168,7 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
   }
   return (
     <div className="flex h-full flex-col overflow-hidden text-zinc-300">
-      <div className={`flex items-center gap-3 pb-4 pt-1 ${collapsed ? "flex-col justify-center px-0" : "px-1"}`}>
+      <div className={`relative flex items-center gap-3 pb-4 pt-1 ${collapsed ? "flex-col justify-center px-0" : "px-1"}`}>
         <span className="rounded-[14px] bg-white/[0.06] p-1 ring-1 ring-white/10 backdrop-blur-md">
           <BrandLogo compact={collapsed} />
         </span>
@@ -180,7 +180,11 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
             aria-expanded={!collapsed}
             aria-controls="khojau-sidebar"
             title={`${collapsed ? "Expand" : "Collapse"} sidebar  ( [ )`}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-black/10 bg-[#D4AF37] text-[#0B0D10] shadow-lg transition-all duration-200 hover:scale-105 hover:brightness-110 active:scale-95"
+            className={
+              collapsed
+                ? "absolute right-[-10px] top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full border border-black/10 bg-[#D4AF37] text-[#0B0D10] shadow-lg transition-all duration-200 hover:scale-105 hover:brightness-110 active:scale-95"
+                : "grid h-9 w-9 shrink-0 place-items-center rounded-full border border-black/10 bg-[#D4AF37] text-[#0B0D10] shadow-lg transition-all duration-200 hover:scale-105 hover:brightness-110 active:scale-95"
+            }
           >
             {collapsed ? <ChevronRightIcon className="h-4 w-4" /> : <ChevronLeftIcon className="h-4 w-4" />}
           </button>
