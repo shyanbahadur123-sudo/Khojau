@@ -328,7 +328,7 @@ export default function Sidebar({ collapsed, onToggle }: { collapsed: boolean; o
           aria-expanded={!collapsed}
           aria-controls="khojau-sidebar"
           title={`${collapsed ? "Expand" : "Collapse"} sidebar  ( [ )`}
-          className="absolute -right-3 top-16 z-30 grid h-8 w-8 place-items-center rounded-full border border-black/10 bg-[#D4AF37] text-[#0B0D10] shadow-lg transition-all duration-200 hover:scale-105 hover:brightness-110 active:scale-95"
+          className="absolute -right-3 top-12 z-30 grid h-8 w-8 place-items-center rounded-full border border-black/10 bg-[#D4AF37] text-[#0B0D10] shadow-lg transition-all duration-200 hover:scale-105 hover:brightness-110 active:scale-95"
         >
           {collapsed ? <ChevronRightIcon className="h-4 w-4" /> : <ChevronLeftIcon className="h-4 w-4" />}
         </button>
