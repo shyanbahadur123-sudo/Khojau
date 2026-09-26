@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase";
-import { validateImageFile } from "@/lib/image-validation";
+import { validateImageFile, validateImageBytes, IMAGE_MAGIC_BYTES } from "@/lib/image-validation";
 import {
   deleteProviderImage,
   sizedImageUrl,
@@ -11,6 +11,7 @@ import {
   type ImageKind,
 } from "@/lib/storage";
 import type { ProviderImage } from "@/types/database";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 interface Props {
   providerId: string;
@@ -27,13 +28,31 @@ export default function ImageManager({ providerId, businessName, status, initial
   const [images, setImages] = useState<ProviderImage[]>([...initialImages].sort((a, b) => a.sort - b.sort));
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<ProviderImage | null>(null);
   const inFlight = useRef(false);
+
+  // Magic-byte check: File.type is client-claimed and forgeable, so read the
+  // leading bytes and confirm they match the claimed image format before any
+  // upload. Returns an error message, or null when content checks out.
+  async function checkImageContent(file: File): Promise<string | null> {
+    try {
+      const buf = await file.slice(0, IMAGE_MAGIC_BYTES).arrayBuffer();
+      return validateImageBytes(new Uint8Array(buf), file.type);
+    } catch {
+      return "Could not read this file. Please try a different image.";
+    }
+  }
 
   async function uploadSingle(kind: "logo" | "cover", file: File) {
     if (inFlight.current) return;
     const problem = validateImageFile(file);
     if (problem) {
       setError(problem);
+      return;
+    }
+    const spoofed = await checkImageContent(file);
+    if (spoofed) {
+      setError(spoofed);
       return;
     }
     setError(null);
@@ -77,6 +96,8 @@ export default function ImageManager({ providerId, businessName, status, initial
       for (const file of Array.from(files)) {
         const problem = validateImageFile(file);
         if (problem) throw new Error(`${file.name}: ${problem}`);
+        const spoofed = await checkImageContent(file);
+        if (spoofed) throw new Error(`${file.name}: ${spoofed}`);
         const { publicUrl } = await uploadProviderImage(sb, providerId, "gallery", file, file.type);
         const { data, error: insErr } = await sb
           .from("provider_images")
@@ -100,9 +121,10 @@ export default function ImageManager({ providerId, businessName, status, initial
     }
   }
 
-  async function deleteGallery(image: ProviderImage) {
-    if (inFlight.current) return;
-    if (!confirm(`Delete this photo from ${businessName}?`)) return;
+  async function handleDeleteConfirm() {
+    if (!deleteConfirm || inFlight.current) return;
+    const image = deleteConfirm;
+    setDeleteConfirm(null);
     setError(null);
     setBusy(`del-${image.id}`);
     inFlight.current = true;
@@ -258,7 +280,7 @@ export default function ImageManager({ providerId, businessName, status, initial
                 <div className="mt-1 flex gap-2 text-xs">
                   <button disabled={disabled || i === 0} onClick={() => void moveGallery(img.id, -1)} className="min-h-[44px] rounded border px-3 py-1 disabled:opacity-40" aria-label={`Move photo ${i + 1} earlier`}>←</button>
                   <button disabled={disabled || i === images.length - 1} onClick={() => void moveGallery(img.id, 1)} className="min-h-[44px] rounded border px-3 py-1 disabled:opacity-40" aria-label={`Move photo ${i + 1} later`}>→</button>
-                  <button disabled={disabled} onClick={() => void deleteGallery(img)} className="ml-auto min-h-[44px] rounded border border-red-300 px-3 py-1 text-red-700" aria-label={`Delete photo ${i + 1}`}>
+                  <button disabled={disabled} onClick={() => setDeleteConfirm(img)} className="ml-auto min-h-[44px] rounded border border-red-300 px-3 py-1 text-red-700" aria-label={`Delete photo ${i + 1}`}>
                     {busy === `del-${img.id}` ? "…" : "Delete"}
                   </button>
                 </div>
@@ -267,6 +289,18 @@ export default function ImageManager({ providerId, businessName, status, initial
           </ul>
         )}
       </div>
+      <ConfirmDialog
+        isOpen={deleteConfirm !== null}
+        onClose={() => setDeleteConfirm(null)}
+        onConfirm={() => void handleDeleteConfirm()}
+        title="Delete photo"
+        message={`Delete this photo from ${businessName}? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="destructive"
+        pending={busy?.startsWith("del-")}
+        disabled={disabled}
+      />
     </section>
   );
 }

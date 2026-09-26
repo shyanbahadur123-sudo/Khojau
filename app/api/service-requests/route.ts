@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { serviceRequestSchema } from "@/lib/validation";
-import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { clientIp } from "@/lib/rate-limit";
+import { rateLimitAuto } from "@/lib/rate-limit-shared";
 
 // Server boundary for request submission: validates provider/service linkage
 // explicitly for friendly errors (RLS WITH CHECK is the authorative backstop),
 // forces status='open', and attaches customer_id from the session when signed in.
-// Anonymous submissions are rate-limited per IP (see lib/rate-limit.ts).
+// Anonymous submissions are rate-limited per IP (see lib/rate-limit-shared.ts).
 export async function POST(req: Request) {
-  if (!rateLimit(`service-requests:${clientIp(req)}`, 5, 10 * 60 * 1000)) {
+  if (!(await rateLimitAuto(`service-requests:${clientIp(req)}`, 5, 10 * 60 * 1000))) {
     return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
   }
   const parsed = serviceRequestSchema.safeParse(await req.json().catch(() => ({})));

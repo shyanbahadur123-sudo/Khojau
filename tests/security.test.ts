@@ -12,7 +12,7 @@ import {
   isSameOriginRequest,
   publicOrigin,
 } from "../lib/validation.js";
-import { validateImageFile } from "../lib/image-validation.js";
+import { validateImageFile, detectImageMime, validateImageBytes } from "../lib/image-validation.js";
 import { clientIp, rateLimit } from "../lib/rate-limit.js";
 import { REQUEST_STATUS_LABEL, REQUEST_NEXT_ACTIONS, formatRequestStatus } from "../lib/request-status.js";
 import { tallyTrendScores } from "../lib/search.js";
@@ -227,6 +227,27 @@ describe("image validation", () => {
     assert.ok(validateImageFile({ name: "big.jpg", type: "image/jpeg", size: 3 * 1024 * 1024 }) !== null);
     assert.equal(validateImageFile({ name: "a.jpg", type: "image/jpeg", size: 100 }), null);
     assert.equal(validateImageFile({ name: "a.webp", type: "image/webp", size: 100 }), null);
+  });
+
+  it("sniffs magic bytes and rejects spoofed content", () => {
+    const jpeg = [0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46, 0x00, 0x00];
+    const png = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d];
+    const webp = [0x52, 0x49, 0x46, 0x46, 0x24, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50];
+    assert.equal(detectImageMime(jpeg), "image/jpeg");
+    assert.equal(detectImageMime(png), "image/png");
+    assert.equal(detectImageMime(webp), "image/webp");
+    // Renamed executable claiming to be a JPEG.
+    assert.equal(detectImageMime([0x4d, 0x5a, 0x90, 0x00, 0x03, 0x00, 0x00, 0x00]), null);
+    // SVG markup, PDF, GIF, and truncated headers are not accepted.
+    assert.equal(detectImageMime([0x3c, 0x73, 0x76, 0x67]), null);
+    assert.equal(detectImageMime([0x25, 0x50, 0x44, 0x46, 0x2d]), null);
+    assert.equal(detectImageMime([0x47, 0x49, 0x46, 0x38, 0x39, 0x61]), null);
+    assert.equal(detectImageMime([0xff, 0xd8]), null);
+    assert.equal(validateImageBytes(jpeg, "image/jpeg"), null);
+    assert.equal(validateImageBytes(png, "image/png"), null);
+    assert.equal(validateImageBytes(webp, "image/webp"), null);
+    assert.ok(validateImageBytes([0x4d, 0x5a, 0x90, 0x00], "image/jpeg") !== null);
+    assert.ok(validateImageBytes(png, "image/jpeg") !== null);
   });
 });
 

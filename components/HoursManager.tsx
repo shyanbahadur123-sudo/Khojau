@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase";
 import { hoursItemSchema } from "@/lib/validation";
 import { WEEKDAYS, type ProviderHourItem } from "@/types/database";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 interface DayState {
   is_closed: boolean;
@@ -26,6 +27,7 @@ export default function HoursManager({ providerId, initial }: { providerId: stri
   const [busy, setBusy] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
+  const [clearConfirm, setClearConfirm] = useState<number | null>(null);
   const inFlight = useRef(false);
 
   async function saveDay(weekday: number) {
@@ -67,9 +69,10 @@ export default function HoursManager({ providerId, initial }: { providerId: stri
     }
   }
 
-  async function clearDay(weekday: number) {
-    if (inFlight.current) return;
-    if (!confirm(`Clear hours for ${WEEKDAYS[weekday]}?`)) return;
+  async function handleClearConfirm() {
+    if (clearConfirm === null || inFlight.current) return;
+    const weekday = clearConfirm;
+    setClearConfirm(null);
     setError(null);
     setSaved(null);
     setBusy(weekday);
@@ -140,7 +143,7 @@ export default function HoursManager({ providerId, initial }: { providerId: stri
                   {busy === weekday ? "…" : "Save"}
                 </button>
                 {hasRow && (
-                  <button disabled={busy !== null} onClick={() => void clearDay(weekday)} className="min-h-[44px] rounded border px-3 py-1 text-xs">
+                  <button disabled={busy !== null} onClick={() => setClearConfirm(weekday)} className="min-h-[44px] rounded border px-3 py-1 text-xs">
                     Clear
                   </button>
                 )}
@@ -149,6 +152,18 @@ export default function HoursManager({ providerId, initial }: { providerId: stri
           );
         })}
       </ul>
+      <ConfirmDialog
+        isOpen={clearConfirm !== null}
+        onClose={() => setClearConfirm(null)}
+        onConfirm={() => void handleClearConfirm()}
+        title="Clear hours"
+        message={clearConfirm !== null ? `Clear hours for ${WEEKDAYS[clearConfirm]}? This action cannot be undone.` : "Clear hours for this day?"}
+        confirmText="Clear"
+        cancelText="Cancel"
+        variant="destructive"
+        pending={busy !== null}
+        disabled={busy !== null}
+      />
     </section>
   );
 }

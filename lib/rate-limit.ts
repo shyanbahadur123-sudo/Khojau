@@ -1,8 +1,11 @@
-// Minimal in-memory sliding-window rate limiter for anonymous-write endpoints.
-// MVP tradeoff: no shared store, so limits apply per server instance. That is
-// sufficient for a single-instance deployment and adds zero infrastructure.
-// If Khojau ever runs multiple instances or faces sustained abuse, move to a
-// shared counter (Supabase table / Upstash) or add Cloudflare Turnstile.
+// Minimal sliding-window rate limiter for anonymous-write endpoints.
+// Two layers:
+// - rateLimit() below: process-local counters (this file). Zero
+//   infrastructure; used directly in unit tests and as the fallback.
+// - rateLimitAuto() in lib/rate-limit-shared.ts: Postgres-backed shared
+//   counter (supabase/migrations/0017_rate_limits.sql) with fallback to this
+//   file. API routes must use rateLimitAuto — per-instance counters alone
+//   under-count abuse on multi-instance hosting.
 
 const buckets = new Map<string, number[]>();
 

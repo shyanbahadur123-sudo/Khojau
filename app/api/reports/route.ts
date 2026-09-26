@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { supabasePublic } from "@/lib/supabase";
 import { reportSchema } from "@/lib/validation";
-import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { clientIp } from "@/lib/rate-limit";
+import { rateLimitAuto } from "@/lib/rate-limit-shared";
 
 export async function POST(req: Request) {
-  if (!rateLimit(`reports:${clientIp(req)}`, 5, 10 * 60 * 1000)) {
+  if (!(await rateLimitAuto(`reports:${clientIp(req)}`, 5, 10 * 60 * 1000))) {
     return NextResponse.json({ error: "Too many reports. Please try again later." }, { status: 429 });
   }
   const parsed = reportSchema.safeParse(await req.json().catch(() => ({})));

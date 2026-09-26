@@ -2,13 +2,14 @@ import Link from "next/link";
 
 // Shown instead of silently bouncing to /login when an admin page is
 // unreachable for a signed-in visitor. Three distinct, honest states:
-// signed-in-but-not-admin (fail-closed 403) vs server key missing (setup
-// guide). Never prints secrets or internal config values.
+// signed-in-but-not-admin (fail-closed 403) vs MFA enrollment missing
+// (fail-closed, setup guide) vs server key missing (setup guide). Never
+// prints secrets or internal config values.
 export default function AdminNotice({
   reason,
   email,
 }: {
-  reason: "forbidden" | "unconfigured";
+  reason: "forbidden" | "unconfigured" | "mfa-required";
   email?: string;
 }) {
   return (
@@ -34,6 +35,27 @@ export default function AdminNotice({
                 Home
               </Link>
             </div>
+          </>
+        ) : reason === "mfa-required" ? (
+          <>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight">Two-factor authentication required</h1>
+            <p className="mt-2 text-sm text-[#6B7280]">
+              {email ? (
+                <>You are signed in as <strong className="text-[#0A0A0A]">{email}</strong>, </>
+              ) : (
+                <>This admin account </>
+              )}
+              has no verified second factor, and this site requires one for moderation. Nothing is broken — approval powers stay locked until MFA is enrolled.
+            </p>
+            <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm">
+              <li>
+                In Supabase: project <strong>Authentication → Sign In / Providers → MFA</strong>, enable TOTP.
+              </li>
+              <li>
+                On the admin account, enroll an authenticator app and verify it on sign-in.
+              </li>
+              <li>Sign out and back in, then reopen <code>/admin</code>.</li>
+            </ol>
           </>
         ) : (
           <>

@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase";
 import { serviceItemSchema } from "@/lib/validation";
 import type { ServiceItem } from "@/types/database";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 export default function ServiceManager({ providerId, initial }: { providerId: string; initial: ServiceItem[] }) {
   const [items, setItems] = useState<ServiceItem[]>(initial);
@@ -14,6 +15,7 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; label: string } | null>(null);
   const inFlight = useRef(false);
 
   async function add() {
@@ -82,9 +84,10 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
     }
   }
 
-  async function remove(id: string, label: string) {
-    if (inFlight.current) return;
-    if (!confirm(`Delete service "${label}"?`)) return;
+  async function handleDeleteConfirm() {
+    if (!deleteConfirm || inFlight.current) return;
+    const { id } = deleteConfirm;
+    setDeleteConfirm(null);
     setError(null);
     setSaved(null);
     setBusy(`del-${id}`);
@@ -134,7 +137,7 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
                   )}
                   <span className="ml-auto flex gap-2">
                     <button disabled={disabled} onClick={() => setEditing(s)} className="min-h-[44px] rounded border px-3 py-1 text-xs">Edit</button>
-                    <button disabled={disabled} onClick={() => void remove(s.id, s.name)} className="min-h-[44px] rounded border border-red-300 px-3 py-1 text-xs text-red-700">
+                    <button disabled={disabled} onClick={() => setDeleteConfirm({ id: s.id, label: s.name })} className="min-h-[44px] rounded border border-red-300 px-3 py-1 text-xs text-red-700">
                       {busy === `del-${s.id}` ? "…" : "Delete"}
                     </button>
                   </span>
@@ -152,7 +155,18 @@ export default function ServiceManager({ providerId, initial }: { providerId: st
       <button disabled={disabled || name.trim() === ""} onClick={() => void add()} className="mt-2 h-11 rounded-lg bg-[#0A0A0A] px-5 font-semibold text-white disabled:opacity-60">
         {busy === "add" ? "Adding…" : "Add service"}
       </button>
+      <ConfirmDialog
+        isOpen={deleteConfirm !== null}
+        onClose={() => setDeleteConfirm(null)}
+        onConfirm={() => void handleDeleteConfirm()}
+        title="Delete service"
+        message={deleteConfirm ? `Delete "${deleteConfirm.label}"? This action cannot be undone.` : "Delete this service?"}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="destructive"
+        pending={busy?.startsWith("del-")}
+        disabled={busy !== null}
+      />
     </section>
   );
 }
-

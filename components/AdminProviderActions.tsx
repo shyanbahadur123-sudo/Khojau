@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 type Row = {
   id: string;
@@ -19,6 +20,7 @@ export default function AdminProviderActions({ rows }: { rows: Row[] }) {
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
   const [notes, setNotes] = useState<Record<string, { ok: boolean; action?: string; text: string }>>({});
+  const [deleteConfirm, setDeleteConfirm] = useState<Row | null>(null);
   const inFlight = useRef(false);
 
   async function act(id: string, action: string, extra?: Record<string, string>) {
@@ -59,7 +61,15 @@ export default function AdminProviderActions({ rows }: { rows: Row[] }) {
     }
   }
 
+  async function handleDeleteConfirm() {
+    if (!deleteConfirm) return;
+    const row = deleteConfirm;
+    setDeleteConfirm(null);
+    await act(row.id, "delete");
+  }
+
   return (
+    <>
     <ul className="space-y-3">
       {rows.map((p) => (
         <li key={p.id} className="rounded-xl bg-[#FFFFFF] p-4 text-sm">
@@ -88,7 +98,7 @@ export default function AdminProviderActions({ rows }: { rows: Row[] }) {
               <option value="featured">featured (Rs.299/mo)</option>
               <option value="premium">premium (Rs.499–999/mo)</option>
             </select>
-            <button disabled={busy !== null} onClick={() => { if (confirm("Delete this provider?")) act(p.id, "delete"); }} className="rounded-lg border border-red-300 px-3 py-1.5 text-red-700 disabled:opacity-60">
+            <button disabled={busy !== null} onClick={() => setDeleteConfirm(p)} className="rounded-lg border border-red-300 px-3 py-1.5 text-red-700 disabled:opacity-60">
               {busy === p.id + "delete" ? "Working…" : "Delete"}
             </button>
           </div>
@@ -103,5 +113,18 @@ export default function AdminProviderActions({ rows }: { rows: Row[] }) {
         </li>
       ))}
     </ul>
+      <ConfirmDialog
+        isOpen={deleteConfirm !== null}
+        onClose={() => setDeleteConfirm(null)}
+        onConfirm={() => void handleDeleteConfirm()}
+        title="Delete provider"
+        message={deleteConfirm ? `Delete ${deleteConfirm.business_name}? This action cannot be undone.` : "Delete this provider?"}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="destructive"
+        pending={busy !== null}
+        disabled={busy !== null}
+      />
+    </>
   );
 }

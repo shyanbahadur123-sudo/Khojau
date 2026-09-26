@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabasePublic } from "@/lib/supabase";
-import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { clientIp } from "@/lib/rate-limit";
+import { rateLimitAuto } from "@/lib/rate-limit-shared";
 import { z } from "zod";
 
 // Allowlisted product events only: the insert runs over RLS (no service
@@ -14,7 +15,7 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
-  if (!rateLimit(`events:${clientIp(req)}`, 120, 60 * 1000)) {
+  if (!(await rateLimitAuto(`events:${clientIp(req)}`, 120, 60 * 1000))) {
     return NextResponse.json({ ok: false }, { status: 429 });
   }
   try {
