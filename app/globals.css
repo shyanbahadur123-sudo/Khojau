@@ -359,10 +359,18 @@ html.dark .khojau-tabbar {
   box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.7);
 }
 .khojau-tab-active {
-  background-color: #0b0d10;
-  color: #fff;
+  background-color: #c9a227;
+  color: #000;
 }
 html.dark .khojau-tab-active {
-  background-color: #fff;
+  background-color: #c9a227;
   color: #000;
+}
+html[data-theme="mono"] .khojau-tab-active {
+  background-color: #0071e3;
+  color: #fff;
+}
+html.dark[data-theme="mono"] .khojau-tab-active {
+  background-color: #2997ff;
+  color: #06121f;
 }
