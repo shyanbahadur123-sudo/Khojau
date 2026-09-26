@@ -347,3 +347,22 @@ html[data-theme="mono"] [class~="border-[#7A5C00]/50"] {
 html:not(.dark)[data-theme="mono"] #khojau-sidebar [class~="border-[#D4AF37]"] {
   border-color: #0071e3;
 }
+/* Floating mobile tab bar follows the page theme (white pill in light,
+// near-black in dark); the active tab inverts. Dedicated classes dodge
+// specificity fights with the token override layers. */
+.khojau-tabbar {
+  background-color: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.25);
+}
+html.dark .khojau-tabbar {
+  background-color: rgba(11, 13, 16, 0.95);
+  box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.7);
+}
+.khojau-tab-active {
+  background-color: #0b0d10;
+  color: #fff;
+}
+html.dark .khojau-tab-active {
+  background-color: #fff;
+  color: #000;
+}

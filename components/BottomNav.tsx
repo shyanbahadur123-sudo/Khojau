@@ -45,23 +45,7 @@ export default function BottomNav() {
         aria-label="Primary"
         className="fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 sm:hidden"
       >
-        <div className="mx-auto flex h-16 max-w-md items-center gap-1 rounded-full bg-[#0B0D10]/95 px-2 shadow-2xl backdrop-blur-md">
-          <button
-            ref={menuBtnRef}
-            type="button"
-            onClick={() => setMenuOpen(true)}
-            aria-expanded={menuOpen}
-            aria-label="Open menu"
-            className="flex min-h-[56px] flex-1 items-center justify-center rounded-full transition-colors"
-          >
-            {menuOpen ? (
-              <span className="flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2 text-[13px] font-semibold text-black">
-                <MenuIcon className="h-5 w-5" /> Menu
-              </span>
-            ) : (
-              <MenuIcon className="h-6 w-6 text-zinc-400" />
-            )}
-          </button>
+        <div className="khojau-tabbar mx-auto flex h-16 max-w-md items-center gap-1 rounded-full px-2 backdrop-blur-md">
           {TABS.map(({ href, label, Icon, exact }) => {
             const active = exact ? path === href : path === href || path.startsWith(href + "/");
             return (
@@ -72,15 +56,31 @@ export default function BottomNav() {
                 className="flex min-h-[56px] flex-1 items-center justify-center rounded-full transition-colors"
               >
                 {active ? (
-                  <span className="flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2 text-[13px] font-semibold text-black">
+                  <span className="khojau-tab-active flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-semibold">
                     <Icon className="h-5 w-5" /> {label}
                   </span>
                 ) : (
-                  <Icon className="h-6 w-6 text-zinc-400" />
+                  <Icon className="h-6 w-6 text-[#6B7280] dark:text-zinc-400" />
                 )}
               </Link>
             );
           })}
+          <button
+            ref={menuBtnRef}
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            aria-expanded={menuOpen}
+            aria-label="Open menu"
+            className="flex min-h-[56px] flex-1 items-center justify-center rounded-full transition-colors"
+          >
+            {menuOpen ? (
+              <span className="khojau-tab-active flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-semibold">
+                <MenuIcon className="h-5 w-5" /> Menu
+              </span>
+            ) : (
+              <MenuIcon className="h-6 w-6 text-[#6B7280] dark:text-zinc-400" />
+            )}
+          </button>
         </div>
       </nav>
       {menuOpen && <MenuSheet onClose={() => setMenuOpen(false)} triggerRef={menuBtnRef} />}
