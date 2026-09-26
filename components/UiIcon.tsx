@@ -179,3 +179,46 @@ export function LogoutIcon({ className }: { className?: string }) {
     </Base>
   );
 }
+
+export function ArrowRightIcon({ className }: { className?: string }) {
+  return (
+    <Base className={className}>
+      <path d="M5 12h14" />
+      <path d="m13 6 6 6-6 6" />
+    </Base>
+  );
+}
+
+export function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <Base className={className}>
+      <path d="m6 9 6 6 6-6" />
+    </Base>
+  );
+}
+
+export function BoltIcon({ className }: { className?: string }) {
+  return (
+    <Base className={className}>
+      <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" />
+    </Base>
+  );
+}
+
+export function BookIcon({ className }: { className?: string }) {
+  return (
+    <Base className={className}>
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13z" />
+      <path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" />
+    </Base>
+  );
+}
+
+export function MountainIcon({ className }: { className?: string }) {
+  return (
+    <Base className={className}>
+      <path d="m3 20 6-11 4 6 3-4 5 9H3z" />
+      <circle cx="17.5" cy="6.5" r="1.5" />
+    </Base>
+  );
+}

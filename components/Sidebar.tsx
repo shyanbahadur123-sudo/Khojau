@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabaseBrowser, isSupabaseConfigured } from "@/lib/supabase";
-import { ClockIcon, GridIcon, HeartIcon, HomeIcon, LogoutIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, PinIcon, PlusIcon, SearchIcon, UserIcon } from "@/components/UiIcon";
+import { ClockIcon, GridIcon, HeartIcon, HomeIcon, LogoutIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, PinIcon, PlusIcon, SearchIcon, UserIcon, ArrowRightIcon, MountainIcon } from "@/components/UiIcon";
 import ThemeToggle from "@/components/ThemeToggle";
 
 // Khojau sidebar. The rail follows the active theme via the override
@@ -126,7 +126,7 @@ function RowShell({ active, collapsed, href, label, onNavigate, children }: {
         aria-label={label}
         title={label}
         aria-current={active ? "page" : undefined}
-        className={`relative mx-auto grid h-11 w-11 place-items-center rounded-xl transition-all duration-200 hover:bg-white/[0.06] hover:text-white active:bg-white/10 ${active ? "bg-white/[0.08] text-[#D4AF37] shadow-[0_0_16px_-4px_rgba(212,175,55,0.5)]" : "text-zinc-400"}`}
+        className={`khojau-nav-link relative mx-auto grid h-11 w-11 place-items-center rounded-xl transition-all duration-200 hover:bg-white/[0.06] hover:text-white active:bg-white/10 ${active ? "khojau-nav-active bg-white/[0.08] text-[#D4AF37] shadow-[0_0_16px_-4px_rgba(212,175,55,0.5)]" : "text-zinc-400"}`}
       >
         {active && <span aria-hidden="true" className="absolute left-[-12px] h-5 w-1 rounded-full bg-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.8)]" />}
         {children}
@@ -138,9 +138,9 @@ function RowShell({ active, collapsed, href, label, onNavigate, children }: {
       onClick={onNavigate}
       href={href}
       aria-current={active ? "page" : undefined}
-      className={`relative flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-xl px-3 text-sm font-medium transition-all duration-200 hover:bg-white/[0.06] hover:text-white active:bg-white/10 ${active ? "bg-white/[0.08] font-semibold text-white shadow-[0_0_20px_-8px_rgba(212,175,55,0.6)]" : "text-zinc-400"}`}
+      className={`khojau-nav-link relative flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-xl px-3 text-sm font-medium transition-all duration-200 hover:bg-white/[0.06] hover:text-white active:bg-white/10 ${active ? "khojau-nav-active bg-white/[0.08] font-semibold text-white shadow-[0_0_20px_-8px_rgba(212,175,55,0.6)]" : "text-zinc-400"}`}
     >
-      {active && <span aria-hidden="true" className="absolute left-[-12px] h-5 w-1 rounded-full bg-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.8)]" />}
+      {active && <span aria-hidden="true" className="absolute left-1 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.8)]" />}
       {children}
     </Link>
   );
@@ -212,7 +212,10 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
         })}
       </ul>
       {!collapsed && (
-        <p className="whitespace-nowrap px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-600">For providers</p>
+        <>
+          <div aria-hidden="true" className="my-3 border-t border-white/10" />
+          <p className="whitespace-nowrap px-3 pb-1 pt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-600">For providers</p>
+        </>
       )}
       <Link
         onClick={onNavigate}
@@ -222,13 +225,19 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
         className={
           collapsed
             ? "mx-auto grid h-11 w-11 place-items-center rounded-xl bg-[#D4AF37] text-[#0B0D10] shadow-[0_4px_20px_-6px_rgba(212,175,55,0.7)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
-            : "flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-xl bg-[#D4AF37] px-3 text-sm font-semibold text-[#0B0D10] shadow-[0_4px_24px_-8px_rgba(212,175,55,0.8)] transition-all duration-200 hover:brightness-110 active:scale-[0.99]"
+            : "flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-full bg-[#D4AF37] px-4 text-sm font-semibold text-[#0B0D10] shadow-[0_4px_24px_-8px_rgba(212,175,55,0.8)] transition-all duration-200 hover:brightness-110 active:scale-[0.99]"
         }
       >
         <PlusIcon className="h-5 w-5 shrink-0" />
-        {!collapsed && "Add your business"}
+        {!collapsed && (
+          <>
+            <span className="flex-1 text-left">Add your business</span>
+            <ArrowRightIcon className="h-5 w-5 shrink-0" />
+          </>
+        )}
       </Link>
       <div className="mt-auto pt-3">
+        {!collapsed && <div aria-hidden="true" className="mb-3 border-t border-white/10" />}
         {collapsed ? (
           <div className="mx-auto w-fit">
             <ThemeToggle />
@@ -254,10 +263,11 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
               <Link
                 onClick={onNavigate}
                 href="/login"
-                className="flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-xl px-3 text-sm font-medium text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
+                className="flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-full border border-white/10 px-4 text-sm font-medium text-zinc-300 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
               >
                 <UserIcon className="h-5 w-5 shrink-0" />
-                Log in
+                <span className="flex-1 text-left">Log in</span>
+                <ArrowRightIcon className="h-5 w-5 shrink-0" />
               </Link>
             )
           ) : collapsed ? (
@@ -299,6 +309,12 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
         </div>
         {!collapsed && signedIn === false && (
           <p className="px-3 pb-1 pt-2 text-xs leading-snug text-zinc-600">Sign in to save services and see full provider details.</p>
+        )}
+        {!collapsed && (
+          <p className="flex items-center gap-2 whitespace-nowrap px-3 pb-1 pt-3 text-xs text-zinc-500">
+            <MountainIcon className="h-4 w-4 shrink-0" />
+            Local services. Closer to you.
+          </p>
         )}
       </div>
     </div>

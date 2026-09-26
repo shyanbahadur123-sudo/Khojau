@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MoonIcon, SunIcon } from "@/components/UiIcon";
+import {
+  BoltIcon,
+  BookIcon,
+  ChevronDownIcon,
+  MoonIcon,
+  SunIcon,
+} from "@/components/UiIcon";
 
 const KEY = "khojau-theme";
 
@@ -13,6 +19,15 @@ export const THEMES = [
 ] as const;
 
 export type ThemeId = (typeof THEMES)[number]["id"];
+
+// Quick-pick dock: one tap per theme. Icons are mnemonic, labels are
+// exposed via aria-label/title so meaning never depends on the glyph.
+const DOCK: { id: ThemeId; label: string; Icon: (p: { className?: string }) => React.ReactNode }[] = [
+  { id: "gold-dark", label: "Gold Dark", Icon: MoonIcon },
+  { id: "gold-light", label: "Gold Light", Icon: SunIcon },
+  { id: "mono-dark", label: "Mono Dark", Icon: BoltIcon },
+  { id: "mono-light", label: "Mono Light", Icon: BookIcon },
+];
 
 function readTheme(): ThemeId {
   const t = document.documentElement.dataset.theme === "mono" ? "mono" : "gold";
@@ -48,25 +63,49 @@ export default function ThemeToggle({ variant = "icon" }: { variant?: "icon" | "
   }
 
   if (variant === "row") {
+    const current = DOCK.find((d) => d.id === theme) ?? DOCK[0];
+    const CurrentIcon = current.Icon;
     return (
-      <div role="group" aria-label="Color theme">
+      <div>
         <p className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">Theme</p>
-        <div className="grid grid-cols-2 gap-1 px-3 pb-2">
-          {THEMES.map((t) => {
-            const active = ready && theme === t.id;
+        <div className="relative px-3">
+          <span aria-hidden="true" className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 text-zinc-400">
+            <CurrentIcon className="h-5 w-5" />
+          </span>
+          <select
+            aria-label="Color theme"
+            value={ready ? theme : "gold-light"}
+            onChange={(e) => choose(e.target.value as ThemeId)}
+            className="h-11 w-full appearance-none rounded-xl border border-white/10 bg-transparent pl-11 pr-9 text-sm font-medium text-zinc-200 transition-colors hover:bg-white/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/60"
+          >
+            {THEMES.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+          <span aria-hidden="true" className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-zinc-500">
+            <ChevronDownIcon className="h-4 w-4" />
+          </span>
+        </div>
+        <div role="group" aria-label="Quick theme" className="mx-3 mt-2 flex items-center justify-between rounded-2xl border border-white/10 p-2">
+          {DOCK.map(({ id, label, Icon }) => {
+            const active = ready && theme === id;
             return (
               <button
-                key={t.id}
+                key={id}
                 type="button"
-                onClick={() => choose(t.id)}
+                onClick={() => choose(id)}
                 aria-pressed={active}
-                className={`min-h-[44px] rounded-lg border px-2 py-1.5 text-xs font-semibold transition-all duration-200 ${
+                aria-label={label}
+                title={label}
+                className={`grid h-10 w-10 place-items-center rounded-full transition-all duration-200 ${
                   active
-                    ? "border-[#D4AF37]/60 bg-white/[0.08] text-white"
-                    : "border-white/10 text-zinc-400 hover:bg-white/[0.06] hover:text-white"
+                    ? "border border-[#D4AF37] text-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.8)]"
+                    : "bg-white/[0.06] text-zinc-400 hover:bg-white/[0.1] hover:text-white"
                 }`}
               >
-                {t.label}
+                <Icon className="h-5 w-5" />
               </button>
             );
           })}

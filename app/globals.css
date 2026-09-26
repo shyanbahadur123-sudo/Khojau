@@ -339,3 +339,22 @@ html.dark[data-theme="mono"] .group:hover [class~="group-hover:bg-[#C9A227]/25"]
 html.dark[data-theme="mono"] [class~="focus:ring-[#D4AF37]/50"]:focus {
   --tw-ring-color: rgba(41, 151, 255, 0.55);
 }
+/* Active nav pill per theme. The marker class rides on the active RowShell
+   link; background tints match each rail while the accent bar and icon keep
+   their theme tokens. */
+html.dark[data-theme="mono"] :is(#khojau-sidebar, #mobile-nav) .khojau-nav-active {
+  background-color: rgba(41, 151, 255, 0.14);
+}
+html:not(.dark) :is(#khojau-sidebar, #mobile-nav) .khojau-nav-active {
+  background-color: rgba(201, 162, 39, 0.15);
+}
+html:not(.dark)[data-theme="mono"] :is(#khojau-sidebar, #mobile-nav) .khojau-nav-active {
+  background-color: rgba(0, 113, 227, 0.1);
+}
+/* Dock active ring follows the theme accent. */
+html[data-theme="mono"] :is(#khojau-sidebar, #mobile-nav) [class~="border-[#D4AF37]"] {
+  border-color: #2997ff;
+}
+html:not(.dark)[data-theme="mono"] :is(#khojau-sidebar, #mobile-nav) [class~="border-[#D4AF37]"] {
+  border-color: #0071e3;
+}
