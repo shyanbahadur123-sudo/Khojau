@@ -61,7 +61,7 @@ export default async function ProviderPage({ params }: { params: { slug: string 
 
       <header className="rounded-2xl bg-[#FFFFFF] p-6 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{p.business_name}</h1>
+          <h1 className="break-words text-3xl font-bold tracking-tight sm:text-4xl">{p.business_name}</h1>
           {p.verification_status === "verified" && <VerifiedBadge />}
           {p.plan !== "free" && (
             <span className="rounded-full bg-[#C9A227] px-2 py-0.5 text-xs font-semibold text-black">{p.plan}</span>
@@ -84,8 +84,9 @@ export default async function ProviderPage({ params }: { params: { slug: string 
 
       <ContactTracker providerId={p.id} />
 
-      {/* Sticky mobile contact bar: stacked Call + side-by-side pair on small screens */}
-      <div className="sticky bottom-3 z-30 flex flex-col gap-2 rounded-2xl border border-black/10 bg-[#FFFFFF] p-2 shadow-lg sm:static sm:grid sm:grid-cols-3 sm:shadow-none">
+      {/* Sticky mobile contact bar: stacked Call + side-by-side pair on small screens.
+          Rides above the bottom tab bar (56px + safe area), never under it. */}
+      <div className="sticky bottom-[calc(68px+env(safe-area-inset-bottom))] z-30 flex flex-col gap-2 rounded-2xl border border-black/10 bg-[#FFFFFF] p-2 shadow-lg sm:static sm:grid sm:grid-cols-3 sm:shadow-none">
         <a href={`tel:${p.phone}`} className="rounded-full bg-[#C9A227] px-4 py-3 text-center font-semibold text-black" data-track="phone_click">
           Call {p.phone}
         </a>
@@ -107,8 +108,8 @@ export default async function ProviderPage({ params }: { params: { slug: string 
 
       {p.description && (
         <section aria-labelledby="about" className="rounded-2xl bg-[#FFFFFF] p-6 shadow-sm">
-          <h2 id="about" className="text-lg font-bold">About {p.business_name}</h2>
-          <p className="mt-2 max-w-2xl whitespace-pre-line text-[15px] leading-relaxed">{p.description}</p>
+          <h2 id="about" className="break-words text-lg font-bold">About {p.business_name}</h2>
+          <p className="mt-2 max-w-2xl whitespace-pre-line break-words text-[15px] leading-relaxed">{p.description}</p>
         </section>
       )}
 

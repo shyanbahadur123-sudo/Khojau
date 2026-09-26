@@ -128,7 +128,7 @@ export function ConfirmDialog({
       }}
     >
       <div
-        className="w-full max-w-md mx-auto animate-in fade-in zoom-in-95 duration-200 rounded-2xl bg-[#FFFFFF] shadow-2xl overflow-hidden"
+        className="w-full max-w-md mx-auto animate-in fade-in zoom-in-95 duration-200 rounded-2xl bg-[#FFFFFF] shadow-2xl overflow-x-hidden max-h-[92dvh] overflow-y-auto"
         role="document"
       >
         <div className="flex items-start justify-between gap-4 p-4 border-b border-black/10">

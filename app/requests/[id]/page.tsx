@@ -53,7 +53,7 @@ export default async function RequestDetailPage({ params }: { params: { id: stri
 
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#7A5C00]">Request</p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{r.service}</h1>
+        <h1 className="mt-1 break-words text-3xl font-bold tracking-tight sm:text-4xl">{r.service}</h1>
         <p className="mt-1 text-sm text-[#6B7280]">
           {r.location} · Requested {timeAgo(r.created_at)}
         </p>

@@ -220,7 +220,7 @@ export default async function HomePage() {
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {urgent.map((u) => (
               <li key={u.id} className="rounded-2xl border border-black/10 bg-[#FFFFFF] p-5 shadow-sm">
-                <p className="font-semibold leading-snug">{u.service}</p>
+                <p className="break-words font-semibold leading-snug">{u.service}</p>
                 <p className="mt-1 text-sm text-[#6B7280]">{u.location} · {timeAgo(u.created_at)}</p>
                 <Link href="/add-business" className="mt-3 inline-block rounded-full bg-[#C9A227] px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-[#B8941F]">
                   I offer this service
