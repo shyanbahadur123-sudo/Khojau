@@ -169,27 +169,27 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
   return (
     <div className="flex h-full flex-col overflow-hidden text-zinc-300">
       <div className={`flex items-center gap-3 pb-4 pt-1 ${collapsed ? "flex-col justify-center px-0" : "px-1"}`}>
-        <span className="rounded-[14px] bg-white/[0.06] p-1 ring-1 ring-white/10 backdrop-blur-md">
+        <span className="relative rounded-[14px] bg-white/[0.06] p-1 ring-1 ring-white/10 backdrop-blur-md">
           <BrandLogo compact={collapsed} />
+          {onToggle && (
+            <button
+              type="button"
+              onClick={onToggle}
+              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              aria-expanded={!collapsed}
+              aria-controls="khojau-sidebar"
+              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              className="absolute -bottom-2 -right-2 grid h-6 w-6 place-items-center rounded-full border border-white/15 bg-black text-zinc-300 transition-colors hover:text-white"
+            >
+              {collapsed ? <PanelLeftOpenIcon className="h-3.5 w-3.5" /> : <PanelLeftCloseIcon className="h-3.5 w-3.5" />}
+            </button>
+          )}
         </span>
         {!collapsed && (
           <span className="min-w-0 flex-1 whitespace-nowrap leading-tight">
             <span className="block truncate text-[15px] font-bold tracking-tight text-white">Khojau</span>
             <span className="block truncate text-xs text-zinc-500">Find local services</span>
           </span>
-        )}
-        {onToggle && (
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            aria-expanded={!collapsed}
-            aria-controls="khojau-sidebar"
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-zinc-500 transition-colors hover:bg-white/[0.06] hover:text-white"
-          >
-            {collapsed ? <PanelLeftOpenIcon className="h-5 w-5" /> : <PanelLeftCloseIcon className="h-5 w-5" />}
-          </button>
         )}
       </div>
       <ul className="mt-2 space-y-0.5">
@@ -224,7 +224,7 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
         title={collapsed ? "Add your business" : undefined}
         className={
           collapsed
-            ? "mx-auto grid h-11 w-11 place-items-center rounded-xl bg-[#D4AF37] text-[#0B0D10] shadow-[0_4px_20px_-6px_rgba(212,175,55,0.7)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
+            ? "mx-auto grid h-11 w-11 place-items-center rounded-full bg-[#D4AF37] text-[#0B0D10] shadow-[0_4px_20px_-6px_rgba(212,175,55,0.7)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
             : "flex min-h-[44px] items-center gap-3 whitespace-nowrap rounded-full bg-[#D4AF37] px-4 text-sm font-semibold text-[#0B0D10] shadow-[0_4px_24px_-8px_rgba(212,175,55,0.8)] transition-all duration-200 hover:brightness-110 active:scale-[0.99]"
         }
       >
@@ -247,7 +247,7 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
         )}
         <div className="pt-1">
           {signedIn === null ? (
-            <span aria-hidden="true" className={`block animate-pulse rounded-xl bg-white/[0.06] ${collapsed ? "mx-auto h-11 w-11" : "h-[44px]"}`} />
+            <span aria-hidden="true" className={`block animate-pulse rounded-full bg-white/[0.06] ${collapsed ? "mx-auto h-11 w-11" : "h-[44px]"}`} />
           ) : !signedIn ? (
             collapsed ? (
               <Link
@@ -255,7 +255,7 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
                 href="/login"
                 aria-label="Log in"
                 title="Log in"
-                className="mx-auto grid h-11 w-11 place-items-center rounded-xl text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
+                className="mx-auto grid h-11 w-11 place-items-center rounded-full border border-white/10 text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white"
               >
                 <UserIcon className="h-5 w-5" />
               </Link>
@@ -277,7 +277,7 @@ export function SidebarNav({ collapsed, onToggle, onNavigate }: { collapsed: boo
               disabled={leaving}
               aria-label="Sign out"
               title="Sign out"
-              className="mx-auto grid h-11 w-11 place-items-center rounded-xl text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white disabled:opacity-60"
+              className="mx-auto grid h-11 w-11 place-items-center rounded-full border border-white/10 text-zinc-400 transition-all duration-200 hover:bg-white/[0.06] hover:text-white disabled:opacity-60"
             >
               <LogoutIcon className="h-5 w-5" />
             </button>
